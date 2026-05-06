@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FV from '../../components/FV.astro';
+import Empathy from '../../components/Empathy.astro';
+import Solution from '../../components/Solution.astro';
+import Reasons from '../../components/Reasons.astro';
+import Flow from '../../components/Flow.astro';
+import Gallery from '../../components/Gallery.astro';
+import Voice from '../../components/Voice.astro';
+import MidCTA from '../../components/MidCTA.astro';
+import Pricing from '../../components/Pricing.astro';
+import Comparison from '../../components/Comparison.astro';
+import ServicePlan from '../../components/ServicePlan.astro';
+import FAQ from '../../components/FAQ.astro';
+import Related from '../../components/Related.astro';
+import Area from '../../components/Area.astro';
+import BlogLink from '../../components/BlogLink.astro';
+import Closing from '../../components/Closing.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const regions = await getCollection('regions');
+  return regions.map(entry => ({
+    params: { region: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+
+// AIO Definition (Conclusion first, ~50 characters)
+const aioDefinitionShort = `${data.prefName}の出張デッドニングとは、自宅駐車場でプロがスピーカー交換と防音施工を行う専門サービスです。`;
+
+// Generate JSON-LD @graph
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      "@id": `${data.canonical}#service`,
+      "name": "車内デッドニング施工サービス",
+      "provider": { "@id": "https://abura.site/#organization" },
+      "areaServed": { "@type": "State", "name": data.prefName },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "デッドニングメニュー",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": { "@type": "Service", "name": "フロントドア デッドニング＋スピーカー交換セット" },
+            "price": "29000",
+            "priceCurrency": "JPY"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": `${data.canonical}#business`,
+      "name": `車の出張パーツ取付 特急便 ${data.prefName}拠点`,
+      "image": "https://abura.site/images/deadning%20image0.jpg",
+      "url": data.canonical,
+      "telephone": "070-8428-0866",
+      "priceRange": "¥29,000〜",
+      "address": { "@type": "PostalAddress", "addressRegion": data.prefName, "addressCountry": "JP" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${data.canonical}#faq`,
+      "mainEntity": data.faqItems.slice(0, 5).map(item => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": { "@type": "Answer", "text": item.a }
+      }))
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://abura.site/" },
+        { "@type": "ListItem", "position": 2, "name": "デッドニング出張施工", "item": "https://abura.site/deadning/" },
+        { "@type": "ListItem", "position": 3, "name": data.prefName, "item": data.canonical }
+      ]
+    }
+  ]
+};
+---
+
+<Layout 
+  title={data.title} 
+  description={data.description} 
+  canonical={data.canonical} 
+  region={entry.id}
+  jsonLd={jsonLd}
+>
+  <FV prefName={data.prefName} aioDefinition={aioDefinitionShort} />
+  <main>
+    <Empathy problemCity={data.problemCity} />
+    <Solution />
+    <Reasons reasonsCity={data.reasonsCity} />
+    <Flow flowCity={data.flowCity} />
+    <Gallery />
+    <Voice voiceCity={data.voiceCity} voiceItems={data.voiceItems} />
+    <MidCTA />
+    <Pricing pricingNote={data.pricingNote} />
+    <Comparison prefName={data.prefName} />
+    <ServicePlan prefName={data.prefName} />
+    <FAQ prefName={data.prefName} faqItems={data.faqItems} />
+    <Related />
+    <Area prefName={data.prefName} areaBlocks={data.areaBlocks} />
+    <BlogLink />
+    <Closing prefName={data.prefName} />
+  </main>
+  <Footer relatedRegions={data.relatedRegions} />
+</Layout>

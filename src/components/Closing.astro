@@ -1,0 +1,30 @@
+---
+interface Props {
+  prefName: string;
+}
+
+const { prefName } = Astro.props;
+---
+<section class="closing-section" id="closing">
+  <div class="container">
+    <h2 class="closing-catch">
+      あなたが「もっと早く頼めばよかった」<br>
+      と思える出会いが、<br>
+      <span class="text-gold">ここにあります。</span>
+    </h2>
+    <p class="closing-text">
+      スピーカーは安く買えた。あとは「信頼できるプロ」に任せるだけ。<br>
+      お見積もりは完全無料. まずはLINEでお気軽にご相談ください。<br>
+      <strong>{prefName}を中心に毎日駆け回っています！</strong>
+    </p>
+    <div class="closing-buttons">
+      <a href="https://lin.ee/g4NPYZ3" target="_blank" class="btn-cta-final pulse" id="closing-line-btn">
+        <i class="fab fa-line"></i> LINEで無料見積もり・相談する
+      </a>
+      <a href="tel:070-8428-0866" class="btn-cta-tel" id="closing-tel-btn">
+        <i class="fas fa-phone-alt"></i> 070-8428-0866<br><small>お急ぎの方はお電話で</small>
+      </a>
+    </div>
+    <p class="cta-micro white">※ 30分で完了・しつこい営業は一切しません</p>
+  </div>
+</section>

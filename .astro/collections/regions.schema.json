@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "prefName": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "canonical": {
+      "type": "string"
+    },
+    "aioDefinition": {
+      "type": "string"
+    },
+    "problemCity": {
+      "type": "string"
+    },
+    "reasonsCity": {
+      "type": "string"
+    },
+    "flowCity": {
+      "type": "string"
+    },
+    "voiceCity": {
+      "type": "string"
+    },
+    "areaBlocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "content"
+        ]
+      }
+    },
+    "faqItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "a": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "q",
+          "a"
+        ]
+      }
+    },
+    "pricingNote": {
+      "type": "string"
+    },
+    "relatedRegions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "slug"
+        ]
+      }
+    },
+    "voiceItems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stars": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "stars",
+          "label",
+          "text"
+        ]
+      }
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "prefName",
+    "title",
+    "description",
+    "canonical",
+    "aioDefinition",
+    "problemCity",
+    "reasonsCity",
+    "flowCity",
+    "voiceCity",
+    "areaBlocks",
+    "faqItems",
+    "pricingNote",
+    "relatedRegions"
+  ]
+}

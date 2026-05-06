@@ -1,0 +1,50 @@
+---
+interface Props {
+  reasonsCity: string;
+}
+
+const { reasonsCity } = Astro.props;
+---
+<section class="reasons-section" id="reasons">
+  <div class="container">
+    <h2 class="section-title">{reasonsCity}で特急便が選ばれる<br><span class="text-red">6つの理由</span></h2>
+    <div class="reasons-grid fade-in">
+      <div class="reason-card">
+        <div class="reason-number">01</div>
+        <div class="reason-icon"><i class="fas fa-tag"></i></div>
+        <h3>圧倒的な低価格</h3>
+        <p>店舗を持たない出張専門だから、家賃も中間マージンもゼロ。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">02</div>
+        <div class="reason-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <h3>追加料金なしの明朗会計</h3>
+        <p>見積もり後の追加請求は一切なし。安心のお約束です。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">03</div>
+        <div class="reason-icon"><i class="fas fa-truck"></i></div>
+        <h3>{reasonsCity}全域に出張</h3>
+        <p>大阪・兵庫・京都など、エリア全域。ご自宅の駐車場で作業完了。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">04</div>
+        <div class="reason-icon"><i class="fas fa-tools"></i></div>
+        <h3>プロの確かな技術力</h3>
+        <p>多くの実績を持つ技術者が丁寧に施工。「安い＝手抜き」は絶対にありません。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">05</div>
+        <div class="reason-icon"><i class="fas fa-box-open"></i></div>
+        <h3>どこで買ってもOK</h3>
+        <p>Amazon・楽天・ヤフオク・中古品. あなたの選んだパーツをプロが取付。</p>
+      </div>
+      <div class="reason-card">
+        <div class="reason-number">06</div>
+        <div class="reason-icon"><i class="fab fa-line"></i></div>
+        <h3>LINEで簡単見積もり</h3>
+        <p>車種とパーツURLを送るだけ。最短30分でお見積もりをお返しします。</p>
+      </div>
+    </div>
+  </div>
+</section>

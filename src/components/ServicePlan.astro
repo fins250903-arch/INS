@@ -1,0 +1,31 @@
+---
+interface Props {
+  prefName: string;
+}
+
+const { prefName } = Astro.props;
+---
+<section class="service-section" id="service">
+  <div class="container">
+    <h2 class="section-title">一番人気！<br><span class="text-gold">「音質劇的向上セットプラン」</span></h2>
+    <div class="set-plan-card fade-in">
+      <div class="set-plan-header">
+        <span class="set-plan-badge">🏆 {prefName}No.1人気</span>
+        <h3>フロントドア デッドニング＋スピーカー交換セット</h3>
+      </div>
+      <div class="set-plan-body">
+        <div class="set-plan-price">
+          <div class="price-num">29,000<span>円〜（税込）</span></div>
+          <p class="price-note">専門店の相場 70,000〜120,000円と比較してください</p>
+        </div>
+        <ul class="set-plan-items">
+          <li><i class="fas fa-check-circle"></i> <span><strong>フロントドア左右デッドニング</strong>（制振材・吸音材施工）</span></li>
+          <li><i class="fas fa-check-circle"></i> <span><strong>スピーカー交換</strong>（お持ち込み品取付）</span></li>
+          <li><i class="fas fa-clock"></i> <span>所要時間：<strong>約2〜3時間</strong>で完了</span></li>
+          <li><i class="fas fa-home"></i> <span>施工場所：<strong>ご自宅の駐車場</strong>でOK（{prefName}全域出張）</span></li>
+        </ul>
+        <p class="plan-pr">「え、こんなに変わるの？」と、施工直後に驚かれるお客様が続出しています。</p>
+      </div>
+    </div>
+  </div>
+</section>

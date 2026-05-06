@@ -1,0 +1,28 @@
+---
+interface Props {
+  problemCity: string;
+}
+
+const { problemCity } = Astro.props;
+---
+<section class="empathy-section" id="empathy">
+  <div class="container">
+    <h2 class="section-title">「いい音でドライブしたい。でも…」<br><span class="text-red">こんなお悩み、ありませんか？</span></h2>
+    <ul class="problem-list fade-in">
+      <li><i class="fas fa-sad-cry"></i> 専門店で見積もったら<strong>10万円を超えた…</strong></li>
+      <li><i class="fas fa-tools"></i> 自分でやろうとドアを外しかけたが、<strong>元に戻せるか不安…</strong></li>
+      <li><i class="fas fa-ban"></i> 格安店は<strong>「持ち込み不可」ばかりでガッカリ…</strong></li>
+      <li><i class="fas fa-clock"></i> 平日は忙しく<strong>車を預けに行く時間がない…</strong></li>
+      <li><i class="fas fa-question-circle"></i> デッドニングって<strong>本当に効果があるの？</strong></li>
+    </ul>
+    <div class="insight-box fade-in">
+      <div class="insight-icon"><i class="fas fa-lightbulb"></i></div>
+      <p class="insight-title">その悩み、特急便がすべて解決します！</p>
+      <p class="insight-text">
+        デッドニングは、スピーカー交換と<strong>同時にやるのが「一番安くて一番効く」</strong>んです。<br>
+        セットで依頼すればコスト大幅カット。施工後は「え、こんなに変わるの？」と<br>
+        驚かれるお客様が<strong>{problemCity}で続出中！</strong>
+      </p>
+    </div>
+  </div>
+</section>

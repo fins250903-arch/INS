@@ -1,0 +1,47 @@
+---
+interface Props {
+  pricingNote: string;
+}
+
+const { pricingNote } = Astro.props;
+---
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <h2 class="section-title">主要メニューと料金（税込）</h2>
+    <div class="fade-in">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>メニュー</th>
+            <th style="text-align:right">工賃（税込）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🏆 <strong>フロントドア<br class="mobile-only"> <span class="ib">デッドニング＋</span><br class="mobile-only"><span class="ib">スピーカー交換セット</span></strong><br><small>フロント左右2枚・材料持込OK</small></td>
+            <td class="price-highlight" style="text-align:right">29,000円〜</td>
+          </tr>
+          <tr>
+            <td><span class="ib">スピーカー交換のみ</span><br class="mobile-only"><small>(フロント左右)</small></td>
+            <td class="price-highlight" style="text-align:right">12,000円〜</td>
+          </tr>
+          <tr>
+            <td><span class="ib">デッドニングのみ</span><br class="mobile-only"><small>(フロントドア左右)</small></td>
+            <td class="price-highlight" style="text-align:right">15,000円〜</td>
+          </tr>
+          <tr>
+            <td><span class="ib">リアドア</span> <span class="ib">デッドニング＋</span><br class="mobile-only"><span class="ib">スピーカー交換セット</span></td>
+            <td class="price-highlight" style="text-align:right">20,000円〜</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="price-note-box" set:html={pricingNote.replace(/\n/g, '<br>')} />
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 768px) {
+    .mobile-only { display: none; }
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  prefName: string;
+  areaBlocks: { title: string; content: string }[];
+}
+
+const { prefName, areaBlocks } = Astro.props;
+---
+<section class="seo-section" id="area">
+  <div class="container">
+    <h2>{prefName} デッドニング＆スピーカー取付 出張対応エリア</h2>
+    <div class="seo-area-grid">
+      {areaBlocks.map((block) => (
+        <div class="seo-area-block">
+          <h3>{block.title}</h3>
+          <p>{block.content}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

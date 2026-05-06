@@ -1,0 +1,46 @@
+---
+interface Props {
+  voiceCity: string;
+  voiceItems?: { stars: string; label: string; text: string }[];
+}
+
+const { voiceCity, voiceItems } = Astro.props;
+
+// Default voices if not provided in JSON
+const defaultVoices = [
+  {
+    stars: "★★★★★",
+    label: `${voiceCity}内 K.S様（30代）`,
+    text: `「${voiceCity}で持ち込みスピーカーの取付を探していましたが、どこも高くて…。特急便さんはデッドニングとセットでこの価格、しかも自宅でやってくれる。<strong>音の厚みが全然違います。</strong>」`
+  },
+  {
+    stars: "★★★★★",
+    label: `${voiceCity}内 M.A様（40代）`,
+    text: `「${voiceCity}まで出張してもらいました。<strong>見積もり通りの金額で追加請求なし。</strong>作業も手際よく、あっという間に完了。車内が静かになり音楽がより鮮明に聞こえます！」`
+  },
+  {
+    stars: "★★★★★",
+    label: `${voiceCity}内 H.O様（50代）`,
+    text: `「DIYは難しそうで断念していましたが、特急便さんに任せて正解. <strong>マンションの駐車場でも丁寧に作業してくれました。</strong>次はリアドアも依頼したいと思います！」`
+  }
+];
+
+const displayVoices = voiceItems || defaultVoices;
+---
+<section class="voice-section" id="voice">
+  <div class="container">
+    <h2 class="section-title">{voiceCity}のお客様の声</h2>
+    <img src="/images/customer_happy.png" alt="施工に満足したお客様" class="voice-main-image fade-in">
+    <div class="voice-cards fade-in">
+      {displayVoices.map((voice) => (
+        <div class="voice-card">
+          <div class="voice-header">
+            <div class="voice-stars">{voice.stars}</div>
+            <span class="voice-label">{voice.label}</span>
+          </div>
+          <p class="voice-text" set:html={voice.text} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

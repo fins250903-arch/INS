@@ -1,0 +1,29 @@
+---
+interface Props {
+  relatedRegions: { name: string; slug: string; active?: boolean }[];
+}
+
+const { relatedRegions } = Astro.props;
+---
+<footer id="footer">
+  <div class="footer-info">
+    <p class="footer-name">車の出張パーツ取付 特急便</p>
+    <p>対応エリア：大阪・兵庫・京都・滋賀・奈良・和歌山・愛知</p>
+    <p>TEL：<a href="tel:070-8428-0866">070-8428-0866</a></p>
+    <p>営業時間：9:00〜19:00（不定休）</p>
+  </div>
+
+  <!-- 府県ナビゲーション -->
+  <nav class="pref-nav" id="pref-nav" style="position:static; border-top:1px solid rgba(255,255,255,0.1); border-bottom:none; background:transparent;">
+    <div class="pref-nav-inner">
+      <span class="pref-nav-label">📍 エリア選択：</span>
+      <div class="pref-nav-links">
+        {relatedRegions.map((region) => (
+          <a href={`/deadning/${region.slug}/`} class={region.active ? 'active' : ''}>{region.name}</a>
+        ))}
+      </div>
+    </div>
+  </nav>
+
+  <p class="footer-copy">&copy; 2026 車の出張パーツ取付 特急便. All Rights Reserved.</p>
+</footer>

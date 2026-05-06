@@ -1,0 +1,91 @@
+---
+interface Props {
+  prefName: string;
+  aioDefinition: string;
+}
+
+const { prefName, aioDefinition } = Astro.props;
+---
+<header class="fv-section" id="fv">
+  <div class="fv-sound-wave">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="fv-top-notif">
+    <span class="ib">３６５日２４時間受付中</span><br>
+    <span class="ib">”出張“車内デッドニング業者</span>
+  </div>
+  <div class="fv-badges">
+    <span class="badge"><i class="fas fa-map-marker-alt"></i> {prefName}全域対応</span>
+    <span class="badge"><i class="fas fa-box-open"></i> 材料持込完全無料</span>
+    <span class="badge"><i class="fas fa-shield-alt"></i> 追加料金ゼロ宣言</span>
+  </div>
+  <h1 class="fv-catch">
+    Amazonで買ったその<br>
+    <span class="highlight-gold">スピーカー</span>、私が<br>
+    <span class="highlight-red">最高の音</span>で取り付けます！
+  </h1>
+  <p class="fv-sub">
+    <strong class="text-gold">{prefName}</strong>全域・出張デッドニング＆スピーカー取付<br>
+    <span class="highlight-yellow">ご自宅で施工完了します</span>
+  </p>
+  <div class="container">
+    <div class="aio-definition">
+      <p><strong>{prefName}の出張デッドニングとは</strong>、{aioDefinition}</p>
+      <div class="quality-badges">
+        <span class="quality-badge gold">📍 {prefName}全域対応</span>
+        <span class="quality-badge">📦 材料持込無料</span>
+        <span class="quality-badge">⏱ 約2〜3時間</span>
+        <span class="quality-badge">💰 専門店の1/3〜の価格</span>
+      </div>
+    </div>
+    <ul class="fv-points">
+      <li><i class="fas fa-check-circle"></i> <span><strong class="ib">材料持ち込み：完全無料・大歓迎！</strong><br class="mobile-only">Amazon・楽天・ヤフオク品もOK</span></li>
+      <li><i class="fas fa-check-circle"></i> <span><strong class="ib">出張施工：</strong>ご自宅の駐車場で全作業完結</span></li>
+      <li><i class="fas fa-check-circle"></i> <span><strong class="ib">約2〜3時間で完了：</strong>あなたは家でくつろぐだけ</span></li>
+    </ul>
+    <div class="fv-cta mobile-only">
+      <a href="https://lin.ee/g4NPYZ3" target="_blank" class="btn-cta-primary pulse" id="fv-line-btn">
+        <i class="fab fa-line"></i> 今すぐ無料で見積もりする
+      </a>
+      <p class="cta-micro">※ 30分で完了・しつこい営業は一切しません</p>
+    </div>
+  </div>
+
+  <!-- PC Conversion Bar -->
+  <div class="fv-pc-conversion">
+    <div class="pc-conv-inner">
+      <a href="https://lin.ee/g4NPYZ3" target="_blank" class="pc-conv-item line">
+        <i class="fab fa-line pc-conv-icon"></i> LINE無料見積もり
+      </a>
+      <div class="pc-conv-divider"></div>
+      <a href="tel:07084280866" class="pc-conv-item tel">
+        <i class="fas fa-phone-alt pc-conv-icon"></i> 電話 070-8428-0866
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .fv-top-notif {
+    text-align: center;
+    color: var(--color-gold);
+    font-weight: 900;
+    margin-bottom: 10px;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+  .highlight-yellow {
+    background: linear-gradient(transparent 60%, rgba(255, 255, 0, 0.4) 60%);
+    font-weight: 900;
+    color: #fff;
+    font-size: 1.2em;
+    padding: 0 4px;
+  }
+  @media (min-width: 768px) {
+    .mobile-only { display: none; }
+  }
+  @media (max-width: 767px) {
+    .fv-pc-conversion { display: none; }
+    .mobile-only { display: block; }
+  }
+</style>

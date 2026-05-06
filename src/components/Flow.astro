@@ -1,0 +1,37 @@
+---
+interface Props {
+  flowCity: string;
+}
+
+const { flowCity } = Astro.props;
+---
+<section class="flow-section" id="flow">
+  <div class="container">
+    <h2 class="section-title">ご利用の流れ</h2>
+    <div class="flow-steps fade-in">
+      <div class="step">
+        <div class="step-num">STEP 1</div>
+        <div class="step-title">LINEで無料見積もり</div>
+        <p>車種とスピーカーのURL（またはパーツ名）をLINEで送るだけ！最短30分でお見積もりをお返しします。</p>
+      </div>
+      <div class="arrow"><i class="fas fa-chevron-down"></i></div>
+      <div class="step">
+        <div class="step-num">STEP 2</div>
+        <div class="step-title">日程調整</div>
+        <p>お見積もりにご納得いただけたら、ご都合のいい日時を調整します。最短翌日OK！</p>
+      </div>
+      <div class="arrow"><i class="fas fa-chevron-down"></i></div>
+      <div class="step">
+        <div class="step-num">STEP 3</div>
+        <div class="step-title">{flowCity}のご自宅で出張施工</div>
+        <p>ご指定の場所にお伺い。約2〜3時間作業。あなたは家でくつろいでいるだけでOK！</p>
+      </div>
+      <div class="arrow"><i class="fas fa-chevron-down"></i></div>
+      <div class="step">
+        <div class="step-num">STEP 4</div>
+        <div class="step-title">試聴・作業完了・お支払い</div>
+        <p>音の確認後にお支払い。見積もり通りの明朗会計で安心です。</p>
+      </div>
+    </div>
+  </div>
+</section>
