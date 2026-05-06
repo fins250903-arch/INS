@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.deadning.abura.site"
+        }
+      ],
+      "destination": "https://deadning.abura.site/blog/:path*",
+      "permanent": true
+    }
+  ]
+}
