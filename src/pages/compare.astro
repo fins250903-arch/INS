@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Side-by-Side Comparison">
+  <div class="h-screen flex flex-col overflow-hidden bg-gray-100">
+    <div class="bg-white border-b px-4 py-2 flex justify-between items-center shadow-sm z-10">
+      <h1 class="text-sm font-bold text-gray-700">Visual Comparison: WordPress vs Astro</h1>
+      <div class="flex space-x-4">
+        <a href="/" class="text-xs text-primary font-bold hover:underline">← Back to New Site</a>
+        <a href="https://osak.insbs.net/wp1/" target="_blank" class="text-xs text-gray-500 hover:underline">Open Original in New Tab</a>
+      </div>
+    </div>
+    
+    <div class="flex-1 flex overflow-hidden">
+      <div class="w-1/2 flex flex-col border-r border-gray-300">
+        <div class="bg-gray-200 text-[10px] font-bold px-2 py-0.5 text-center uppercase tracking-wider text-gray-500">Original (WordPress)</div>
+        <iframe src="https://osak.insbs.net/wp1/" class="flex-1 w-full border-none"></iframe>
+      </div>
+      <div class="w-1/2 flex flex-col">
+        <div class="bg-primary text-[10px] font-bold px-2 py-0.5 text-center uppercase tracking-wider text-white">New (Astro)</div>
+        <iframe src="/" class="flex-1 w-full border-none"></iframe>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Disable body scroll on this page */
+  :global(body) {
+    overflow: hidden;
+  }
+</style>

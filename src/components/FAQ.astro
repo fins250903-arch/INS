@@ -1,0 +1,48 @@
+---
+const faqs = [
+  {
+    q: "対応できる時間帯は？",
+    a: "受付は、365日 24時間対応です。即日訪問も致します。"
+  },
+  {
+    q: "作業時間はどれくらい？",
+    a: "おおよそ2-4時間以内です。ただしヨゴレの程度により変わります。"
+  },
+  {
+    q: "作業中の待ち方は？",
+    a: "作業中立会は不要です。その際、貴重品は車内から持出をお願いします。"
+  },
+  {
+    q: "会社の駐車場でもできる？",
+    a: "できます。ドアを開けるスペースと、掃除中の音が大丈夫であれば対応可能です。"
+  },
+  {
+    q: "作業終了後すぐ乗れる？",
+    a: "乾燥時間が有ります。天候や洗剤の使用量で変わるため、終了時に乗車可能時間をお伝えします。"
+  }
+];
+---
+
+<section class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">よくある質問</h2>
+      <p class="text-gray-600 font-bold">出張訪問車内クリーニング清掃の質問</p>
+    </div>
+    
+    <div class="space-y-4">
+      {faqs.map(faq => (
+        <div class="bg-gray-50 rounded-2xl overflow-hidden">
+          <div class="p-6 border-b border-gray-200 flex items-center bg-white">
+            <span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold mr-4 flex-shrink-0">Q</span>
+            <h3 class="font-bold text-gray-900">{faq.q}</h3>
+          </div>
+          <div class="p-6 flex items-start">
+            <span class="w-8 h-8 rounded-full bg-cta-red text-white flex items-center justify-center font-bold mr-4 flex-shrink-0">A</span>
+            <p class="text-gray-700 leading-relaxed text-sm">{faq.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

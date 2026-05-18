@@ -1,0 +1,44 @@
+---
+const features = [
+  {
+    title: "即座に、ご指定場所へ出張",
+    desc: "クリーニング清掃や臭い取り作業を致します。"
+  },
+  {
+    title: "清掃中は立会不要",
+    desc: "作業完了後、お知らせしますので、時間を有効に使えます。"
+  },
+  {
+    title: "特殊な洗剤・消臭機を使用",
+    desc: "市販の洗剤では落ちないシミやニオイにも対応します。"
+  },
+  {
+    title: "赤ちゃん・ペットにも安心",
+    desc: "洗剤が空気と触れ合うと分解されるものを使用します。"
+  }
+];
+---
+
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        出張訪問車内清掃専門の当店で、できること
+      </h2>
+      <p class="text-primary font-bold">INS出張車内クリーニングの特長</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {features.map((feature, index) => (
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow text-center relative overflow-hidden group">
+          <div class="absolute top-0 right-0 bg-primary text-white w-12 h-12 flex items-center justify-center font-bold text-xl rounded-bl-2xl">
+            0{index + 1}
+          </div>
+          <div class="text-4xl mb-6 group-hover:scale-110 transition-transform">✨</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-4 leading-tight">{feature.title}</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">{feature.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import mainVisual from '../assets/images/main_visual.png';
+import badge92 from '../assets/images/badge92.png';
+---
+
+<section class="relative bg-white overflow-hidden border-b border-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20 md:py-24 flex flex-col md:flex-row items-center">
+    <div class="md:w-7/12 z-10 text-center md:text-left">
+      <div class="inline-block bg-primary text-white px-4 py-1.5 text-sm md:text-base font-bold rounded-full mb-6 shadow-sm">
+        福岡 地元密着 の出張
+      </div>
+      <h1 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+        「うわっ、どうしよう…」<br />
+        <span class="text-cta-red text-4xl md:text-6xl block mt-2">その絶望、私たちが<br class="md:hidden" />なかったことにします。</span>
+      </h1>
+      <p class="text-lg md:text-2xl text-gray-700 mb-10 font-medium leading-relaxed">
+        お電話一本で、プロの【車内 洗浄】が<br />あなたのご自宅へ。
+      </p>
+      
+      <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-10">
+        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-lg border border-gray-50 min-w-[120px]">
+          <span class="text-xs text-gray-500 font-bold mb-1">最短</span>
+          <span class="text-xl font-bold text-primary italic">当日訪問</span>
+        </div>
+        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-lg border border-gray-50 min-w-[120px]">
+          <span class="text-xs text-gray-500 font-bold mb-1">福岡県内</span>
+          <span class="text-xl font-bold text-primary italic">全域対応</span>
+        </div>
+        <div class="flex flex-col items-center bg-white p-4 rounded-xl shadow-lg border border-gray-50 min-w-[120px]">
+          <span class="text-xs text-gray-500 font-bold mb-1">実績</span>
+          <span class="text-xl font-bold text-primary italic">多数</span>
+        </div>
+      </div>
+      
+      <div class="flex flex-col items-center md:items-start">
+        <a href="tel:070-8428-0866" class="w-full md:w-auto bg-cta-red hover:bg-opacity-90 text-white text-2xl md:text-3xl font-bold py-5 px-10 rounded-full shadow-2xl transition-all transform hover:scale-105 flex items-center justify-center">
+          <span class="mr-3 text-3xl">📞</span> 070-8428-0866
+        </a>
+        <p class="mt-3 text-base text-gray-500 font-bold tracking-widest">365日24時間受付中</p>
+      </div>
+    </div>
+    
+    <div class="md:w-5/12 mt-12 md:mt-0 relative w-full">
+      <div class="relative rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-4 border-white transform md:rotate-2">
+        <Image src={mainVisual} alt="出張車内清掃" class="w-full h-auto" />
+      </div>
+      <div class="absolute -top-10 -right-4 md:-right-10 w-28 md:w-40 z-20 animate-bounce-slow">
+        <Image src={badge92} alt="お客様満足度92%" class="w-full h-auto drop-shadow-2xl" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .animate-bounce-slow {
+    animation: bounce-slow 3s ease-in-out infinite;
+  }
+</style>

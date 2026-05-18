@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	/** head 内に JSON-LD（application/ld+json）として出力するオブジェクト配列 */
+	jsonLd?: Record<string, unknown>[];
+}
+
+const { 
+	title = "大阪｜アイエヌエスINS出張車内清掃業者｜車内クリーニング", 
+	description = "「うわ、どうしよう…」その絶望、私たちがリセットします。お電話一本で、プロの【車内 洗浄】があなたのご自宅へ。",
+	jsonLd
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<link rel="apple-touch-icon" href="/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		{jsonLd?.map((block) => (
+			<script type="application/ld+json" set:html={JSON.stringify(block)} />
+		))}
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	</head>
+	<body class="bg-white">
+		<slot />
+	</body>
+</html>

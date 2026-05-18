@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import voice01 from '../assets/images/202604-724x1024.jpg';
+import voice02 from '../assets/images/202603-724x1024.jpg';
+import voice03 from '../assets/images/202602-scaled.jpg';
+import ownerPhoto from '../assets/images/representative-new.png';
+
+/** WordPress osak.insbs.net/wp1「お客様の声」冒頭3件と同一文言 */
+const surveyVoices = [
+  {
+    image: voice01,
+    title: '60代男',
+    body: '母を乗せた際におもらしがあり、シートの奥まで染みてしまいました。自分では表面しか拭けず臭いが残っていましたが、高温スチームで奥まで除菌してもらい解消しました。'
+  },
+  {
+    image: voice02,
+    title: '30代',
+    body: '放置していた食べこぼしからカビが発生。不衛生で子供を乗せられませんでしたが、徹底洗浄と除菌でピカピカに。これからは車内での飲食に気をつけます。'
+  },
+  {
+    image: voice03,
+    title: '40代',
+    body: '売却前に査定を上げたくてヤニ取り清掃を依頼。見た目の清潔感が格段に上がり、予想以上の査定額がつきました。クリーニング代を払ってもお釣りがきました。'
+  }
+];
+---
+
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">車内清掃ご利用頂いたお客様の声</h2>
+      <p class="text-gray-600">ご利用頂いたお客様からのお喜びと、改善点も掲載しております。</p>
+    </div>
+
+    <div class="space-y-8 mb-16 max-w-3xl mx-auto">
+      {surveyVoices.map((v) => (
+        <figure class="bg-white rounded-2xl overflow-hidden shadow border border-gray-100">
+          <Image src={v.image} alt={`${v.title}のお客様の声`} class="w-full h-auto" loading="lazy" />
+          <figcaption class="p-4 sm:p-6 text-sm sm:text-base leading-relaxed text-gray-800">
+            <span class="font-bold text-primary">{v.title}</span>
+            <span class="block mt-2">{v.body}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 flex flex-col md:flex-row max-w-5xl mx-auto">
+      <div class="md:w-2/5 bg-gray-50 p-6 md:p-8 flex items-center justify-center">
+        <Image src={ownerPhoto} alt="店主 今井 雄策" class="w-full max-w-sm rounded-xl shadow" loading="lazy" />
+      </div>
+      <div class="md:w-3/5 p-8 md:p-10 flex flex-col justify-center">
+        <p class="text-sm font-semibold text-cta-red">message</p>
+        <h3 class="text-2xl font-bold text-gray-900 mt-1">代表者あいさつ</h3>
+        <p class="mt-1 font-bold text-gray-900">店主　今井 雄策</p>
+        <p class="mt-4 text-sm text-gray-700 leading-relaxed">
+          当店のホームページをご覧いただき、誠にありがとうございます。家の中は、掃除してキレイ。車内までは、手が回らないし、掃除ができない。特に、嘔吐、おもらしはニオイがこびりつきます。そんな時、早急にキレイにニオイが無いお車に致します。どうぞ、気軽にお問い合わせください。
+        </p>
+        <p class="mt-3 text-xs text-gray-500">趣味：家庭料理冷蔵庫にあるもので作り上げること／娘3人に評価を聞くこと</p>
+      </div>
+    </div>
+  </div>
+</section>

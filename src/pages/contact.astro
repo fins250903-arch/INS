@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatingCTA from '../components/FloatingCTA.astro';
+import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+---
+
+<Layout title="お問い合わせ｜アイエヌエス車内清掃">
+  <Header />
+  <main class="bg-white">
+    <section class="max-w-3xl mx-auto px-6 py-12">
+      <h1 class="text-3xl font-bold">お問い合わせ</h1>
+      <p class="mt-4 text-sm text-gray-600 leading-relaxed">
+        365日24時間受付中です。お急ぎの方はお電話、じっくりご相談の方はメールまたはLINEをご利用ください。
+      </p>
+      <div class="mt-6 space-y-4">
+        <a href="tel:070-8428-0866" class="block rounded-xl border border-gray-200 p-4 text-lg font-bold hover:bg-gray-50 transition-colors">
+          TEL: 070-8428-0866
+        </a>
+        <a
+          href={CONTACT_MAILTO}
+          class="block rounded-xl border border-primary/30 bg-primary/5 p-4 text-center hover:bg-primary/10 transition-colors"
+        >
+          <span class="block text-xs font-bold text-gray-500 mb-1">メール（タップで送信画面が開きます）</span>
+          <span class="text-base sm:text-lg font-bold text-primary break-all">{CONTACT_EMAIL}</span>
+        </a>
+        <a
+          href="https://lin.ee/Xs8Orp2"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block rounded-xl bg-[#06C755] p-4 text-center text-white font-bold hover:opacity-90 transition-opacity"
+        >
+          LINE公式アカウント
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <FloatingCTA />
+</Layout>

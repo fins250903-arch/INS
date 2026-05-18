@@ -1,0 +1,78 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import FloatingCTA from '../../../components/FloatingCTA.astro';
+import posts from '../../../data/wp-posts.json';
+import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
+
+export function getStaticPaths() {
+  return CHIIKI_REGIONS.map((region) => ({
+    params: { slug: region.slug },
+    props: { region }
+  }));
+}
+
+const { region } = Astro.props as { region: (typeof CHIIKI_REGIONS)[number] };
+
+const published = posts.filter((post) => post.status === 'publish');
+const filtered = published.filter((post) => (post.categories || []).includes(region.categoryLabel));
+
+const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
+
+/** 都道府県タグが付いていない記事向けに、同一内容の解説を代表記事へ集約 */
+const fallbackArticles: { title: string; slug: string }[] = [
+  { title: '車内で嘔吐！でも大丈夫な対応方法', slug: 'outo1' },
+  { title: '知らなかった！やってはいけない嘔吐物処理とは', slug: 'outo2' },
+  { title: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術', slug: 'no1' }
+];
+---
+
+<Layout title={`${region.name}の記事一覧｜ブログ`} description={`${region.name}向けにカテゴリ分けしたブログ記事一覧です。`}>
+  <Header />
+  <main class="bg-white">
+    <section class="max-w-6xl mx-auto px-6 py-12">
+      <nav class="text-sm text-gray-500">
+        <a href="/blog/" class="underline hover:text-primary">ブログ一覧</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-800">{region.name}</span>
+      </nav>
+      <h1 class="mt-4 text-3xl font-bold">{region.name}の記事</h1>
+      <p class="mt-2 text-sm text-gray-600">
+        WordPress のカテゴリ「{region.categoryLabel}」が付いた記事のみを表示しています。
+      </p>
+
+      {
+        filtered.length > 0 ? (
+          <div class="mt-8 grid gap-4 md:grid-cols-2">
+            {filtered.map((post) => (
+              <a href={`/blog/${post.slug}/`} class="block rounded-xl border border-gray-200 p-4 hover:shadow">
+                <div class="text-xs text-gray-500">{formatDate(post.date)}</div>
+                <div class="mt-2 font-semibold text-gray-900">{post.title}</div>
+                <div class="mt-2 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="mt-8 rounded-xl border border-amber-100 bg-amber-50/80 p-6 text-gray-800">
+            <p class="font-semibold">この都道府県カテゴリの記事はまだありません。</p>
+            <p class="mt-2 text-sm leading-relaxed">
+              内容が同じ解説記事は全国向けに一本化しており、以下の代表記事をご参照ください。
+            </p>
+            <ul class="mt-4 list-disc space-y-2 pl-5 text-sm">
+              {fallbackArticles.map((a) => (
+                <li>
+                  <a href={`/blog/${a.slug}/`} class="font-medium text-primary underline hover:no-underline">
+                    {a.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </section>
+  </main>
+  <Footer regionFull={region.name} />
+  <FloatingCTA />
+</Layout>

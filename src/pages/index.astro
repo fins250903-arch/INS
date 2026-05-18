@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import LandingPage from '../components/LandingPage.astro';
+import { osakaServiceAreas } from '../data/service-areas/osaka';
+import { getCaseStudiesForSlug } from '../data/lp-region-case-studies';
+import { buildLpJsonLd } from '../lib/lp-json-ld';
+import Footer from '../components/Footer.astro';
+import FloatingCTA from '../components/FloatingCTA.astro';
+
+const layoutTitle = '大阪｜アイエヌエスINS出張車内清掃業者｜車内クリーニング';
+const layoutDescription =
+	'「うわ、どうしよう…」その絶望、私たちがリセットします。お電話一本で、プロの【車内 洗浄】があなたのご自宅へ。';
+const jsonLd = buildLpJsonLd({
+	path: '/',
+	regionFull: '大阪府',
+	regionName: '大阪',
+	description: layoutDescription
+});
+---
+
+<Layout title={layoutTitle} description={layoutDescription} jsonLd={jsonLd}>
+	<Header />
+	<main>
+		<LandingPage
+			regionName="大阪"
+			regionFull="大阪府"
+			showAreaList={true}
+			serviceAreas={osakaServiceAreas}
+			caseStudies={getCaseStudiesForSlug('index')}
+		/>
+	</main>
+	<Footer regionFull="大阪府" regionName="大阪" />
+	<FloatingCTA />
+</Layout>

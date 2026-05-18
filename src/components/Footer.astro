@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import logoImg from '../assets/images/logo.png';
+import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+import { regionLpLinks } from '../data/region-lp-links';
+import { resolveFooterCopy, type FooterRegionProps } from '../lib/footer-copy';
+
+const copy = resolveFooterCopy(Astro.props as FooterRegionProps);
+---
+
+<footer class="bg-gray-900 text-white py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-12 border-b border-gray-800 pb-12">
+      <div>
+        <div class="flex items-center mb-6">
+          <Image src={logoImg} alt="INS CAR CLEAN" class="h-12 w-auto object-contain" />
+          <div class="ml-2">
+            <span class="block text-[10px] text-gray-400 font-bold leading-tight">{copy.tagline}</span>
+            <span class="block text-lg font-bold text-white">アイエヌエス車内清掃</span>
+          </div>
+        </div>
+        <p class="text-gray-400 text-sm leading-relaxed mb-6">
+          {copy.intro}
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold mb-6 flex items-center">
+          <span class="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
+          お問い合わせ
+        </h4>
+        <div class="space-y-4">
+          <a href="tel:070-8428-0866" class="block group">
+            <span class="block text-xs text-gray-400">お急ぎの方はこちら</span>
+            <span class="text-2xl font-bold text-white group-hover:text-primary transition-colors">070-8428-0866</span>
+          </a>
+          <a href={CONTACT_MAILTO} class="block text-gray-300 text-sm break-all hover:text-white transition-colors">
+            メール：{CONTACT_EMAIL}
+          </a>
+          <a
+            href="https://lin.ee/Xs8Orp2"
+            target="_blank"
+            class="block bg-[#06C755] text-white px-6 py-2 rounded-md text-center font-bold text-sm hover:opacity-90 transition-opacity"
+          >
+            LINE公式アカウント
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold mb-6 flex items-center">
+          <span class="w-1.5 h-1.5 bg-primary rounded-full mr-2"></span>
+          対応エリア
+        </h4>
+        <p class="text-sm text-gray-400 leading-relaxed">
+          {copy.area}
+        </p>
+        <div class="mt-5">
+          <h5 class="text-sm font-bold text-white mb-3">地区相互リンク</h5>
+          <div class="flex flex-wrap gap-x-3 gap-y-2 text-xs text-gray-300">
+            {regionLpLinks.map((region) => (
+              <a href={`/${region.slug}/`} class="hover:text-white transition-colors">
+                {region.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+      <p>© 2026 アイエヌエス車内清掃 All Rights Reserved.</p>
+      <div class="mt-4 md:mt-0 flex space-x-6">
+        <a href="/" class="hover:text-white transition-colors">ホーム</a>
+        <a href="/blog/" class="hover:text-white transition-colors">ブログはこちら</a>
+        <a href="/privacy" class="hover:text-white transition-colors">プライバシーポリシー</a>
+        <a href="/terms" class="hover:text-white transition-colors">利用規約</a>
+      </div>
+    </div>
+  </div>
+</footer>

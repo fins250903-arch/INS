@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import logoMark from '../assets/images/logo.png';
+---
+
+<header class="border-b border-gray-100 shadow-sm md:bg-white">
+  <!-- スマホ：白行なし（FVが隠れない）。タブレット以上：ロゴ＋社名 -->
+  <div class="hidden md:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20 md:h-28">
+      <div class="flex-shrink-0 flex items-center gap-3">
+        <a href="/" class="shrink-0 hover:opacity-90 transition-opacity" aria-label="トップへ">
+          <Image src={logoMark} alt="INS CAR CLEAN" class="h-12 w-auto object-contain md:h-14" loading="eager" />
+        </a>
+        <a href="/" class="flex flex-col justify-center hover:opacity-80 transition-opacity min-w-0">
+          <span class="block text-[10px] md:text-xs text-gray-500 font-bold leading-tight">地域密着！出張車内クリーニング業者</span>
+          <span class="block text-lg md:text-2xl font-bold text-gray-800 tracking-tighter">アイエヌエス車内清掃</span>
+        </a>
+      </div>
+
+      <div class="flex items-center space-x-4 lg:space-x-6">
+        <span
+          class="hidden xl:inline-flex items-center rounded-full border-2 border-amber-400 bg-amber-50 px-2.5 py-0.5 text-[11px] font-extrabold text-gray-900 whitespace-nowrap"
+        >
+          お客様満足度 92%
+        </span>
+        <div class="hidden lg:flex flex-col items-end">
+          <span class="text-xs text-gray-500 font-bold mb-1">365日24時間受付中</span>
+          <div class="flex items-center">
+            <span class="text-2xl mr-2">📞</span>
+            <a href="tel:070-8428-0866" class="text-3xl font-bold text-cta-red hover:underline tracking-tighter">070-8428-0866</a>
+          </div>
+        </div>
+        <a
+          href="tel:070-8428-0866"
+          class="bg-primary hover:bg-opacity-90 text-white px-6 py-3 rounded-md text-lg font-bold transition-all shadow-lg hidden md:block"
+        >
+          今すぐ相談
+        </a>
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-primary text-white text-[10px] sm:text-xs py-1.5 px-3 sm:px-4 text-center font-bold leading-snug whitespace-pre-line"
+  >
+    {`365日24時間受付中・迅速訪問\n立会も不要！ 嘔吐、お漏らし\n灯油こぼしも　ニオイ徹底洗浄`}
+  </div>
+</header>

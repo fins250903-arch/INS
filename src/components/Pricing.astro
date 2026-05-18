@@ -1,0 +1,102 @@
+---
+import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../data/lp-pricing';
+import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+---
+
+<section class="py-16 bg-white" id="pricing">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">出張🚗 車内クリーニング 料金表</h2>
+      <p class="text-cta-red text-lg font-bold">概算の料金です・施工前にお見積り致します。</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto mb-12 bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100">
+      <h3 class="text-xl md:text-2xl font-bold flex items-center gap-2">
+        <span class="text-2xl">🏆</span> 【一番人気】セットでお得なパック
+      </h3>
+      <p class="mt-2 text-sm text-gray-700 leading-relaxed">
+        「シート洗浄＋床面洗浄」がセットになったお得なプランです。<br />
+        内容：簡易リンサー洗浄 / スチーム洗浄 / 掃除機 / 内装・シートベルト拭き上げ<br />
+        ＊別途：消臭・脱臭（嘔吐・糞尿・激臭・血液は追加費用）／天井部洗浄・ペットの毛取りは含まれません。
+      </p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm border border-gray-200 bg-white">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 text-left">車種区分（税込）</th>
+              <th class="p-3 text-left">料金</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricingSet.map((row) => (
+              <tr class="border-t border-gray-200">
+                <td class="p-3">{row.label}</td>
+                <td class="p-3 font-bold text-lg">{row.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-8 text-xl font-bold">📍 【個別】部分クリーニング</h3>
+      <p class="mt-2 text-sm text-gray-600">「ここだけ綺麗にしたい」というご要望に。※床マット・ドア内側・シートベルトは除きます。</p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm border border-gray-200 bg-white">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 text-left">項目</th>
+              <th class="p-3 text-left">料金</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricingPartial.map((row) => (
+              <tr class="border-t border-gray-200">
+                <td class="p-3">{row.label}</td>
+                <td class="p-3 font-semibold">{row.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-8 text-xl font-bold">✨ オプションメニュー</h3>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm border border-gray-200 bg-white">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 text-left">追加サービス内容</th>
+              <th class="p-3 text-left">料金</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricingOptions.map((row) => (
+              <tr class="border-t border-gray-200">
+                <td class="p-3">{row.label}</td>
+                <td class="p-3 font-semibold">{row.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="mt-4 text-sm text-gray-700 list-disc list-inside space-y-1">
+        {additionalNotes.map((note) => (
+          <li>{note}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="text-center">
+      <a
+        href="tel:070-8428-0866"
+        class="inline-block bg-cta-green hover:bg-opacity-90 text-white text-xl md:text-2xl font-bold py-5 px-12 rounded-full shadow-xl transition-all"
+      >
+        無料見積もり・お問い合わせはこちら
+      </a>
+      <p class="mt-4">
+        <a href={CONTACT_MAILTO} class="text-primary font-bold underline break-all">{CONTACT_EMAIL}</a>
+        <span class="block mt-2 text-sm text-gray-600">メールでのお問い合わせ（上記をタップ）</span>
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatingCTA from '../components/FloatingCTA.astro';
+import LandingPage from '../components/LandingPage.astro';
+import { getCaseStudiesForSlug } from '../data/lp-region-case-studies';
+import { buildLpJsonLd } from '../lib/lp-json-ld';
+import pages from '../data/wp-pages.json';
+import regionLpsMain from '../data/region-lp.json';
+import regionLpsExtra from '../data/region-lp-extra.json';
+
+type RegionLp = (typeof regionLpsMain)[number];
+
+export function getStaticPaths() {
+  const regionBySlug = new Map<string, RegionLp>();
+  for (const r of regionLpsExtra) {
+    regionBySlug.set(r.slug, r as RegionLp);
+  }
+  for (const r of regionLpsMain) {
+    regionBySlug.set(r.slug, r);
+  }
+  const regionLps = Array.from(regionBySlug.values());
+
+  const regionSlugs = new Set(regionLps.map((r) => r.slug));
+  const excluded = new Set([
+    'occ',
+    'contact',
+    'thanks',
+    'privacy-policy',
+    'terms',
+    'compare',
+    'index'
+  ]);
+  const wpPaths = pages
+    .filter((page) => page.status === 'publish' && !excluded.has(page.slug))
+    .filter((page) => !regionSlugs.has(page.slug))
+    .map((page) => ({
+      params: { slug: page.slug },
+      props: { mode: 'wp' as const, page }
+    }));
+
+  const regionPaths = regionLps.map((regionLp) => ({
+    params: { slug: regionLp.slug },
+    props: { mode: 'region' as const, regionLp }
+  }));
+
+  return [...regionPaths, ...wpPaths];
+}
+
+const props = Astro.props as
+  | { mode: 'wp'; page: (typeof pages)[number] }
+  | { mode: 'region'; regionLp: RegionLp };
+
+const regionJsonLd =
+  props.mode === 'region'
+    ? buildLpJsonLd({
+        path: `/${props.regionLp.slug}/`,
+        regionFull: props.regionLp.regionFull,
+        regionName: props.regionLp.regionName,
+        description: props.regionLp.layoutDescription
+      })
+    : undefined;
+---
+
+{
+  props.mode === 'region' ? (
+    <Layout
+      title={props.regionLp.layoutTitle}
+      description={props.regionLp.layoutDescription}
+      jsonLd={regionJsonLd}
+    >
+      <Header />
+      <main>
+        <LandingPage
+          regionName={props.regionLp.regionName}
+          regionFull={props.regionLp.regionFull}
+          showAreaList={props.regionLp.showAreaList}
+          serviceAreas={props.regionLp.serviceAreas}
+          representativeImageFile={props.regionLp.representativeImageFile}
+          areaLead={props.regionLp.areaLead}
+          caseStudies={getCaseStudiesForSlug(props.regionLp.slug)}
+        />
+      </main>
+      <Footer regionFull={props.regionLp.regionFull} regionName={props.regionLp.regionName} />
+      <FloatingCTA />
+    </Layout>
+  ) : (
+    <Layout title={props.page.title} description={props.page.title}>
+      <Header />
+      <main class="bg-white">
+        <section class="max-w-4xl mx-auto px-6 py-12">
+          <h1 class="text-3xl font-bold">{props.page.title}</h1>
+          <div class="mt-8 prose max-w-none wp-content" set:html={props.page.content} />
+        </section>
+      </main>
+      <Footer />
+      <FloatingCTA />
+    </Layout>
+  )
+}

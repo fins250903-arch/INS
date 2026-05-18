@@ -1,0 +1,50 @@
+---
+const areas = [
+  {
+    name: "福岡エリア",
+    cities: "福岡市（中央区・博多区・東区・西区・南区・城南区・早良区）、筑紫野市、春日市、大野城市、太宰府市、那珂川市、糟屋郡、宗像市、古賀市、福津市、糸島市"
+  },
+  {
+    name: "北九州エリア",
+    cities: "北九州市（小倉北区・小倉南区・若松区・戸畑区・八幡東区・八幡西区・門司区）、中間市、遠賀郡"
+  },
+  {
+    name: "久留米・筑後エリア",
+    cities: "久留米市、大牟田市、柳川市、八女市、筑後市、大川市、小郡市、うきは市、みやま市、三井郡、三潴郡、八女郡"
+  },
+  {
+    name: "筑豊エリア",
+    cities: "飯塚市、直方市、田川市、宮若市、嘉麻市、鞍手郡、嘉穂郡、田川郡"
+  },
+  {
+    name: "京築エリア",
+    cities: "行橋市、豊前市、京都郡、築上郡"
+  }
+];
+---
+
+<section class="bg-gray-50 py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">
+        福岡県内ならどこでも！<span class="text-primary">最短当日お伺いいたします</span>
+      </h2>
+      <p class="text-gray-600">
+        「仕事先に来てほしい」「自宅の駐車場で作業してほしい」というご要望にお応えします！
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {areas.map(area => (
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+          <h3 class="text-lg font-bold text-primary mb-3 flex items-center">
+            <span class="mr-2">📍</span> {area.name}
+          </h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            {area.cities}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
