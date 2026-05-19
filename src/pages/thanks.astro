@@ -3,15 +3,28 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
+import { buildPageJsonLd } from '../lib/json-ld-site';
+
+const thanksJsonLd = buildPageJsonLd({
+  path: '/thanks/',
+  title: 'お問い合わせありがとうございます｜アイエヌエス車内清掃',
+  description: 'お問い合わせを受け付けました。'
+});
 ---
 
-<Layout title="お問い合わせありがとうございます｜アイエヌエス車内清掃">
+<Layout
+  title="お問い合わせありがとうございます｜アイエヌエス車内清掃"
+  description="お問い合わせを受け付けました。"
+  canonical="/thanks/"
+  jsonLd={thanksJsonLd}
+  noindex
+>
   <Header />
   <main class="bg-white">
     <section class="max-w-3xl mx-auto px-6 py-12 text-center">
       <h1 class="text-3xl font-bold">お問い合わせありがとうございます。</h1>
       <p class="mt-4 text-sm text-gray-600">担当者よりご連絡いたします。しばらくお待ちください。</p>
-      <a href="/" class="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-white font-bold">ホーム画面</a>
+      <a href="/osaka/" class="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-white font-bold">ホーム画面</a>
     </section>
   </main>
   <Footer />

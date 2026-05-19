@@ -1,15 +1,15 @@
 ---
 export const prerender = false;
 
+import { resolveWp1Region } from '../../lib/wp1-region-redirect';
+
 const rawHost = Astro.request.headers.get('x-forwarded-host') || Astro.url.hostname;
-const host = rawHost.toLowerCase();
 const path = Astro.params.path || '';
+const { region, rest } = resolveWp1Region(rawHost, path);
 
-let region = 'osaka';
-if (host.includes('hyg')) region = 'hyougo';
-if (host.includes('siga')) region = 'siga';
-
-const destination = path ? `https://insbs.net/${region}/${path}` : `https://insbs.net/${region}/`;
+const destination = rest
+  ? `https://insbs.net/${region}/${rest}`
+  : `https://insbs.net/${region}/`;
 
 return Astro.redirect(destination, 301);
 ---

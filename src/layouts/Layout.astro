@@ -1,18 +1,37 @@
 ---
 import '../styles/global.css';
+import { canonicalUrl } from '../lib/canonical-url';
+import { buildPageJsonLd } from '../lib/json-ld-site';
 
 interface Props {
 	title?: string;
 	description?: string;
-	/** head 内に JSON-LD（application/ld+json）として出力するオブジェクト配列 */
-	jsonLd?: Record<string, unknown>[];
+	/** 正規 URL（未指定時は現在パスから自動生成） */
+	canonical?: string;
+	/** head 内 JSON-LD（@graph 単一ドキュメント）。未指定時は WebPage の最小グラフ */
+	jsonLd?: Record<string, unknown>;
+	/** true のとき検索エンジンにインデックスさせない（thanks 等） */
+	noindex?: boolean;
 }
 
-const { 
-	title = "大阪｜アイエヌエスINS出張車内清掃業者｜車内クリーニング", 
-	description = "「うわ、どうしよう…」その絶望、私たちがリセットします。お電話一本で、プロの【車内 洗浄】があなたのご自宅へ。",
-	jsonLd
+const {
+	title = '大阪｜アイエヌエスINS出張車内清掃業者｜車内クリーニング',
+	description = '「うわ、どうしよう…」その絶望、私たちがリセットします。お電話一本で、プロの【車内 洗浄】があなたのご自宅へ。',
+	canonical,
+	jsonLd,
+	noindex = false
 } = Astro.props;
+
+const resolvedCanonical =
+	canonical?.startsWith('http') ? canonical : canonicalUrl(canonical ?? Astro.url.pathname);
+const resolvedJsonLd =
+	jsonLd ??
+	buildPageJsonLd({
+		path: Astro.url.pathname,
+		title,
+		description
+	});
+const jsonLdHtml = JSON.stringify(resolvedJsonLd);
 ---
 
 <!doctype html>
@@ -25,11 +44,19 @@ const {
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		{jsonLd?.map((block) => (
-			<script type="application/ld+json" set:html={JSON.stringify(block)} />
-		))}
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="canonical" href={resolvedCanonical} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={resolvedCanonical} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:locale" content="ja_JP" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<script type="application/ld+json" set:html={jsonLdHtml} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	</head>
 	<body class="bg-white">
 		<slot />

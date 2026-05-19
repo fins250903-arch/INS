@@ -1,6 +1,132 @@
 {
   "redirects": [
     {
+      "source": "/wp1/blog/:path+",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/blog/chiiki/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog/",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/blog/chiiki/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/:path+",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/osaka/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "osak.insbs.net" }],
+      "destination": "https://insbs.net/osaka/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog/:path+",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/blog/chiiki/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog/",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/blog/chiiki/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/:path+",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/hyougo/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "hyg.insbs.net" }],
+      "destination": "https://insbs.net/hyougo/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog/:path+",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/blog/chiiki/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/blog/",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/blog/chiiki/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/:path+",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/siga/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "siga.insbs.net" }],
+      "destination": "https://insbs.net/siga/:path*",
+      "permanent": true
+    },
+    {
       "source": "/wp1/mie/blog",
       "destination": "https://insbs.net/blog/chiiki/mie/",
       "permanent": true
@@ -193,6 +319,96 @@
     {
       "source": "/wp1/sizuoka/blog/:path+",
       "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/osaka/blog",
+      "destination": "https://insbs.net/blog/chiiki/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/osaka/blog/",
+      "destination": "https://insbs.net/blog/chiiki/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/osaka/blog/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/hyougo/blog",
+      "destination": "https://insbs.net/blog/chiiki/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/hyougo/blog/",
+      "destination": "https://insbs.net/blog/chiiki/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/hyougo/blog/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/siga/blog",
+      "destination": "https://insbs.net/blog/chiiki/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/siga/blog/",
+      "destination": "https://insbs.net/blog/chiiki/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/siga/blog/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/osaka",
+      "destination": "https://insbs.net/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/osaka/",
+      "destination": "https://insbs.net/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/osaka/:path+",
+      "destination": "https://insbs.net/osaka/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/hyougo",
+      "destination": "https://insbs.net/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/hyougo/",
+      "destination": "https://insbs.net/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/hyougo/:path+",
+      "destination": "https://insbs.net/hyougo/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/siga",
+      "destination": "https://insbs.net/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/siga/",
+      "destination": "https://insbs.net/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/wp1/siga/:path+",
+      "destination": "https://insbs.net/siga/:path+",
       "permanent": true
     },
     {
@@ -898,6 +1114,11 @@
     {
       "source": "/blog/fukuoka/:path+",
       "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "destination": "https://insbs.net/osaka/",
       "permanent": true
     }
   ]

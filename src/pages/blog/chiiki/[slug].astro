@@ -5,6 +5,7 @@ import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
 import posts from '../../../data/wp-posts.json';
 import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
+import { buildPageJsonLd } from '../../../lib/json-ld-site';
 
 export function getStaticPaths() {
   return CHIIKI_REGIONS.map((region) => ({
@@ -26,9 +27,21 @@ const fallbackArticles: { title: string; slug: string }[] = [
   { title: '知らなかった！やってはいけない嘔吐物処理とは', slug: 'outo2' },
   { title: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術', slug: 'no1' }
 ];
+
+const chiikiJsonLd = buildPageJsonLd({
+  path: `/blog/chiiki/${region.slug}/`,
+  title: `${region.name}の記事一覧｜ブログ`,
+  description: `${region.name}向けにカテゴリ分けしたブログ記事一覧です。`,
+  pageType: 'CollectionPage'
+});
 ---
 
-<Layout title={`${region.name}の記事一覧｜ブログ`} description={`${region.name}向けにカテゴリ分けしたブログ記事一覧です。`}>
+<Layout
+  title={`${region.name}の記事一覧｜ブログ`}
+  description={`${region.name}向けにカテゴリ分けしたブログ記事一覧です。`}
+  canonical={`/blog/chiiki/${region.slug}/`}
+  jsonLd={chiikiJsonLd}
+>
   <Header />
   <main class="bg-white">
     <section class="max-w-6xl mx-auto px-6 py-12">

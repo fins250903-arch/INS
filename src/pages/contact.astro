@@ -4,9 +4,22 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
 import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+import { buildPageJsonLd } from '../lib/json-ld-site';
+
+const contactJsonLd = buildPageJsonLd({
+  path: '/contact/',
+  title: 'お問い合わせ｜アイエヌエス車内清掃',
+  description: '365日24時間受付。お電話・メール・LINEでお問い合わせください。',
+  pageType: 'ContactPage'
+});
 ---
 
-<Layout title="お問い合わせ｜アイエヌエス車内清掃">
+<Layout
+  title="お問い合わせ｜アイエヌエス車内清掃"
+  description="365日24時間受付。お電話・メール・LINEでお問い合わせください。"
+  canonical="/contact/"
+  jsonLd={contactJsonLd}
+>
   <Header />
   <main class="bg-white">
     <section class="max-w-3xl mx-auto px-6 py-12">

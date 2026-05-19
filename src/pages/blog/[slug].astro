@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import FloatingCTA from '../../components/FloatingCTA.astro';
 import posts from '../../data/wp-posts.json';
 import { CHIIKI_REGIONS } from '../../data/blog-chiiki';
+import { buildBlogPostJsonLd } from '../../lib/blog-json-ld';
 
 export function getStaticPaths() {
   return posts
@@ -23,9 +24,21 @@ for (const c of post.categories || []) {
     break;
   }
 }
+
+const blogJsonLd = buildBlogPostJsonLd({
+  slug: post.slug,
+  title: post.title,
+  description: post.title,
+  datePublished: post.date
+});
 ---
 
-<Layout title={`${post.title}｜アイエヌエス車内清掃`} description={post.title}>
+<Layout
+  title={`${post.title}｜アイエヌエス車内清掃`}
+  description={post.title}
+  canonical={`/blog/${post.slug}/`}
+  jsonLd={blogJsonLd}
+>
   <Header />
   <main class="bg-white">
     <article class="max-w-3xl mx-auto px-6 py-12">
