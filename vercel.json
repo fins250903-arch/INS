@@ -767,6 +767,336 @@
       "source": "/ok2/:path+",
       "destination": "https://insbs.net/fukuoka/:path+",
       "permanent": true
+    },
+    {
+      "source": "/blog/mie",
+      "destination": "https://insbs.net/blog/chiiki/mie/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/mie/",
+      "destination": "https://insbs.net/blog/chiiki/mie/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/mie/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kyouto",
+      "destination": "https://insbs.net/blog/chiiki/kyouto/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kyouto/",
+      "destination": "https://insbs.net/blog/chiiki/kyouto/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kyouto/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/wakayama",
+      "destination": "https://insbs.net/blog/chiiki/wakayama/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/wakayama/",
+      "destination": "https://insbs.net/blog/chiiki/wakayama/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/wakayama/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/nara",
+      "destination": "https://insbs.net/blog/chiiki/nara/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/nara/",
+      "destination": "https://insbs.net/blog/chiiki/nara/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/nara/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/gunnma",
+      "destination": "https://insbs.net/blog/chiiki/gunnma/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/gunnma/",
+      "destination": "https://insbs.net/blog/chiiki/gunnma/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/gunnma/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/ibaraki",
+      "destination": "https://insbs.net/blog/chiiki/ibaraki/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/ibaraki/",
+      "destination": "https://insbs.net/blog/chiiki/ibaraki/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/ibaraki/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/miyagi",
+      "destination": "https://insbs.net/blog/chiiki/miyagi/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/miyagi/",
+      "destination": "https://insbs.net/blog/chiiki/miyagi/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/miyagi/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hirosima",
+      "destination": "https://insbs.net/blog/chiiki/hirosima/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hirosima/",
+      "destination": "https://insbs.net/blog/chiiki/hirosima/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hirosima/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kumamoto",
+      "destination": "https://insbs.net/blog/chiiki/kumamoto/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kumamoto/",
+      "destination": "https://insbs.net/blog/chiiki/kumamoto/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kumamoto/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saga",
+      "destination": "https://insbs.net/blog/chiiki/saga/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saga/",
+      "destination": "https://insbs.net/blog/chiiki/saga/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saga/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti",
+      "destination": "https://insbs.net/blog/chiiki/aiti/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti/",
+      "destination": "https://insbs.net/blog/chiiki/aiti/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/fukui",
+      "destination": "https://insbs.net/blog/chiiki/fukui/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/fukui/",
+      "destination": "https://insbs.net/blog/chiiki/fukui/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/fukui/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sizuoka",
+      "destination": "https://insbs.net/blog/chiiki/sizuoka/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sizuoka/",
+      "destination": "https://insbs.net/blog/chiiki/sizuoka/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/sizuoka/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tiba",
+      "destination": "https://insbs.net/blog/chiiki/tiba/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tiba/",
+      "destination": "https://insbs.net/blog/chiiki/tiba/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tiba/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saitama",
+      "destination": "https://insbs.net/blog/chiiki/saitama/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saitama/",
+      "destination": "https://insbs.net/blog/chiiki/saitama/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/saitama/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tokyou",
+      "destination": "https://insbs.net/blog/chiiki/tokyou/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tokyou/",
+      "destination": "https://insbs.net/blog/chiiki/tokyou/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/tokyou/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/okinawa",
+      "destination": "https://insbs.net/blog/chiiki/okinawa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/okinawa/",
+      "destination": "https://insbs.net/blog/chiiki/okinawa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/okinawa/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kanagawa",
+      "destination": "https://insbs.net/blog/chiiki/kanagawa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kanagawa/",
+      "destination": "https://insbs.net/blog/chiiki/kanagawa/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/kanagawa/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/osaka",
+      "destination": "https://insbs.net/blog/chiiki/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/osaka/",
+      "destination": "https://insbs.net/blog/chiiki/osaka/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/osaka/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hyougo",
+      "destination": "https://insbs.net/blog/chiiki/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hyougo/",
+      "destination": "https://insbs.net/blog/chiiki/hyougo/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/hyougo/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/siga",
+      "destination": "https://insbs.net/blog/chiiki/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/siga/",
+      "destination": "https://insbs.net/blog/chiiki/siga/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/siga/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
+    },
+    {
+      "source": "/blog/fukuoka",
+      "destination": "https://insbs.net/blog/chiiki/fukuoka/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/fukuoka/",
+      "destination": "https://insbs.net/blog/chiiki/fukuoka/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/fukuoka/:path+",
+      "destination": "https://insbs.net/blog/:path+",
+      "permanent": true
     }
   ]
 }
