@@ -547,7 +547,7 @@
       "has": [
         {
           "type": "host",
-          "value": "osak.insbs.net"
+          "value": "(?i).*osak\\.insbs\\.net.*"
         }
       ]
     },
@@ -558,7 +558,7 @@
       "has": [
         {
           "type": "host",
-          "value": "osak.insbs.net"
+          "value": "(?i).*osak\\.insbs\\.net.*"
         }
       ]
     },
@@ -569,7 +569,7 @@
       "has": [
         {
           "type": "host",
-          "value": "osak.insbs.net"
+          "value": "(?i).*osak\\.insbs\\.net.*"
         }
       ]
     },
@@ -580,7 +580,7 @@
       "has": [
         {
           "type": "host",
-          "value": "hyg.insbs.net"
+          "value": "(?i).*hyg\\.insbs\\.net.*"
         }
       ]
     },
@@ -591,7 +591,7 @@
       "has": [
         {
           "type": "host",
-          "value": "hyg.insbs.net"
+          "value": "(?i).*hyg\\.insbs\\.net.*"
         }
       ]
     },
@@ -602,7 +602,7 @@
       "has": [
         {
           "type": "host",
-          "value": "hyg.insbs.net"
+          "value": "(?i).*hyg\\.insbs\\.net.*"
         }
       ]
     },
@@ -613,7 +613,7 @@
       "has": [
         {
           "type": "host",
-          "value": "siga.insbs.net"
+          "value": "(?i).*siga\\.insbs\\.net.*"
         }
       ]
     },
@@ -624,7 +624,7 @@
       "has": [
         {
           "type": "host",
-          "value": "siga.insbs.net"
+          "value": "(?i).*siga\\.insbs\\.net.*"
         }
       ]
     },
@@ -635,7 +635,7 @@
       "has": [
         {
           "type": "host",
-          "value": "siga.insbs.net"
+          "value": "(?i).*siga\\.insbs\\.net.*"
         }
       ]
     },
@@ -661,7 +661,7 @@
       "has": [
         {
           "type": "host",
-          "value": "osak.insbs.net"
+          "value": "(?i).*osak\\.insbs\\.net.*"
         }
       ]
     },
@@ -672,7 +672,7 @@
       "has": [
         {
           "type": "host",
-          "value": "osak.insbs.net"
+          "value": "(?i).*osak\\.insbs\\.net.*"
         }
       ]
     },
@@ -683,7 +683,7 @@
       "has": [
         {
           "type": "host",
-          "value": "osak.insbs.net"
+          "value": "(?i).*osak\\.insbs\\.net.*"
         }
       ]
     },
@@ -694,7 +694,7 @@
       "has": [
         {
           "type": "host",
-          "value": "hyg.insbs.net"
+          "value": "(?i).*hyg\\.insbs\\.net.*"
         }
       ]
     },
@@ -705,7 +705,7 @@
       "has": [
         {
           "type": "host",
-          "value": "hyg.insbs.net"
+          "value": "(?i).*hyg\\.insbs\\.net.*"
         }
       ]
     },
@@ -716,7 +716,7 @@
       "has": [
         {
           "type": "host",
-          "value": "hyg.insbs.net"
+          "value": "(?i).*hyg\\.insbs\\.net.*"
         }
       ]
     },
@@ -727,7 +727,7 @@
       "has": [
         {
           "type": "host",
-          "value": "siga.insbs.net"
+          "value": "(?i).*siga\\.insbs\\.net.*"
         }
       ]
     },
@@ -738,7 +738,7 @@
       "has": [
         {
           "type": "host",
-          "value": "siga.insbs.net"
+          "value": "(?i).*siga\\.insbs\\.net.*"
         }
       ]
     },
@@ -749,7 +749,7 @@
       "has": [
         {
           "type": "host",
-          "value": "siga.insbs.net"
+          "value": "(?i).*siga\\.insbs\\.net.*"
         }
       ]
     },
