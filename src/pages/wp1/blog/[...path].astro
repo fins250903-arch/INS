@@ -1,0 +1,14 @@
+---
+export const prerender = false;
+
+const host = Astro.url.hostname;
+const path = Astro.params.path || '';
+
+let region = 'osaka';
+if (host.includes('hyg')) region = 'hyougo';
+if (host.includes('siga')) region = 'siga';
+
+const destination = path ? `https://insbs.net/blog/${path}` : `https://insbs.net/blog/chiiki/${region}/`;
+
+return Astro.redirect(destination, 301);
+---
