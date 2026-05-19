@@ -1,0 +1,8 @@
+{
+  "$comment": "delete-props コマンドで削除するプロパティ。旧サブドメイン用プレフィックス等を記載。",
+  "properties": [
+    "https://osak.insbs.net/",
+    "https://hyg.insbs.net/",
+    "https://siga.insbs.net/"
+  ]
+}

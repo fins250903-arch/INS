@@ -1,0 +1,3 @@
+# 1行1URL。Indexing API で URL_DELETED を送る（削除した LP 等）
+# 例:
+# https://insbs.net/old-page/

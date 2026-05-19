@@ -1,0 +1,4 @@
+{
+  "$comment": "追加で Search Console に登録したい URL プレフィックス（任意）。通常は https://insbs.net/ の1件で全ページをカバーします。",
+  "properties": []
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "./scripts/gsc/gsc.config.schema.json",
+  "siteOrigin": "https://insbs.net",
+  "primaryProperty": "https://insbs.net/",
+  "properties": [
+    "https://insbs.net/"
+  ],
+  "sitemapUrl": "https://insbs.net/sitemap-index.xml",
+  "localSitemapGlob": "dist/client/sitemap*.xml",
+  "indexing": {
+    "enabled": true,
+    "dailyLimit": 180,
+    "delayMs": 600
+  },
+  "excludeUrlPatterns": [
+    "/thanks/",
+    "/compare/"
+  ]
+}

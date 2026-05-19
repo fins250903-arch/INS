@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+# Google サービスアカウント鍵（絶対にコミットしない）
+secrets/
+*.json.key
+
 # macOS-specific files
 .DS_Store
 

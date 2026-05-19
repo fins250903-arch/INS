@@ -11,12 +11,22 @@
     "build": "astro build",
     "preview": "astro preview",
     "preview:lan": "astro preview --host 0.0.0.0",
-    "astro": "astro"
+    "astro": "astro",
+    "gsc": "tsx scripts/gsc/sync.ts",
+    "gsc:sync": "npm run build && npm run gsc -- sync",
+    "sachi:sync": "npm run gsc:sync"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.7",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.3.3",
+    "dotenv": "^17.4.2",
+    "google-auth-library": "^10.6.2",
+    "googleapis": "^171.4.0",
     "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "tsx": "^4.22.3"
   }
 }
