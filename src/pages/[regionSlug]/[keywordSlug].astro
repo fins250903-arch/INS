@@ -1,0 +1,640 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FloatingCTA from '../../components/FloatingCTA.astro';
+import { regionLpLinks } from '../../data/region-lp-links';
+import { keywordLps } from '../../data/keyword-lp';
+import regionLpsMain from '../../data/region-lp.json';
+import regionLpsExtra from '../../data/region-lp-extra.json';
+import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../../data/lp-pricing';
+import { CONTACT_EMAIL, CONTACT_MAILTO } from '../../data/site';
+import posts from '../../data/wp-posts.json';
+
+// 画像アセットのインポート (Astro:assetsの最適化を利用)
+import bgHero from '../../assets/images/images-1-e1756888161530.jpg';
+import ctaBg from '../../assets/images/carclean15kb.jpg';
+import defaultRepresentative from '../../assets/images/representative-new.png';
+import worryDrink from '../../assets/images/嘔吐シミダレ-1.jpg';
+import worryCeiling from '../../assets/images/tennjyo.jpg';
+import worrySeat from '../../assets/images/シート.jpg';
+
+import voice01 from '../../assets/images/202604-724x1024.jpg';
+import voice02 from '../../assets/images/202603-724x1024.jpg';
+import voice03 from '../../assets/images/202602-scaled.jpg';
+import voice04 from '../../assets/images/お客様の声2602-scaled.jpg';
+import voice05 from '../../assets/images/車前-3人並び喜ぶ.jpg';
+import voice06 from '../../assets/images/放尿260206.jpg';
+import voice07 from '../../assets/images/ふまん-2601-scaled.jpg';
+import voice08 from '../../assets/images/お客様の声1-2510.jpg';
+import voice09 from '../../assets/images/gasosut-251012-scaled.jpg';
+import voice10 from '../../assets/images/お客様の声2508.jpg';
+import voice11 from '../../assets/images/軽四お客様喜び-1024x559.jpg';
+import commentPhoto from '../../assets/images/car_zaseki_pikapika.jpg';
+
+// すべての地域データをマップにまとめて地域詳細情報を引き出せるようにする
+type RegionLp = (typeof regionLpsMain)[number];
+const regionBySlug = new Map<string, RegionLp>();
+for (const r of regionLpsExtra) {
+  regionBySlug.set(r.slug, r as RegionLp);
+}
+for (const r of regionLpsMain) {
+  regionBySlug.set(r.slug, r);
+}
+
+export function getStaticPaths() {
+  const paths = [];
+  for (const region of regionLpLinks) {
+    for (const kw of keywordLps) {
+      paths.push({
+        params: {
+          regionSlug: region.slug,
+          keywordSlug: kw.slug
+        },
+        props: {
+          regionSlug: region.slug,
+          regionName: region.label,
+          keyword: kw
+        }
+      });
+    }
+  }
+  return paths;
+}
+
+const { regionSlug, regionName, keyword } = Astro.props;
+
+// 地域フルネームを取得 (例: "大阪府", "東京都", "奈良県")
+const regionDetail = regionBySlug.get(regionSlug);
+const regionFull = regionDetail?.regionFull || `${regionName}府`;
+const serviceHeadingTarget = regionFull === '沖縄県' ? '沖縄本島' : regionFull;
+const areaListTitlePrefix = regionFull === '沖縄県' ? '沖縄本島' : regionFull;
+
+// 地域店主画像の解決（無ければデフォルト）
+const representativeGlob = import.meta.glob<ImageMetadata>('../../assets/images/representative*.png', {
+  eager: true,
+  import: 'default'
+});
+
+const ownerPhoto = (() => {
+  const repFile = regionDetail?.representativeImageFile;
+  if (!repFile?.trim()) return defaultRepresentative;
+  const name = repFile.trim();
+  const hit = Object.keys(representativeGlob).find((k) => {
+    const norm = k.replace(/\\/g, '/');
+    return norm.endsWith('/' + name) || norm.endsWith(name);
+  });
+  return hit ? representativeGlob[hit] : defaultRepresentative;
+})();
+
+// 置換処理: {{region}} や {{regionFull}} を動的バインド
+const fvCopyText = keyword.fvCopy.replace(/{{region}}/g, regionName).replace(/{{regionFull}}/g, regionFull);
+const pageTitle = `【${regionName}】${keyword.keyword}・頑固な汚れ・臭い対策ならプロにお任せ｜INS車内清掃`;
+const pageDescription = keyword.description.replace(/{{region}}/g, regionName).replace(/{{regionFull}}/g, regionFull);
+const canonical = `/${regionSlug}/${keyword.slug}/`;
+
+// JSON-LD (LocalBusiness スキーマ)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": `INS出張車内清掃【${regionName}店】`,
+  "image": "https://insbs.net/assets/images/logo.png",
+  "description": pageDescription,
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": regionFull,
+    "addressCountry": "JP"
+  },
+  "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": regionFull
+  },
+  "priceRange": "¥8,800 - ¥35,000"
+};
+
+// ブログ・ポストのロードと地域フィルタ
+const publishedPosts = posts.filter((post) => post.status === 'publish');
+const regionKeywords = [regionName, regionFull].map((v) => v?.trim()).filter(Boolean);
+const hasRegionKeyword = (content?: string) => {
+  if (!content || regionKeywords.length === 0) return false;
+  return regionKeywords.some((keyword) => content.includes(keyword));
+};
+const regionPosts = publishedPosts.filter((post) => hasRegionKeyword(post.content));
+const blogPosts = (regionPosts.length > 0 ? regionPosts : publishedPosts)
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+  .slice(0, 6);
+
+const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
+
+// お客様の声カルーセル
+const surveyItems = [
+  {
+    image: voice01,
+    alt: '60代男 母を乗せた際におもらしがあり、シートの奥まで染みてしまいました。自分では表面しか拭けず臭いが残っていましたが、高温スチームで奥まで除菌してもらい解消しました。',
+    text: '60代男 母を乗せた際におもらしがあり、シートの奥まで染みてしまいました。自分では表面しか拭けず臭いが残っていましたが、高温スチームで奥まで除菌してもらい解消しました。'
+  },
+  {
+    image: voice02,
+    alt: '30代 放置していた食べこぼしからカビが発生。不衛生で子供を乗せられませんでしたが、徹底洗浄と除菌でピカピカに。これからは車内での飲食に気をつけます。',
+    text: '30代 放置していた食べこぼしからカビが発生。不衛生で子供を乗せられませんでしたが、徹底洗浄と除菌でピカピカに。これからは車内での飲食に気をつけます。'
+  },
+  {
+    image: voice03,
+    alt: '売却前に査定を上げたくてヤニ取り清掃を依頼。見た目の清潔感が格段に上がり、予想以上の査定額がつきました。クリーニング代を払ってもお釣りがきました。40代',
+    text: '売却前に査定を上げたくてヤニ取り清掃を依頼。見た目の清潔感が格段に上がり、予想以上の査定額がつきました。クリーニング代を払ってもお釣りがきました。40代'
+  }
+];
+
+const voiceGallery = [
+  { image: voice04, caption: 'おもらしクリーニングもスッキリ' },
+  { image: voice05, caption: '車内洗浄が終わった車の前で3人並び喜ぶ笑顔' },
+  { image: voice06, caption: '車内のアクシデントもプロが解決' },
+  { image: voice07, caption: 'しつこいヤニ汚れもピカピカに' },
+  { image: voice08, caption: 'シート汚れがきれいで大満足' },
+  { image: voice09, caption: 'ガソリンスタンドのクリーニングより綺麗に' },
+  { image: voice10, caption: '炎天下の作業ご苦労さまでした。気になる臭いも解消！' }
+];
+
+const faqs = [
+  { q: '対応できる時間帯は？', a: '受付は、365日 24時間対応です。即日訪問も致します。' },
+  { q: '作業時間はどれくらい？', a: 'おおよそ2-4時間以内です。ただしヨゴレの程度により変わります。' },
+  { q: '作業中の待ち方は？', a: '作業中立会は不要です。その際、貴重品は車内から持出をお願いします。' },
+  { q: '会社の駐車場でもできる？', a: 'できます。ドアを開けるスペースと、掃除中の音が大丈夫であれば対応できます。マンション駐車場も可能です。商業施設等は、確認が必要です。' },
+  { q: '作業終了後すぐ乗れる？', a: '乾燥時間が有ります。天候や、洗剤の使用量で変わります。そのため、何分後から乗車可能とお伝えします。' },
+  { q: '対応できる地域', a: 'お電話で郵便番号をお伺いします。対応が難しいエリアは、お伝えします。山間部や、離島は対応できない場合が有ります。' }
+];
+
+const flowSteps = [
+  {
+    title: 'お問い合わせ',
+    text: 'まずはお気軽にお問い合わせください。お電話・メール・LINEでお待ちしております。作業中等で、電話にすぐに出られない場合は、折り返し迅速にご連絡します。'
+  },
+  {
+    title: '訪問日・作業内容の決定',
+    text: '状況をお聞かせいただき、概算をお伝えします。ご希望の日時と駐車場所の状態、全ドアを開けられるスペース、水、電源などの確認や当方の車を停める駐車場の有無などをお伺いいたします。'
+  },
+  {
+    title: 'お見積り',
+    text: '訪問後、現車の汚れ・臭いの状態を確認します。それから作業前にお見積りをお伝えします。'
+  },
+  {
+    title: '清掃',
+    text: 'ご了承次第、作業開始します。作業完了後、ご報告し、状況をご確認頂きます。'
+  },
+  {
+    title: 'お会計',
+    text: 'ご確認完了、状態をご了承後、お支払いお願いします。現金か、銀行振込での決済です。'
+  },
+  {
+    title: '完了',
+    text: '快適になった、お車をご利用ください。もし万が一施工後に洗い残し、ニオイ等、気になることが有れば、お知らせください。※灯油、ネコのおしっこニオイは、完全に除去できない場合があります。'
+  }
+];
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <Header />
+  
+  <main class="overflow-x-hidden">
+    <!-- 1. FV (ファーストビュー) -->
+    <section class="relative flex min-h-[min(40rem,90svh)] flex-col justify-center overflow-hidden bg-black text-white">
+      <div class="absolute inset-0">
+        <Image src={bgHero} alt="INS出張車内清掃 背景画像" class="h-full w-full object-cover opacity-60" />
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 to-slate-900/60"></div>
+      </div>
+      <div class="relative mx-auto w-full max-w-6xl px-6 py-16 sm:py-20 lg:py-24">
+        <div class="flex flex-col gap-8">
+          <div>
+            <span class="inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs sm:text-sm font-extrabold px-4 py-1.5 rounded-full mb-6 tracking-wider uppercase">
+              【{regionFull}】エリア出張対応店
+            </span>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight tracking-tight text-white drop-shadow-md">
+              {fvCopyText}
+            </h1>
+            <p class="mt-5 text-sm font-bold tracking-wide text-gray-200 sm:text-base flex flex-wrap gap-4">
+              <span class="inline-block border-b-2 border-emerald-400 pb-0.5">即日訪問相談</span>
+              <span class="inline-block border-b-2 border-emerald-400 pb-0.5">地元密着の信頼</span>
+              <span class="inline-block border-b-2 border-emerald-400 pb-0.5">実績多数</span>
+            </p>
+            <div class="mt-8 flex flex-wrap items-center gap-4 rounded-xl bg-slate-900/80 border border-slate-800 p-5 backdrop-blur-md max-w-2xl">
+              <span class="inline-flex items-center rounded-full border border-amber-300 bg-amber-400/90 px-3.5 py-1 text-xs font-black text-slate-950 shadow">
+                お客様満足度 92%
+              </span>
+              <p class="flex-1 text-xs font-semibold leading-relaxed text-gray-300 sm:text-sm whitespace-pre-line">
+                {`365日24時間受付中・迅速訪問・立会不要！\n頑固なシミ、お漏らし、灯油こぼし、ペットの抜け毛やニオイをプロが徹底洗浄・徹底消臭。`}
+              </p>
+            </div>
+            
+            <!-- FV内CTAボタン -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 max-w-xl">
+              <a href="tel:070-8428-0866" class="flex items-center justify-center gap-2 font-bold text-base px-6 py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white">
+                <span class="text-lg">📞</span>電話で今すぐ相談 (24時間)
+              </a>
+              <a href="https://lin.ee/Xs8Orp2" target="_blank" class="flex items-center justify-center gap-2 font-bold text-base px-6 py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 bg-gradient-to-r from-[#06C755] to-[#05b04b] text-white">
+                <span class="text-lg">💬</span>LINEで無料見積もり
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 悩み訴求セクション (★最重要・FVの直後) -->
+    <section class="py-16 sm:py-20 bg-slate-950 text-white">
+      <div class="max-w-6xl mx-auto px-6 text-center">
+        <span class="text-xs font-bold tracking-widest text-red-500 uppercase block mb-3">Do you have these problems?</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          あなたにこんなお悩みないですか？
+        </h2>
+        <div class="mt-6 w-12 h-1 bg-red-600 mx-auto rounded"></div>
+        <p class="mt-4 text-sm sm:text-base text-gray-400 max-w-2xl mx-auto">
+          車内のアクシデントや頑固な汚れ・臭いは、放置するとカビや雑菌の繁殖に繋がり、自力での清掃では悪化することも。
+        </p>
+        
+        <ul class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4 list-none p-0 text-left">
+          {keyword.troubles.map((trouble, index) => (
+            <li class="bg-slate-900/60 border border-slate-800 hover:border-red-500/40 rounded-2xl p-6 transition-all hover:-translate-y-1">
+              <div class="inline-flex items-center justify-center w-10 h-10 bg-red-500/15 text-red-500 rounded-full font-black text-sm mb-4">
+                0{index + 1}
+              </div>
+              <p class="text-sm sm:text-base font-semibold leading-relaxed text-gray-200">
+                {trouble}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 既存の訴求画像 -->
+    <section class="py-12 bg-white">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-lg font-bold text-center text-gray-800 mb-6">このようなお悩みで出張車内清掃をご利用いただいています</h3>
+        <div class="grid gap-6 md:grid-cols-3">
+          <figure class="bg-slate-50 rounded-xl overflow-hidden shadow-sm border border-slate-100">
+            <Image src={worryDrink} alt="飲み物シミ・食べこぼし" class="w-full h-52 object-cover" />
+            <figcaption class="p-3 text-center text-sm font-semibold text-gray-700 bg-slate-100">コーヒー・飲み物シミ</figcaption>
+          </figure>
+          <figure class="bg-slate-50 rounded-xl overflow-hidden shadow-sm border border-slate-100">
+            <Image src={worryCeiling} alt="天井ヤニヨゴレ・タバコのヤニ" class="w-full h-52 object-cover" />
+            <figcaption class="p-3 text-center text-sm font-semibold text-gray-700 bg-slate-100">天井のタバコヤニ汚れ</figcaption>
+          </figure>
+          <figure class="bg-slate-50 rounded-xl overflow-hidden shadow-sm border border-slate-100">
+            <Image src={worrySeat} alt="シートの嘔吐・おもらしシミ" class="w-full h-52 object-cover" />
+            <figcaption class="p-3 text-center text-sm font-semibold text-gray-700 bg-slate-100">嘔吐・おしっこの染み</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 解決策・強みセクション -->
+    <section class="py-16 sm:py-20 bg-slate-50 border-y border-slate-200">
+      <div class="max-w-6xl mx-auto px-6 text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          なぜINSの「出張車内クリーニング」で解決できるのか？
+        </h2>
+        <div class="mt-4 w-12 h-1 bg-emerald-500 mx-auto rounded"></div>
+        <p class="mt-4 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+          ただの掃除屋ではありません。シートの内部まで染み込んだ汚れや臭いを根本からリセットする、プロの特殊洗浄技術があります。
+        </p>
+        
+        <div class="mt-12 grid gap-8 md:grid-cols-3">
+          <!-- 特徴 1 -->
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200/60 text-left transition-all hover:shadow-md">
+            <div class="text-emerald-500 font-extrabold text-4xl mb-4 font-mono leading-none opacity-40">01</div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">最高80℃ 高温スチーム＆リンサー洗浄</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              洗剤をシート奥まで噴射して汚れを浮かせ、最高80℃の温水スチームで除菌しながら、強力バキュームで「汚れを臭いごと吸い出します」。濁った汚水を見ることで、効果をはっきりと実感いただけます。
+            </p>
+          </div>
+          <!-- 特徴 2 -->
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200/60 text-left transition-all hover:shadow-md">
+            <div class="text-emerald-500 font-extrabold text-4xl mb-4 font-mono leading-none opacity-40">02</div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">赤ちゃんやペットにも安心の特殊消臭剤</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              香料でごまかす芳香剤は一切使いません。アミノ酸、有機金属、天然植物抽出物を主成分とした無害・無臭の消臭剤を使用し、臭いの原因分子を化学分解。ペットや小さなお子様にも完全に安全です。
+            </p>
+          </div>
+          <!-- 特徴 3 -->
+          <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200/60 text-left transition-all hover:shadow-md">
+            <div class="text-emerald-500 font-extrabold text-4xl mb-4 font-mono leading-none opacity-40">03</div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">【{regionName}】出張型・立会不要で手間ゼロ</h3>
+            <p class="text-sm text-gray-600 leading-relaxed">
+              ご自宅の駐車場、お勤め先、コインパーキングなど、指定の場所へ専用クリーニング車両で駆けつけます。作業中の立ち合いは不要ですので、貴重品だけお持ちになり、ご自宅でゆったりお待ちいただけます。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 中間緊急CTA -->
+    <section class="py-12 bg-amber-50">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="text-center font-bold space-y-3">
+          <p class="text-lg text-slate-800">「駐車スペースが狭い」「電源がない」という場合も近隣で対応可能です</p>
+          <p class="text-base text-gray-600">※車両保険・個人賠償責任保険が適用可能なトラブルもございます。お気軽にご相談ください。</p>
+          <p class="text-base text-red-600">【 ＼{serviceHeadingTarget}エリア、当日緊急対応も相談OK！／ 無料見積もり・お問い合わせ 】</p>
+        </div>
+        <div class="mt-8 bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+          <div class="relative">
+            <Image src={ctaBg} alt="車内クリーニング専用機材" class="h-44 w-full object-cover" />
+            <div class="absolute inset-0 bg-slate-950/70"></div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+              <p class="text-lg font-black tracking-wider">ご希望日をお電話・LINEでお伝えください</p>
+              <p class="text-xs text-emerald-400 mt-2 font-bold">24時間年中無休・全国出張対応</p>
+            </div>
+          </div>
+          <div class="p-8 flex flex-col items-center gap-4 text-center">
+            <a href="tel:070-8428-0866" class="text-3xl font-black text-red-600 transition-colors hover:text-red-500">TEL: 070-8428-0866</a>
+            <p class="text-xs text-gray-500">（お急ぎの際はお電話が最速です。深夜・早朝もお受けしております）</p>
+            <a href={CONTACT_MAILTO} class="text-sm font-bold text-emerald-600 underline hover:text-emerald-500 break-all">{CONTACT_EMAIL}</a>
+            <a href="https://lin.ee/Xs8Orp2" target="_blank" class="w-full max-w-sm bg-[#06C755] text-white py-3.5 rounded-xl font-extrabold text-base shadow hover:opacity-95 transition-opacity">
+              LINE公式アカウントで写真を送って無料相談
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 料金表セクション -->
+    <section class="py-16 sm:py-20 bg-white">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-slate-900 tracking-tight">出張車内クリーニング 料金表</h2>
+        <p class="mt-2 text-center text-sm text-red-600 font-extrabold">※施工前に事前にお見積もりし、ご承諾後に作業を開始いたします。</p>
+
+        <div class="mt-10 bg-slate-50 rounded-2xl border border-slate-200/80 p-6 sm:p-8">
+          <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="text-emerald-500">🏆</span> 【人気No.1】セットでお得なパック
+          </h3>
+          <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+            「シート洗浄＋床面洗浄」がセットになったお得なプランです！<br />
+            <strong>内容：</strong>簡易リンサー洗浄 / スチーム洗浄 / 掃除機 / 内装・シートベルト拭き上げ<br />
+            <span class="text-red-600 font-semibold">＊別途：</span>消臭・脱臭（おもらし・嘔吐・糞便・激臭・灯油・血液等のトラブルは追加消臭費用）
+          </p>
+          
+          <div class="mt-5 overflow-x-auto">
+            <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden shadow-sm border border-slate-200">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="p-4 text-left font-bold border-b border-slate-200">車種区分（税込）</th>
+                  <th class="p-4 text-left font-bold border-b border-slate-200">料金</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-800">
+                {pricingSet.map((row) => (
+                  <tr class="border-t border-slate-100 hover:bg-slate-50/50">
+                    <td class="p-4 font-semibold">{row.label}</td>
+                    <td class="p-4 font-bold text-emerald-600">{row.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="mt-10 text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="text-emerald-500">📍</span> 部分部分クリーニング
+          </h3>
+          <p class="mt-2 text-sm text-gray-600">「汚れた座席だけをピンポイントで綺麗にしたい」というご要望にお応えします。</p>
+          <div class="mt-4 overflow-x-auto">
+            <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden shadow-sm border border-slate-200">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="p-4 text-left font-bold border-b border-slate-200">項目</th>
+                  <th class="p-4 text-left font-bold border-b border-slate-200">料金</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-800">
+                {pricingPartial.map((row) => (
+                  <tr class="border-t border-slate-100 hover:bg-slate-50/50">
+                    <td class="p-4 font-semibold">{row.label}</td>
+                    <td class="p-4 font-bold text-emerald-600">{row.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="mt-10 text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span class="text-emerald-500">✨</span> オプションメニュー
+          </h3>
+          <p class="mt-2 text-sm text-gray-600">特別な汚れや、さらに徹底的な除菌・消臭を求めたい時に。</p>
+          <div class="mt-4 overflow-x-auto">
+            <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden shadow-sm border border-slate-200">
+              <thead>
+                <tr class="bg-slate-100 text-slate-700">
+                  <th class="p-4 text-left font-bold border-b border-slate-200">追加サービス内容</th>
+                  <th class="p-4 text-left font-bold border-b border-slate-200">料金</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-800">
+                {pricingOptions.map((row) => (
+                  <tr class="border-t border-slate-100 hover:bg-slate-50/50">
+                    <td class="p-4 font-semibold">{row.label}</td>
+                    <td class="p-4 font-bold text-emerald-600">{row.price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-6 text-sm leading-relaxed text-slate-700 border-t border-slate-200 pt-6">
+            <p class="font-extrabold text-red-600">⚠️ 追加作業について※お見積り時にすり合わせいたします。</p>
+            <ul class="mt-2 list-disc list-inside space-y-1 pl-2 text-gray-600">
+              {additionalNotes.map((note) => (
+                <li>{note}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ご利用いただいたお客様の声 -->
+    <section class="py-16 bg-slate-50 border-y border-slate-200">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-slate-900">車内清掃をご利用いただいたお客様の声</h2>
+        <p class="mt-2 text-center text-sm text-gray-500">施工後のアンケートやお喜びの声をそのまま掲載しております。</p>
+
+        <div class="mt-10 space-y-8">
+          {surveyItems.map((item) => (
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 flex flex-col md:flex-row">
+              <div class="md:w-1/3 max-h-64 overflow-hidden">
+                <Image src={item.image} alt={item.alt} class="w-full h-full object-cover" />
+              </div>
+              <div class="p-6 md:w-2/3 flex flex-col justify-center bg-white text-slate-800">
+                <span class="text-amber-500 text-lg mb-2">★★★★★</span>
+                <p class="text-sm sm:text-base leading-relaxed font-semibold text-slate-700">
+                  {item.text}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {voiceGallery.slice(0, 4).map((item) => (
+            <figure class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200">
+              <Image src={item.image} alt={item.caption} class="w-full h-auto" />
+              <figcaption class="p-4 text-sm font-bold text-center text-slate-800 bg-slate-50 border-t border-slate-100">{item.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 出張対応エリア -->
+    {regionDetail?.showAreaList && (
+      <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-slate-900">
+            {serviceHeadingTarget}へ出張訪問！最短当日で伺います
+          </h2>
+          <p class="mt-4 text-base text-center text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            {regionDetail.areaLead ? (
+              regionDetail.areaLead
+            ) : (
+              <>
+                {regionName}市内・県内の主要エリアはもちろん、<strong>{regionFull}内の市町村</strong>へプロの専用洗浄機材を積み込んだ車両でスピーディーに出張対応いたします。「わざわざ店舗へ車を持って行く時間がない」「作業中車がないと困る」というお客様もご安心ください。
+              </>
+            )}
+          </p>
+          <div class="mt-8 space-y-4 bg-slate-50 border border-slate-200 p-6 rounded-2xl text-sm text-slate-700 max-w-4xl mx-auto">
+            <p class="font-extrabold text-slate-900 text-base border-b border-slate-200 pb-2">■ {areaListTitlePrefix}内の出張対応エリア詳細</p>
+            {regionDetail.serviceAreas?.map((area) => (
+              <p class="leading-relaxed">
+                <strong class="text-emerald-600">{area.label}：</strong> {area.text}
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- 施工の流れセクション -->
+    <section class="py-16 bg-slate-950 text-white">
+      <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-center tracking-tight">出張車内清掃 ご依頼までのながれ</h2>
+        <p class="mt-2 text-center text-sm text-gray-400">事前見積もりで安心。お申込みから完了まで丁寧にご案内します。</p>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {flowSteps.map((step, index) => (
+            <div class="bg-slate-900 border-l-4 border-emerald-500 rounded-xl p-6 transition-all hover:bg-slate-900/80">
+              <h3 class="font-bold text-base text-emerald-400 flex items-center gap-2">
+                <span class="font-mono text-xl">0{index + 1}.</span> {step.title}
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-gray-300">
+                {step.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 代表者挨拶 -->
+    <section class="py-16 bg-white border-b border-slate-200">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="grid gap-10 md:grid-cols-2 items-center">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 tracking-wider uppercase block mb-2">Message</span>
+            <h3 class="text-2xl font-extrabold text-slate-950">店主あいさつ</h3>
+            <p class="mt-6 text-sm sm:text-base leading-relaxed text-gray-600">
+              当店のホームページをご覧いただき、誠にありがとうございます。<br /><br />
+              家の中はこまめに掃除していても、車のシートや内装、ましてや突然のおもらしやゲロ、灯油こぼしなどのアクシデントは自分で綺麗にするのが非常に困難です。<br /><br />
+              「うわ、どうしよう…」と絶望しそうな時は、ぜひプロにお任せください。プロの洗浄技術と特殊機材で、臭いもシミもすっきりクリアにし、ご家族やお友達を自信を持って乗せられる空間を再現します。どうぞお気軽にお問い合わせください。
+            </p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+            <Image src={ownerPhoto} alt="店主 今井雄策（INS出張車内清掃）" class="w-full rounded-xl object-cover" />
+            <div class="mt-4 flex justify-between items-end border-t border-slate-200 pt-4">
+              <div>
+                <p class="text-xs text-gray-500">INS出張車内清掃 店主</p>
+                <p class="font-black text-slate-900 text-lg">今井 雄策</p>
+              </div>
+              <p class="text-[10px] text-gray-400 max-w-[200px] text-right">趣味：冷蔵庫にある食材で家族が喜ぶ家庭料理を作ること</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- よくある質問 (FAQ) -->
+    <section class="py-16 bg-slate-50">
+      <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-slate-900">よくあるご質問 (FAQ)</h2>
+        <div class="mt-10 space-y-4">
+          {faqs.map((faq) => (
+            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div class="bg-slate-100/60 px-5 py-4 font-bold text-slate-900 flex gap-2">
+                <span class="text-emerald-500 font-mono">Q.</span>
+                <span>{faq.q}</span>
+              </div>
+              <div class="px-5 py-4 text-sm text-gray-600 leading-relaxed flex gap-2">
+                <span class="text-red-500 font-mono font-bold">A.</span>
+                <span>{faq.a}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ブログ記事一覧 -->
+    <section class="py-16 bg-white">
+      <div class="max-w-6xl mx-auto px-6">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-center text-slate-900">投稿ブログ・お役立ちコラム</h2>
+        <p class="mt-2 text-center text-sm text-gray-500">お悩み別の対策や、出張施工の様子を公開しています。</p>
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          {blogPosts.map((post) => (
+            <a href={`/blog/${post.slug}/`} class="block bg-slate-50 border border-slate-200/80 rounded-2xl p-5 hover:shadow hover:border-emerald-500/40 transition-all">
+              <div class="text-xs text-gray-400">{formatDate(post.date)}</div>
+              <div class="mt-2 font-bold text-base text-slate-900 line-clamp-1">{post.title}</div>
+              <div class="mt-2 text-[10px] inline-block bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-semibold">{post.categories?.join(' / ')}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. フッター手前：SEO対策（同一地域内キーワードの相互リンクによるドメインパワー向上） -->
+    <section class="py-16 bg-slate-950 border-t-4 border-emerald-500 text-white">
+      <div class="max-w-6xl mx-auto px-6">
+        <h3 class="text-lg font-bold text-center text-slate-200 mb-8">
+          【{regionFull}】他のお悩み・出張対応サービス一覧
+        </h3>
+        <ul class="cross-links grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 list-none p-0">
+          {keywordLps.map((kw) => (
+            <li>
+              <a 
+                href={`/${regionSlug}/${kw.slug}/`} 
+                class="block bg-slate-900/60 border border-slate-800 hover:border-emerald-500/60 hover:text-emerald-400 rounded-xl p-3 text-center text-xs font-bold transition-all"
+              >
+                {regionName}の{kw.keyword}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+  
+  <Footer regionFull={regionFull} regionName={regionName} />
+  <FloatingCTA />
+</Layout>
+
+<style>
+  /* 相互リンクホバー時のマイクロインタラクション用 */
+  .cross-links a {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .cross-links a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.15);
+  }
+</style>
