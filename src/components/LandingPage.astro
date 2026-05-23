@@ -208,13 +208,12 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">地元密着</span>
           <span class="inline-block border-b-2 border-primary pb-0.5">実績多数</span>
         </p>
-        <div class="mt-6 flex flex-wrap items-center gap-4 rounded-xl bg-black/35 px-4 py-3 backdrop-blur-sm">
-          <span
-            class="fv-badge-text inline-flex items-center rounded-full border-2 border-amber-300 bg-amber-400/95 px-3 py-1 text-xs font-extrabold text-gray-900 shadow sm:text-sm"
-          >
-            お客様満足度 92%
-          </span>
-          <p class="fv-desc min-w-[12rem] flex-1 text-xs font-semibold leading-relaxed text-white/95 sm:text-sm">
+        <div class="mt-6 flex flex-wrap items-center gap-6 rounded-xl bg-black/40 px-5 py-4 backdrop-blur-sm">
+          <div class="fv-stamp">
+            <span class="fv-stamp-label">顧客満足</span>
+            <span class="fv-stamp-value">92%</span>
+          </div>
+          <p class="fv-desc min-w-[12rem] flex-1 text-base sm:text-lg font-bold leading-relaxed text-white/95">
             365日24時間受付中・迅速訪問<br />
             立会も不要！ <span class="text-amber-300 font-bold">嘔吐</span>、<span class="text-amber-300 font-bold">お漏らし</span><br />
             <span class="text-amber-300 font-bold">灯油こぼし</span>も <span class="text-amber-300 font-bold underline decoration-amber-300">ニオイ徹底洗浄</span>
@@ -864,6 +863,39 @@ DIYは軽度向きで深部汚れは限界`}
 
 <!-- Task 2: スマホ用FV視認性最適化用のスタイル上書き -->
 <style>
+  /* 丸いハンコ（太鼓判）スタイル */
+  .fv-stamp {
+    width: 82px;
+    height: 82px;
+    border: 4px double #dc2626; /* 太鼓判の二重丸ボーダー */
+    border-radius: 50%;
+    color: #dc2626;
+    background-color: rgba(255, 255, 255, 0.95);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    transform: rotate(-6deg);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    font-family: 'Noto Serif JP', 'Georgia', serif;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .fv-stamp-label {
+    font-size: 0.65rem;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-weight: 900;
+  }
+  .fv-stamp-value {
+    font-size: 1.35rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin-top: 1px;
+  }
+
   @media (max-width: 767px) {
     .fv-title {
       font-size: 2.15rem !important; /* 約120%〜130%拡大 */
@@ -874,12 +906,19 @@ DIYは軽度向きで深部汚れは限界`}
       font-size: 1.05rem !important; /* 約120%拡大 */
       margin-top: 1.25rem !important;
     }
-    .fv-badge-text {
-      font-size: 0.85rem !important; /* 約120%拡大 */
-      padding: 0.3rem 0.75rem !important;
+    .fv-stamp {
+      width: 76px;
+      height: 76px;
+      border-width: 3px;
+    }
+    .fv-stamp-label {
+      font-size: 0.6rem;
+    }
+    .fv-stamp-value {
+      font-size: 1.2rem;
     }
     .fv-desc {
-      font-size: 0.95rem !important; /* 約120%拡大 */
+      font-size: 1.05rem !important; /* 約120%拡大 */
       line-height: 1.55 !important;
     }
   }
