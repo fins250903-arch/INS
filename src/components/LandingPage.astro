@@ -6,7 +6,8 @@ import CtaBundle from './CtaBundle.astro';
 import posts from '../data/wp-posts.json';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
 import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../data/lp-pricing';
-import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+import { buildRegionFaqs } from '../data/lp-faqs';
+import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../data/site';
 import type { CaseStudiesBlock } from '../data/lp-region-case-studies';
 import bgHero from '../assets/images/images-1-e1756888161530.jpg';
 import ctaBg from '../assets/images/carclean15kb.jpg';
@@ -43,6 +44,8 @@ interface Props {
   areaLead?: string;
   /** 地域ごとの施工事例・ブログへのテキストリンク（AI検索・重複軽減用） */
   caseStudies?: CaseStudiesBlock;
+  /** 地区FAQ・JSON-LD用（例: osaka, aiti, tokyou） */
+  regionSlug?: string;
 }
 
 const {
@@ -52,7 +55,8 @@ const {
   serviceAreas: serviceAreasProp,
   representativeImageFile,
   areaLead,
-  caseStudies
+  caseStudies,
+  regionSlug
 } = Astro.props;
 
 const serviceHeadingTarget = regionFull === '沖縄県' ? '沖縄本島' : regionFull;
@@ -180,14 +184,10 @@ const voiceGallery = [
   { image: voice10, caption: '炎天下の作業ご苦労さまでした　生肉の匂いが取れました。' }
 ];
 
-const faqs = [
-  { q: '対応できる時間帯は？', a: '受付は、365日 24時間対応です。即日訪問も致します。' },
-  { q: '作業時間はどれくらい？', a: 'おおよそ2-4時間以内です。ただしヨゴレの程度により変わります。' },
-  { q: '作業中の待ち方は？', a: '作業中立会は不要です。その際、貴重品は車内から持出をお願いします。' },
-  { q: '会社の駐車場でもできる？', a: 'できます。ドアを開けるスペースと、掃除中の音が大丈夫であれば対応できます。マンション駐車場も可能です。商業施設等は、確認が必要です。' },
-  { q: '作業終了後すぐ乗れる？', a: '乾燥時間が有ります。天候や、洗剤の使用量で変わります。そのため、何分後から乗車可能とお伝えします。' },
-  { q: '対応できる地域', a: 'お電話で郵便番号をお伺いします。対応が難しいエリアは、お伝えします。山間部や、離島は対応できない場合が有ります。' }
-];
+const faqs = buildRegionFaqs(regionName, regionFull, regionSlug);
+
+const [updatedYear, updatedMonth, updatedDay] = SITE_CONTENT_UPDATED.split('-');
+const contentUpdatedJa = `${updatedYear}年${Number(updatedMonth)}月${Number(updatedDay)}日`;
 
 const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
 ---
@@ -223,6 +223,61 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
           <CtaBundle className="!mx-0 !my-0 w-full max-w-[480px]" />
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-3 bg-slate-100 border-b border-slate-200" aria-label="コンテンツ更新情報">
+  <div class="max-w-6xl mx-auto px-6">
+    <p class="text-xs sm:text-sm text-slate-600 text-center leading-relaxed">
+      <strong>最終更新：{contentUpdatedJa}</strong>｜料金・対応エリア・FAQは定期的に見直しています。
+    </p>
+  </div>
+</section>
+
+<section class="py-10 bg-white border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">出張車内清掃とは</h2>
+    <p class="mt-3 text-sm sm:text-base text-gray-700 leading-relaxed">
+      ご自宅・勤務先の<strong>駐車場へ専門スタッフが訪問</strong>し、シート・フロア・天井など車内を洗浄・消臭するサービスです。店舗に預けず、嘔吐・尿・灯油・タバコ臭など「自力では限界」の汚れを、温水吸引と専用洗剤で<strong>臭いの発生源から</strong>処理します。
+    </p>
+    <div class="mt-6 overflow-x-auto -mx-2 px-2">
+      <table class="w-full min-w-[320px] text-xs sm:text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-200 px-2 py-2 text-left font-semibold">比較</th>
+            <th class="border border-gray-200 px-2 py-2 text-center font-semibold">ガソスタ洗車</th>
+            <th class="border border-gray-200 px-2 py-2 text-center font-semibold">コイン洗車</th>
+            <th class="border border-gray-200 px-2 py-2 text-center font-semibold text-primary">出張車内清掃</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-200 px-2 py-2 font-medium">訪問・駐車場完結</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">×</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">×</td>
+            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">○</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-200 px-2 py-2 font-medium">嘔吐・尿の奥染み</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">△</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">×</td>
+            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">○</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-200 px-2 py-2 font-medium">立会</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">要</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">要</td>
+            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">不要可</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-200 px-2 py-2 font-medium">即日・24h受付</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">△</td>
+            <td class="border border-gray-200 px-2 py-2 text-center">○</td>
+            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">○</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>

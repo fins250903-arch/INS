@@ -4,7 +4,15 @@
  */
 export const SITE_CANONICAL_ORIGIN = 'https://insbs.net' as const;
 
+/** サイト本文・料金表・FAQの最終見直し日（JSON-LD dateModified 等） */
+export const SITE_CONTENT_UPDATED = '2026-05-23' as const;
+
 export const BUSINESS_NAME = 'アイエヌエスINS出張車内清掃' as const;
+
+/** 代表者（JSON-LD Person @id） */
+export const SITE_PERSON_IMAI_ID = 'https://insbs.net/#person-imai' as const;
+export const SITE_PERSON_NAME = '今井雄策' as const;
+export const SITE_PERSON_JOB_TITLE = '代表・出張車内清掃担当' as const;
 
 /** サイト共通の連絡先（LP・フッター・お問い合わせで共有） */
 export const CONTACT_EMAIL = 'fins250903@gmail.com' as const;

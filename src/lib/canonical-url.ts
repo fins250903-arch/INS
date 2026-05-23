@@ -19,3 +19,5 @@ export function pageId(path: string): string {
 
 export const SITE_WEBSITE_ID = `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/#website`;
 export const SITE_ORGANIZATION_ID = `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/#organization`;
+
+export { SITE_PERSON_IMAI_ID as SITE_PERSON_ID } from '../data/site';

@@ -10,7 +10,10 @@ import { keywordLps } from '../../data/keyword-lp';
 import regionLpsMain from '../../data/region-lp.json';
 import regionLpsExtra from '../../data/region-lp-extra.json';
 import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../../data/lp-pricing';
-import { CONTACT_EMAIL, CONTACT_MAILTO } from '../../data/site';
+import { buildRegionFaqs } from '../../data/lp-faqs';
+import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
+import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../../data/site';
+import { buildKeywordLpJsonLd } from '../../lib/lp-json-ld';
 import posts from '../../data/wp-posts.json';
 
 // 画像アセットのインポート (Astro:assetsの最適化を利用)
@@ -95,24 +98,22 @@ const pageTitle = `【${regionName}】${keyword.keyword}・頑固な汚れ・臭
 const pageDescription = keyword.description.replace(/{{region}}/g, regionName).replace(/{{regionFull}}/g, regionFull);
 const canonical = `/${regionSlug}/${keyword.slug}/`;
 
-// JSON-LD (LocalBusiness スキーマ)
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": `INS出張車内清掃【${regionName}店】`,
-  "image": "https://insbs.net/assets/images/logo.png",
-  "description": pageDescription,
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": regionFull,
-    "addressCountry": "JP"
-  },
-  "areaServed": {
-    "@type": "AdministrativeArea",
-    "name": regionFull
-  },
-  "priceRange": "¥8,800 - ¥35,000"
-};
+const faqs = buildRegionFaqs(regionName, regionFull, regionSlug);
+const regionCaseStudies = getCaseStudiesForSlug(regionSlug);
+const [updatedYear, updatedMonth, updatedDay] = SITE_CONTENT_UPDATED.split('-');
+const contentUpdatedJa = `${updatedYear}年${Number(updatedMonth)}月${Number(updatedDay)}日`;
+
+const jsonLd = buildKeywordLpJsonLd({
+  path: canonical,
+  regionFull,
+  regionName,
+  description: pageDescription,
+  pageTitle,
+  keyword: keyword.keyword,
+  faqs,
+  caseStudies: regionCaseStudies,
+  localBusinessDescription: regionCaseStudies.lead
+});
 
 // ブログ・ポストのロードと地域フィルタ
 const publishedPosts = posts.filter((post) => post.status === 'publish');
@@ -155,15 +156,6 @@ const voiceGallery = [
   { image: voice08, caption: 'シート汚れがきれいで大満足' },
   { image: voice09, caption: 'ガソリンスタンドのクリーニングより綺麗に' },
   { image: voice10, caption: '炎天下の作業ご苦労さまでした。気になる臭いも解消！' }
-];
-
-const faqs = [
-  { q: '対応できる時間帯は？', a: '受付は、365日 24時間対応です。即日訪問も致します。' },
-  { q: '作業時間はどれくらい？', a: 'おおよそ2-4時間以内です。ただしヨゴレの程度により変わります。' },
-  { q: '作業中の待ち方は？', a: '作業中立会は不要です。その際、貴重品は車内から持出をお願いします。' },
-  { q: '会社の駐車場でもできる？', a: 'できます。ドアを開けるスペースと、掃除中の音が大丈夫であれば対応できます。マンション駐車場も可能です。商業施設等は、確認が必要です。' },
-  { q: '作業終了後すぐ乗れる？', a: '乾燥時間が有ります。天候や、洗剤の使用量で変わります。そのため、何分後から乗車可能とお伝えします。' },
-  { q: '対応できる地域', a: 'お電話で郵便番号をお伺いします。対応が難しいエリアは、お伝えします。山間部や、離島は対応できない場合が有ります。' }
 ];
 
 const flowSteps = [
@@ -243,6 +235,14 @@ const flowSteps = [
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="py-3 bg-slate-100 border-b border-slate-200" aria-label="コンテンツ更新情報">
+      <div class="max-w-6xl mx-auto px-6">
+        <p class="text-xs sm:text-sm text-slate-600 text-center leading-relaxed">
+          <strong>最終更新：{contentUpdatedJa}</strong>｜料金・対応エリア・FAQは定期的に見直しています。
+        </p>
       </div>
     </section>
 
@@ -561,6 +561,27 @@ const flowSteps = [
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-white" aria-labelledby="heading-regional-cases-kw">
+      <div class="max-w-4xl mx-auto px-6 text-gray-800">
+        <h2 id="heading-regional-cases-kw" class="text-xl sm:text-2xl font-extrabold text-center text-slate-900">
+          {regionCaseStudies.heading}
+        </h2>
+        <p class="mt-4 text-sm sm:text-base text-center leading-relaxed text-gray-700">{regionCaseStudies.lead}</p>
+        <ul class="mt-6 space-y-4 list-none p-0">
+          {regionCaseStudies.items.map((item) => (
+            <li class="rounded-xl border border-slate-200 bg-slate-50/80 p-4 sm:p-5">
+              <p class="text-sm leading-relaxed">{item.body}</p>
+              <p class="mt-2 text-sm">
+                <a href={item.href} class="font-semibold text-emerald-700 underline hover:text-emerald-900">
+                  {item.linkLabel}
+                </a>
+              </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 

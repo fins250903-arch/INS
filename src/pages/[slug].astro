@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
 import LandingPage from '../components/LandingPage.astro';
+import { buildRegionFaqs } from '../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../data/lp-region-case-studies';
 import { buildLpJsonLd } from '../lib/lp-json-ld';
 import { buildPageJsonLd } from '../lib/json-ld-site';
@@ -53,6 +54,8 @@ const props = Astro.props as
   | { mode: 'wp'; page: (typeof pages)[number] }
   | { mode: 'region'; regionLp: RegionLp };
 
+const regionCaseStudies =
+  props.mode === 'region' ? getCaseStudiesForSlug(props.regionLp.slug) : undefined;
 const regionJsonLd =
   props.mode === 'region'
     ? buildLpJsonLd({
@@ -60,7 +63,15 @@ const regionJsonLd =
         regionFull: props.regionLp.regionFull,
         regionName: props.regionLp.regionName,
         description: props.regionLp.layoutDescription,
-        pageTitle: props.regionLp.layoutTitle
+        pageTitle: props.regionLp.layoutTitle,
+        faqs: buildRegionFaqs(
+          props.regionLp.regionName,
+          props.regionLp.regionFull,
+          props.regionLp.slug
+        ),
+        localBusinessDescription: regionCaseStudies?.lead,
+        caseStudies: regionCaseStudies,
+        regionSlug: props.regionLp.slug
       })
     : undefined;
 const wpJsonLd =
@@ -91,6 +102,7 @@ const wpJsonLd =
           representativeImageFile={props.regionLp.representativeImageFile}
           areaLead={props.regionLp.areaLead}
           caseStudies={getCaseStudiesForSlug(props.regionLp.slug)}
+          regionSlug={props.regionLp.slug}
         />
       </main>
       <Footer regionFull={props.regionLp.regionFull} regionName={props.regionLp.regionName} />

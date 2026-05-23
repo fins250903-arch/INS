@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import LandingPage from '../components/LandingPage.astro';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
+import { buildRegionFaqs } from '../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../data/lp-region-case-studies';
 import { buildLpJsonLd } from '../lib/lp-json-ld';
 import Footer from '../components/Footer.astro';
@@ -14,12 +15,18 @@ const layoutDescription =
 /** 大阪 LP の正規 URL（トップ `/` はここへ集約） */
 const osakaCanonicalPath = '/osaka/';
 
+const osakaCaseStudies = getCaseStudiesForSlug('index');
+
 const jsonLd = buildLpJsonLd({
 	path: osakaCanonicalPath,
 	regionFull: '大阪府',
 	regionName: '大阪',
 	description: layoutDescription,
-	pageTitle: layoutTitle
+	pageTitle: layoutTitle,
+	faqs: buildRegionFaqs('大阪', '大阪府', 'osaka'),
+	localBusinessDescription: osakaCaseStudies?.lead,
+	caseStudies: osakaCaseStudies,
+	regionSlug: 'osaka'
 });
 ---
 
@@ -36,7 +43,8 @@ const jsonLd = buildLpJsonLd({
 			regionFull="大阪府"
 			showAreaList={true}
 			serviceAreas={osakaServiceAreas}
-			caseStudies={getCaseStudiesForSlug('index')}
+			caseStudies={osakaCaseStudies}
+			regionSlug="osaka"
 		/>
 	</main>
 	<Footer regionFull="大阪府" regionName="大阪" />
