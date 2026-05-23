@@ -2,6 +2,7 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import AntimicrobialCampaignBanner from './AntimicrobialCampaignBanner.astro';
+import CtaBundle from './CtaBundle.astro';
 import posts from '../data/wp-posts.json';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
 import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../data/lp-pricing';
@@ -199,26 +200,28 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
   <div class="relative mx-auto w-full max-w-6xl px-6 py-16 sm:py-20 lg:py-24">
     <div class="flex flex-col gap-8">
       <div>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+        <h1 class="fv-title text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
           {regionName} 地元密着｜<br />出張 車内清掃
         </h1>
-        <p class="mt-5 text-sm font-bold tracking-wide text-white/95 sm:text-base">
+        <p class="fv-sub mt-5 text-sm font-bold tracking-wide text-white/95 sm:text-base">
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">即日訪問</span>
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">地元密着</span>
           <span class="inline-block border-b-2 border-primary pb-0.5">実績多数</span>
         </p>
         <div class="mt-6 flex flex-wrap items-center gap-4 rounded-xl bg-black/35 px-4 py-3 backdrop-blur-sm">
           <span
-            class="inline-flex items-center rounded-full border-2 border-amber-300 bg-amber-400/95 px-3 py-1 text-xs font-extrabold text-gray-900 shadow sm:text-sm"
+            class="fv-badge-text inline-flex items-center rounded-full border-2 border-amber-300 bg-amber-400/95 px-3 py-1 text-xs font-extrabold text-gray-900 shadow sm:text-sm"
           >
             お客様満足度 92%
           </span>
-          <p class="min-w-[12rem] flex-1 text-xs font-semibold leading-relaxed text-white/95 sm:text-sm whitespace-pre-line">
-            {`365日24時間受付中・迅速訪問\n立会も不要！ 嘔吐、お漏らし\n灯油こぼしも　ニオイ徹底洗浄`}
+          <p class="fv-desc min-w-[12rem] flex-1 text-xs font-semibold leading-relaxed text-white/95 sm:text-sm">
+            365日24時間受付中・迅速訪問<br />
+            立会も不要！ <span class="text-amber-300 font-bold">嘔吐</span>、<span class="text-amber-300 font-bold">お漏らし</span><br />
+            <span class="text-amber-300 font-bold">灯油こぼし</span>も <span class="text-amber-300 font-bold underline decoration-amber-300">ニオイ徹底洗浄</span>
           </p>
         </div>
-        <div class="mt-6 flex justify-start">
-          <AntimicrobialCampaignBanner />
+        <div class="mt-6 flex justify-start w-full">
+          <CtaBundle className="!mx-0 !my-0 w-full max-w-[480px]" />
         </div>
       </div>
       <div class="bg-white/90 text-gray-900 rounded-2xl p-5 sm:p-6 shadow-lg">
@@ -234,6 +237,43 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
           ●家族以外の他人が、嘔吐等した場合、出張車内清掃に車両保険、個人賠償責任保険が使えます。
         </p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Task 1: 「お悩み共感セクション」の新設 -->
+<section class="py-12 bg-gray-100 border-b border-gray-200">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900 leading-tight">
+      こんな「車内のニオイ・汚れ」のお悩みありませんか？
+    </h2>
+    
+    <div class="mt-8 max-w-2xl mx-auto bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200/60">
+      <ul class="space-y-4">
+        <li class="flex items-start gap-3 text-base sm:text-lg font-medium text-gray-800">
+          <span class="text-cta-red text-xl sm:text-2xl flex-shrink-0 mt-0.5">☑</span>
+          <span>子供やペットが車酔いしてシートに吐いてしまった…</span>
+        </li>
+        <li class="flex items-start gap-3 text-base sm:text-lg font-medium text-gray-800">
+          <span class="text-cta-red text-xl sm:text-2xl flex-shrink-0 mt-0.5">☑</span>
+          <span>自分で拭き取っても、奥からモワッと悪臭が戻ってくる</span>
+        </li>
+        <li class="flex items-start gap-3 text-base sm:text-lg font-medium text-gray-800">
+          <span class="text-cta-red text-xl sm:text-2xl flex-shrink-0 mt-0.5">☑</span>
+          <span>おしっこや灯油をこぼしてしまい、運転するのもツラい…</span>
+        </li>
+        <li class="flex items-start gap-3 text-base sm:text-lg font-medium text-gray-800">
+          <span class="text-cta-red text-xl sm:text-2xl flex-shrink-0 mt-0.5">☑</span>
+          <span>どこに頼めばいいか分からないし、お店に車を持っていく時間もない！</span>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="mt-8 text-center bg-red-50 border border-red-100 rounded-2xl p-6 max-w-3xl mx-auto">
+      <p class="text-base sm:text-lg font-bold text-cta-red leading-relaxed">
+        そのまま放置すると悪化します！その絶望的な汚れとニオイ、<br />
+        出張専門の「INS車内清掃」が<span class="underline decoration-2 decoration-amber-500 font-extrabold text-lg sm:text-xl">【ご自宅の駐車場】</span>でリセットします！
+      </p>
     </div>
   </div>
 </section>
@@ -345,7 +385,7 @@ DIYは軽度向きで深部汚れは限界`}
         <p class="mt-2">
           店舗は<strong>作業場所・乾燥ラインが固定</strong>されている分、大型パーツを外して洗うような工程に強い場合があります。一方で、往復の手間・代車・預け期間が負担になる方には、出張が向きます。
         </p>
-        <img src="/matibouke.png" alt="車内清掃の比較イメージ" class="mt-4 w-full rounded-xl border border-gray-200" loading="lazy" />
+        <img src="/hikakutenpo.jpg" alt="車内清掃の比較イメージ" class="mt-4 w-full rounded-xl border border-gray-200" loading="lazy" />
       </div>
       <div>
         <h3 class="text-lg font-bold text-gray-900">自分で掃除（DIY）との違い（いつプロを頼るべきか）</h3>
@@ -727,6 +767,17 @@ DIYは軽度向きで深部汚れは限界`}
   </div>
 </section>
 
+<!-- Task 3 (2箇所目): 料金表後のCTA -->
+<section class="py-12 bg-amber-50 border-y border-amber-100">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <p class="text-xl sm:text-2xl font-bold text-gray-900 mb-3">その汚れとニオイ、諦める前にご相談ください！</p>
+    <p class="text-sm sm:text-base text-gray-600 mb-8 max-w-xl mx-auto leading-relaxed">
+      「こんなにキレイになるなら、もっと早く頼めばよかった」とお喜びの声をいただいています。<br class="hidden sm:inline" />お見積りは完全無料、追加料金なしの明朗会計です。
+    </p>
+    <CtaBundle />
+  </div>
+</section>
+
 <section class="py-12 bg-gray-50">
   <div class="max-w-4xl mx-auto px-6">
     <h2 class="text-2xl font-bold text-center">お支払い方法・キャンセルポリシー</h2>
@@ -786,14 +837,43 @@ DIYは軽度向きで深部汚れは限界`}
   </div>
 </section>
 
-<section class="py-12 bg-gray-900 text-white">
+<section class="py-16 bg-gray-900 text-white border-t border-gray-800">
   <div class="max-w-5xl mx-auto px-6 text-center">
-    <h2 class="text-2xl sm:text-3xl font-bold">友人を、自信を持って乗せられる車に。</h2>
-    <p class="mt-3">「この車、なんかクサイ…？」</p>
-    <p class="mt-2">大切な友人や家族にそう思われるのは、もうおしまいです。</p>
-    <p class="mt-2">どんなに酷い汚れやニオイでも、諦める前に一度ご相談ください。</p>
-    <p class="mt-2 font-semibold">車内 クリーニング 専門 店として、あなたがまた笑顔でドライブを楽しめるよう、誠心誠意、施工させていただきます。</p>
-    <a href="tel:070-8428-0866" class="mt-6 inline-flex items-center justify-center rounded-full bg-cta-red px-8 py-4 text-lg font-bold">今すぐ相談する 070-8428-0866</a>
-    <a href={CONTACT_MAILTO} class="mt-4 block text-center text-sm text-white/90 underline break-all hover:text-white">{CONTACT_EMAIL}</a>
+    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">友人を、自信を持って乗せられる車に。</h2>
+    <p class="mt-4 text-gray-300 text-base sm:text-lg">「この車、なんかクサイ…？」</p>
+    <p class="mt-2 text-gray-300 text-base sm:text-lg">大切な友人や家族にそう思われるのは、もうおしまいです。</p>
+    <p class="mt-2 text-gray-300 text-base sm:text-lg">どんなに酷い汚れやニオイでも、諦める前に一度ご相談ください。</p>
+    <p class="mt-3 font-semibold text-amber-300 text-base sm:text-lg">
+      車内 クリーニング 専門 店として、あなたがまた笑顔でドライブを楽しめるよう、誠心誠意、施工させていただきます。
+    </p>
+    
+    <div class="mt-10 max-w-lg mx-auto text-gray-900">
+      <CtaBundle />
+    </div>
+    
+    <a href={CONTACT_MAILTO} class="mt-6 block text-center text-sm text-white/70 underline break-all hover:text-white transition-colors">{CONTACT_EMAIL}</a>
   </div>
 </section>
+
+<!-- Task 2: スマホ用FV視認性最適化用のスタイル上書き -->
+<style>
+  @media (max-width: 767px) {
+    .fv-title {
+      font-size: 2.15rem !important; /* 約120%〜130%拡大 */
+      line-height: 1.25 !important;
+      letter-spacing: -0.01em !important;
+    }
+    .fv-sub {
+      font-size: 1.05rem !important; /* 約120%拡大 */
+      margin-top: 1.25rem !important;
+    }
+    .fv-badge-text {
+      font-size: 0.85rem !important; /* 約120%拡大 */
+      padding: 0.3rem 0.75rem !important;
+    }
+    .fv-desc {
+      font-size: 0.95rem !important; /* 約120%拡大 */
+      line-height: 1.55 !important;
+    }
+  }
+</style>
