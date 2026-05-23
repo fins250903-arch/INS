@@ -1,23 +1,51 @@
 ---
+// サーバーレンダリングを有効化（認証が必要なため）
+export const prerender = false;
+
 import Layout from '../../layouts/Layout.astro';
 import { BlogManager } from '../../lib/blog-manager';
 
 // 管理者認証チェック
-const password = 'admin123'; // 本番環境では環境変数から取得してください
+const ADMIN_PASSWORD = 'admin123'; // 本番環境では環境変数から取得してください
 const authToken = Astro.cookies.get('admin_auth')?.value;
-const isAuthenticated = authToken === password;
+const isAuthenticated = authToken === ADMIN_PASSWORD;
 
-// フォーム処理
+// ログイン処理
+let loginError = '';
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const submittedPassword = formData.get('password')?.toString() || '';
+  const action = formData.get('action')?.toString() || '';
+
+  // ログイン処理
+  if (action === 'login') {
+    if (submittedPassword === ADMIN_PASSWORD) {
+      // クッキーを設定して認証
+      Astro.cookies.set('admin_auth', ADMIN_PASSWORD, {
+        path: '/',
+        httpOnly: true,
+        secure: false, // 開発環境用（本番ではtrue）
+        sameSite: 'lax',
+      });
+      // リロードさせる
+      return Astro.redirect('/admin/blog-manager/');
+    } else {
+      loginError = 'パスワードが間違っています';
+    }
+  }
+}
+
+// ブログ管理処理（認証後のみ）
 let actionMessage = '';
 let actionType = '';
 
-if (Astro.request.method === 'POST') {
+if (isAuthenticated && Astro.request.method === 'POST') {
   const formData = await Astro.request.formData();
-  const action = formData.get('action');
-  const selectedSlugs = formData.getAll('selected_slugs');
+  const action = formData.get('action')?.toString();
+  const selectedSlugs = formData.getAll('selected_slugs') as string[];
 
   if (action === 'delete' && selectedSlugs.length > 0) {
-    const success = BlogManager.deletePostsBySlugs(selectedSlugs as string[]);
+    const success = BlogManager.deletePostsBySlugs(selectedSlugs);
     actionMessage = success
       ? `${selectedSlugs.length}件の記事を削除しました`
       : '削除に失敗しました';
@@ -25,11 +53,8 @@ if (Astro.request.method === 'POST') {
   }
 
   if (action === 'update_status' && selectedSlugs.length > 0) {
-    const newStatus = formData.get('new_status');
-    const success = BlogManager.updatePostsStatus(
-      selectedSlugs as string[],
-      newStatus as any
-    );
+    const newStatus = formData.get('new_status')?.toString() as any;
+    const success = BlogManager.updatePostsStatus(selectedSlugs, newStatus);
     actionMessage = success
       ? `${selectedSlugs.length}件の記事のステータスを更新しました`
       : '更新に失敗しました';
@@ -38,8 +63,7 @@ if (Astro.request.method === 'POST') {
 }
 
 // ブログポストを取得
-const allPosts = BlogManager.getAllPosts();
-const posts = isAuthenticated ? allPosts : [];
+const allPosts = isAuthenticated ? BlogManager.getAllPosts() : [];
 
 const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
 ---
@@ -56,7 +80,15 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
         <div class="flex items-center justify-center min-h-screen">
           <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
             <h1 class="text-2xl font-bold mb-6 text-center">管理画面ログイン</h1>
+            
+            {loginError && (
+              <div class="mb-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm">
+                {loginError}
+              </div>
+            )}
+            
             <form method="POST" class="space-y-4">
+              <input type="hidden" name="action" value="login" />
               <div>
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                   パスワード
@@ -68,6 +100,7 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
                   placeholder="パスワードを入力"
                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
+                  autofocus
                 />
               </div>
               <button
@@ -77,6 +110,11 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
                 ログイン
               </button>
             </form>
+            
+            <div class="mt-4 p-3 bg-blue-50 rounded text-sm text-gray-600">
+              <p class="font-semibold mb-1">テスト用パスワード:</p>
+              <p>admin123</p>
+            </div>
           </div>
         </div>
       ) : (
@@ -84,12 +122,17 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
         <div class="max-w-7xl mx-auto px-6 py-8">
           <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold">ブログ管理画面</h1>
-            <a
-              href="/blog/"
-              class="text-blue-600 hover:underline"
-            >
-              ← ブログに戻る
-            </a>
+            <div class="flex gap-4">
+              <a href="/blog/" class="text-blue-600 hover:underline">
+                ← ブログに戻る
+              </a>
+              <form method="POST" style="display: inline;">
+                <input type="hidden" name="action" value="logout" />
+                <button type="submit" class="text-red-600 hover:underline">
+                  ログアウト
+                </button>
+              </form>
+            </div>
           </div>
 
           {
@@ -109,11 +152,11 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
           <div class="bg-white rounded-lg shadow">
             <div class="p-6 border-b">
               <h2 class="text-xl font-semibold mb-4">
-                記事一覧 （全 {posts.length} 件）
+                記事一覧 （全 {allPosts.length} 件）
               </h2>
 
               <form id="blog-manager-form" method="POST" class="space-y-4">
-                {posts.length === 0 ? (
+                {allPosts.length === 0 ? (
                   <p class="text-gray-500">記事がありません</p>
                 ) : (
                   <>
@@ -121,11 +164,11 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
                       <table class="w-full text-sm">
                         <thead class="bg-gray-100">
                           <tr>
-                            <th class="px-4 py-3 text-left">
+                            <th class="px-4 py-3 text-left w-12">
                               <input
                                 type="checkbox"
                                 id="select-all"
-                                class="w-4 h-4"
+                                class="w-4 h-4 cursor-pointer"
                               />
                             </th>
                             <th class="px-4 py-3 text-left">タイトル</th>
@@ -136,20 +179,20 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
                           </tr>
                         </thead>
                         <tbody class="divide-y">
-                          {posts.map((post) => (
+                          {allPosts.map((post) => (
                             <tr class="hover:bg-gray-50">
                               <td class="px-4 py-3">
                                 <input
                                   type="checkbox"
                                   name="selected_slugs"
                                   value={post.slug}
-                                  class="w-4 h-4 post-checkbox"
+                                  class="w-4 h-4 post-checkbox cursor-pointer"
                                 />
                               </td>
                               <td class="px-4 py-3 font-medium max-w-xs truncate">
                                 {post.title}
                               </td>
-                              <td class="px-4 py-3 text-gray-600 text-xs">
+                              <td class="px-4 py-3 text-gray-600 text-xs font-mono">
                                 {post.slug}
                               </td>
                               <td class="px-4 py-3 text-gray-600 text-xs">
@@ -217,26 +260,8 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
     }
   </main>
 
-  <script define:vars={{ password }}>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // ログイン処理
-      const forms = document.querySelectorAll('form');
-      const loginForm = Array.from(forms).find(f => f.id !== 'blog-manager-form');
-      
-      if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const passwordInput = loginForm.querySelector('input[name="password"]');
-          if (passwordInput && passwordInput.value === password) {
-            document.cookie = `admin_auth=${password}; path=/;`;
-            window.location.reload();
-          } else {
-            alert('パスワードが間違っています');
-            if (passwordInput) passwordInput.value = '';
-          }
-        });
-      }
-
       // 管理画面スクリプト
       const selectAllCheckbox = document.getElementById('select-all');
       const postCheckboxes = document.querySelectorAll('.post-checkbox');
@@ -245,38 +270,41 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
       const selectedCountSpan = document.getElementById('selected-count');
       const form = document.getElementById('blog-manager-form');
 
-      if (!form) return;
+      if (!form) return; // 管理画面でない場合はスキップ
 
       function updateSelectedCount() {
-        const selected = Array.from(postCheckboxes).filter((cb) => cb.checked).length;
-        if (selectedCountSpan) selectedCountSpan.textContent = selected;
+        const selected = Array.from(postCheckboxes).filter((cb: any) => cb.checked).length;
+        if (selectedCountSpan) selectedCountSpan.textContent = String(selected);
         if (applyButton) applyButton.disabled = selected === 0;
       }
 
+      // 全選択チェックボックス
       if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', (e) => {
-          postCheckboxes.forEach((cb) => {
+        selectAllCheckbox.addEventListener('change', (e: any) => {
+          postCheckboxes.forEach((cb: any) => {
             cb.checked = e.target.checked;
           });
           updateSelectedCount();
         });
       }
 
-      postCheckboxes.forEach((checkbox) => {
+      // 個別チェックボックス
+      postCheckboxes.forEach((checkbox: any) => {
         checkbox.addEventListener('change', updateSelectedCount);
       });
 
+      // 一括操作ボタン
       if (applyButton) {
         applyButton.addEventListener('click', () => {
-          const action = bulkActionSelect?.value;
+          const action = (bulkActionSelect as any)?.value;
           if (!action) {
             alert('操作を選択してください');
             return;
           }
 
           const selected = Array.from(postCheckboxes)
-            .filter((cb) => cb.checked)
-            .map((cb) => cb.value);
+            .filter((cb: any) => cb.checked)
+            .map((cb: any) => cb.value);
 
           if (selected.length === 0) {
             alert('記事を選択してください');
@@ -286,13 +314,14 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
           let confirmed = true;
           if (action === 'delete') {
             confirmed = confirm(
-              `${selected.length}件の記事を完全に削除してもよろしいですか？この操作は取り消せません。`
+              `${selected.length}件の記事を完全に削除してもよろしいですか？\nこの操作は取り消せません。`
             );
           } else if (action === 'trash') {
             confirmed = confirm(`${selected.length}件の記事をゴミ箱へ移動しますか？`);
           }
 
           if (confirmed) {
+            // フォームにhiddenフィールドを追加
             const actionInput = document.createElement('input');
             actionInput.type = 'hidden';
             actionInput.name = 'action';
@@ -307,7 +336,8 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
               form.appendChild(statusInput);
             }
 
-            selected.forEach((slug) => {
+            // 選択された記事をフォームに追加
+            selected.forEach((slug: string) => {
               const hiddenInput = document.createElement('input');
               hiddenInput.type = 'hidden';
               hiddenInput.name = 'selected_slugs';
@@ -320,6 +350,7 @@ const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
         });
       }
 
+      // 初期化
       updateSelectedCount();
     });
   </script>
