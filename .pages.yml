@@ -9,6 +9,9 @@ content:
     format: frontmatter
     view:
       search: true
+      fields:
+        - title
+        - date
     fields:
       - name: title
         label: Title

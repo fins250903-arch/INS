@@ -5,7 +5,7 @@ import TurndownService from 'turndown';
 import https from 'node:https';
 import http from 'node:http';
 
-const XML_DIR = 'C:\\Users\\yu\\Desktop\\INS\\insblog20260523';
+const XML_DIR = 'C:\\Users\\yu\\Desktop\\INS\\INS\\src\\data';
 const OUTPUT_DIR = path.join(process.cwd(), 'src/content/blog');
 const IMAGE_DIR = path.join(process.cwd(), 'public/images/blog');
 
