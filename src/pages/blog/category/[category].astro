@@ -3,13 +3,14 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
-import posts from '../../../data/wp-posts.json';
+import { getCollection } from 'astro:content';
 import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
 import { buildPageJsonLd } from '../../../lib/json-ld-site';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
   const categories = Array.from(
-    new Set(posts.filter((post) => post.status === 'publish').flatMap((post) => post.categories || []))
+    new Set(posts.flatMap((post) => post.data.categories || []))
   );
   return categories.map((category) => ({
     params: { category },
@@ -18,13 +19,17 @@ export function getStaticPaths() {
 }
 
 const { category } = Astro.props;
+const posts = await getCollection('blog');
 const filtered = posts.filter(
-  (post) => post.status === 'publish' && (post.categories || []).includes(category)
+  (post) => (post.data.categories || []).includes(category)
 );
 
 const chiikiMatch = CHIIKI_REGIONS.find((r) => r.categoryLabel === category);
 
-const formatDate = (value) => value.split(' ')[0].replace(/-/g, '.');
+const formatDate = (date) => {
+  const d = new Date(date);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+};
 const categoryPath = `/blog/category/${encodeURIComponent(category)}/`;
 const categoryJsonLd = buildPageJsonLd({
   path: categoryPath,
@@ -46,10 +51,10 @@ const categoryJsonLd = buildPageJsonLd({
       <h1 class="text-3xl font-bold">{category} の記事</h1>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {filtered.map((post) => (
-          <a href={`/blog/${post.slug}/`} class="block rounded-xl border border-gray-200 p-4 hover:shadow">
-            <div class="text-xs text-gray-500">{formatDate(post.date)}</div>
-            <div class="mt-2 font-semibold text-gray-900">{post.title}</div>
-            <div class="mt-2 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
+          <a href={`/blog/${post.id}/`} class="block rounded-xl border border-gray-200 p-4 hover:shadow">
+            <div class="text-xs text-gray-500">{formatDate(post.data.date)}</div>
+            <div class="mt-2 font-semibold text-gray-900">{post.data.title}</div>
+            <div class="mt-2 text-xs text-gray-500">{post.data.categories?.join(' / ')}</div>
           </a>
         ))}
       </div>

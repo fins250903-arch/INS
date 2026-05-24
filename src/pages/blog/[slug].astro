@@ -3,21 +3,24 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FloatingCTA from '../../components/FloatingCTA.astro';
-import posts from '../../data/wp-posts.json';
+import { getCollection, render } from 'astro:content';
 import { CHIIKI_REGIONS } from '../../data/blog-chiiki';
 import { buildBlogPostJsonLd } from '../../lib/blog-json-ld';
 
-export function getStaticPaths() {
-  return posts
-    .filter((post) => post.status === 'publish')
-    .map((post) => ({ params: { slug: post.slug }, props: { post } }));
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
 }
 
 const { post } = Astro.props;
-const formatDate = (value) => value.split(' ')[0].replace(/-/g, '.');
+const { Content } = await render(post);
+const formatDate = (date) => {
+  const d = new Date(date);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+};
 
 let footerRegionFull: string | undefined;
-for (const c of post.categories || []) {
+for (const c of post.data.categories || []) {
   const m = CHIIKI_REGIONS.find((r) => r.categoryLabel === c);
   if (m) {
     footerRegionFull = m.name;
@@ -26,26 +29,26 @@ for (const c of post.categories || []) {
 }
 
 const blogJsonLd = buildBlogPostJsonLd({
-  slug: post.slug,
-  title: post.title,
-  description: post.title,
-  datePublished: post.date
+  slug: post.id,
+  title: post.data.title,
+  description: post.data.title,
+  datePublished: post.data.date.toISOString()
 });
 ---
 
 <Layout
-  title={`${post.title}｜アイエヌエス車内清掃`}
-  description={post.title}
-  canonical={`/blog/${post.slug}/`}
+  title={`${post.data.title}｜アイエヌエス車内清掃`}
+  description={post.data.title}
+  canonical={`/blog/${post.id}/`}
   jsonLd={blogJsonLd}
 >
   <Header />
   <main class="bg-white">
     <article class="max-w-3xl mx-auto px-6 py-12">
-      <p class="text-xs text-gray-500">{formatDate(post.date)}</p>
-      <h1 class="mt-2 text-3xl font-bold">{post.title}</h1>
-      <div class="mt-4 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
-      <div class="mt-8 prose max-w-none wp-content" set:html={post.content}></div>
+      <p class="text-xs text-gray-500">{formatDate(post.data.date)}</p>
+      <h1 class="mt-2 text-3xl font-bold">{post.data.title}</h1>
+      <div class="mt-4 text-xs text-gray-500">{post.data.categories?.join(' / ')}</div>
+      <div class="mt-8 prose max-w-none wp-content"><Content /></div>
     </article>
   </main>
   <Footer regionFull={footerRegionFull} />

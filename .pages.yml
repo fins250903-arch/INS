@@ -1,0 +1,27 @@
+media:
+  input: public/images/blog
+  output: /images/blog
+content:
+  - name: blog
+    label: Blog
+    type: collection
+    path: src/content/blog
+    format: frontmatter
+    view:
+      search: true
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: categories
+        label: Categories
+        type: string
+        list: true
+      - name: body
+        label: Body
+        type: rich-text
