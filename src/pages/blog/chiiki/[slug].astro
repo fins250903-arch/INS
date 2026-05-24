@@ -3,23 +3,27 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
-import posts from '../../../data/wp-posts.json';
+import { getCollection } from 'astro:content';
 import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
 import { buildPageJsonLd } from '../../../lib/json-ld-site';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
   return CHIIKI_REGIONS.map((region) => ({
     params: { slug: region.slug },
     props: { region }
   }));
 }
 
-const { region } = Astro.props as { region: (typeof CHIIKI_REGIONS)[number] };
+interface Props {
+  region: (typeof CHIIKI_REGIONS)[number];
+}
 
-const published = posts.filter((post) => post.status === 'publish');
-const filtered = published.filter((post) => (post.categories || []).includes(region.categoryLabel));
+const { region } = Astro.props;
 
-const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
+const posts = await getCollection('blog', ({ data }) => data.status === 'publish');
+const filtered = posts.filter((post) => (post.data.categories || []).includes(region.categoryLabel));
+
+const formatDate = (value: string) => value.replace(/-/g, '.');
 
 /** 都道府県タグが付いていない記事向けに、同一内容の解説を代表記事へ集約 */
 const fallbackArticles: { title: string; slug: string }[] = [
@@ -60,9 +64,9 @@ const chiikiJsonLd = buildPageJsonLd({
           <div class="mt-8 grid gap-4 md:grid-cols-2">
             {filtered.map((post) => (
               <a href={`/blog/${post.slug}/`} class="block rounded-xl border border-gray-200 p-4 hover:shadow">
-                <div class="text-xs text-gray-500">{formatDate(post.date)}</div>
-                <div class="mt-2 font-semibold text-gray-900">{post.title}</div>
-                <div class="mt-2 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
+                <div class="text-xs text-gray-500">{formatDate(post.data.date)}</div>
+                <div class="mt-2 font-semibold text-gray-900">{post.data.title}</div>
+                <div class="mt-2 text-xs text-gray-500">{post.data.categories?.join(' / ')}</div>
               </a>
             ))}
           </div>
