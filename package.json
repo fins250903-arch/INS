@@ -27,6 +27,7 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
+    "fast-xml-parser": "^5.8.0",
     "tsx": "^4.22.3"
   }
 }

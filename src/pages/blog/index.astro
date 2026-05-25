@@ -7,7 +7,9 @@ import posts from '../../data/wp-posts.json';
 import { CHIIKI_REGIONS } from '../../data/blog-chiiki';
 import { buildPageJsonLd } from '../../lib/json-ld-site';
 
-const published = posts.filter((post) => post.status === 'publish');
+const published = posts
+  .filter((post) => post.status === 'publish')
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 const categories = Array.from(new Set(published.flatMap((post) => post.categories || [])));
 const regionCategories = ['大阪', '京都', '群馬', '茨城'];
 const otherCategories = categories.filter((cat) => !regionCategories.includes(cat));

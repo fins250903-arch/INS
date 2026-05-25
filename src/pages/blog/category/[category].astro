@@ -18,9 +18,11 @@ export function getStaticPaths() {
 }
 
 const { category } = Astro.props;
-const filtered = posts.filter(
-  (post) => post.status === 'publish' && (post.categories || []).includes(category)
-);
+const filtered = posts
+  .filter(
+    (post) => post.status === 'publish' && (post.categories || []).includes(category)
+  )
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 const chiikiMatch = CHIIKI_REGIONS.find((r) => r.categoryLabel === category);
 

@@ -17,7 +17,9 @@ export function getStaticPaths() {
 const { region } = Astro.props as { region: (typeof CHIIKI_REGIONS)[number] };
 
 const published = posts.filter((post) => post.status === 'publish');
-const filtered = published.filter((post) => (post.categories || []).includes(region.categoryLabel));
+const filtered = published
+  .filter((post) => (post.categories || []).includes(region.categoryLabel))
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
 
