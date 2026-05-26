@@ -73,6 +73,6 @@
   }
 
   .wp-content img {
-    @apply rounded-lg shadow-sm;
+    @apply rounded-lg shadow-sm max-w-full h-auto;
   }
 }

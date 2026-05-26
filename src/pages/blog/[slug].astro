@@ -42,6 +42,13 @@ const blogJsonLd = buildBlogPostJsonLd({
   <Header />
   <main class="bg-white">
     <article class="max-w-3xl mx-auto px-6 py-12">
+      {post.featured_image && (
+        <img
+          src={post.featured_image}
+          alt={post.title}
+          class="w-full h-auto rounded-lg mb-8"
+        />
+      )}
       <p class="text-xs text-gray-500">{formatDate(post.date)}</p>
       <h1 class="mt-2 text-3xl font-bold">{post.title}</h1>
       <div class="mt-4 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
