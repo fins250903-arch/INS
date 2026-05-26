@@ -10,6 +10,8 @@ type Post = {
   status: string;
   content: string;
   categories: string[];
+  thumbnail_id?: number;
+  featured_image?: string;
 };
 
 async function parseWordPressXml() {
@@ -33,6 +35,7 @@ async function parseWordPressXml() {
 
   const allPosts: Post[] = [];
   const processedIds = new Set<number>();
+  const attachmentMap = new Map<number, string>(); // ID -> featured image URL
 
   for (const pattern of xmlPatterns) {
     const xmlFile = path.join(dataDir, pattern);
@@ -51,6 +54,17 @@ async function parseWordPressXml() {
       items = items ? [items] : [];
     }
 
+    // First pass: collect attachments
+    for (const item of items) {
+      if (item['wp:post_type'] === 'attachment') {
+        const attachmentId = parseInt(item['wp:post_id'], 10);
+        const attachmentUrl = String(item['wp:attachment_url'] || '').trim();
+        if (attachmentId && attachmentUrl) {
+          attachmentMap.set(attachmentId, attachmentUrl);
+        }
+      }
+    }
+
     const filePosts = items
       .filter(
         (item: any) =>
@@ -66,6 +80,26 @@ async function parseWordPressXml() {
             .filter((cat: any) => cat['@_domain'] === 'category')
             .map((cat: any) => cat['#text'] || '')
             .filter(c => c);
+        }
+
+        // Extract featured image ID from post meta
+        let thumbnailId: number | undefined;
+        let featuredImage: string | undefined;
+
+        if (item['wp:postmeta']) {
+          const metas = Array.isArray(item['wp:postmeta'])
+            ? item['wp:postmeta']
+            : [item['wp:postmeta']];
+          
+          for (const meta of metas) {
+            if (meta['wp:meta_key'] === '_thumbnail_id') {
+              thumbnailId = parseInt(meta['wp:meta_value'], 10);
+              if (thumbnailId && attachmentMap.has(thumbnailId)) {
+                featuredImage = attachmentMap.get(thumbnailId);
+              }
+              break;
+            }
+          }
         }
 
         const postId = parseInt(item['wp:post_id'], 10);
@@ -88,6 +122,8 @@ async function parseWordPressXml() {
           status: 'publish',
           content: postContent,
           categories,
+          thumbnail_id: thumbnailId,
+          featured_image: featuredImage,
         };
       })
       .filter((p: Post | null): p is Post => p !== null);
