@@ -19,12 +19,12 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
     "@astrojs/vercel": "^10.0.7",
-    "@tailwindcss/vite": "^4.2.4",
-    "astro": "^6.3.3",
+    "@tailwindcss/postcss": "^4.2.4",
+    "astro": "^6.0.0",
     "dotenv": "^17.4.2",
     "google-auth-library": "^10.6.2",
     "googleapis": "^171.4.0",
-    "tailwindcss": "^4.2.4"
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "fast-xml-parser": "^5.8.0",
