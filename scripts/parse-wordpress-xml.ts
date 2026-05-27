@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { XMLParser } from 'fast-xml-parser';
+import { normalizeWpContentImageUrls, normalizeWpImageUrl } from '../src/lib/wp-image-url';
 
-type Post = {
+type ImportedPost = {
   id: number;
   title: string;
   slug: string;
@@ -10,22 +11,26 @@ type Post = {
   status: string;
   content: string;
   categories: string[];
-  thumbnail_id?: number;
-  featured_image?: string;
+  tags: string[];
+  thumbnail: string;
 };
 
 async function parseWordPressXml() {
-  const dataDir = path.join(process.cwd(), 'src/data');
-  const outputFile = path.join(dataDir, 'wp-posts.json');
+  const xmlDir = path.join(process.cwd(), 'INSDATA');
+  const outputFile = path.join(process.cwd(), 'src', 'data', 'wp-posts.json');
 
-  // XML ファイルのパターンを定義（複数ファイルをマージ）
-  const xmlPatterns = [
-    'ins.WordPress.2026-05-12.xml',
-    'ins.WordPress.2026-05-12 (1).xml',
-    'ins.WordPress.2026-05-12 (2).xml',
-    'ins.WordPress.2026-05-12 (3).xml',
-    'WordPress.2026-05-12.xml'
-  ];
+  if (!fs.existsSync(xmlDir)) {
+    throw new Error(`INSDATA folder not found: ${xmlDir}`);
+  }
+
+  const xmlFiles = fs
+    .readdirSync(xmlDir)
+    .filter((name) => name.toLowerCase().endsWith('.xml'))
+    .sort((a, b) => a.localeCompare(b, 'ja'));
+
+  if (xmlFiles.length === 0) {
+    throw new Error(`No XML files found under: ${xmlDir}`);
+  }
 
   const parser = new XMLParser({
     ignoreAttributes: false,
@@ -33,34 +38,28 @@ async function parseWordPressXml() {
     parseAttributeValue: false
   });
 
-  const allPosts: Post[] = [];
+  const allPosts: ImportedPost[] = [];
   const processedIds = new Set<number>();
-  const attachmentMap = new Map<number, string>(); // ID -> featured image URL
+  const attachmentMap = new Map<number, string>(); // attachment_id -> url
 
-  for (const pattern of xmlPatterns) {
-    const xmlFile = path.join(dataDir, pattern);
-    if (!fs.existsSync(xmlFile)) {
-      console.log(`⊘ Skipping: ${pattern} (not found)`);
-      continue;
-    }
-
-    console.log(`✓ Processing: ${pattern}`);
+  for (const filename of xmlFiles) {
+    const xmlFile = path.join(xmlDir, filename);
+    console.log(`Processing: ${filename}`);
     const xmlContent = fs.readFileSync(xmlFile, 'utf-8');
     const xmlData = parser.parse(xmlContent);
-    let items = xmlData.rss.channel.item;
+    let items = xmlData?.rss?.channel?.item;
 
-    // item が単一オブジェクトの場合は配列にする
     if (!Array.isArray(items)) {
       items = items ? [items] : [];
     }
 
-    // First pass: collect attachments
+    // 1st pass: collect attachment URLs
     for (const item of items) {
       if (item['wp:post_type'] === 'attachment') {
         const attachmentId = parseInt(item['wp:post_id'], 10);
         const attachmentUrl = String(item['wp:attachment_url'] || '').trim();
         if (attachmentId && attachmentUrl) {
-          attachmentMap.set(attachmentId, attachmentUrl);
+          attachmentMap.set(attachmentId, normalizeWpImageUrl(attachmentUrl));
         }
       }
     }
@@ -71,20 +70,22 @@ async function parseWordPressXml() {
           item['wp:post_type'] === 'post' && item['wp:status'] === 'publish'
       )
       .map((item: any) => {
-        let categories: string[] = [];
+        const categories: string[] = [];
+        const tags: string[] = [];
         if (item.category) {
           const cats = Array.isArray(item.category)
             ? item.category
             : [item.category];
-          categories = cats
-            .filter((cat: any) => cat['@_domain'] === 'category')
-            .map((cat: any) => cat['#text'] || '')
-            .filter(c => c);
+          for (const cat of cats) {
+            const label = String(cat['#text'] || '').trim();
+            if (!label) continue;
+            if (cat['@_domain'] === 'category') categories.push(label);
+            if (cat['@_domain'] === 'post_tag') tags.push(label);
+          }
         }
 
-        // Extract featured image ID from post meta
+        // Extract featured image ID
         let thumbnailId: number | undefined;
-        let featuredImage: string | undefined;
 
         if (item['wp:postmeta']) {
           const metas = Array.isArray(item['wp:postmeta'])
@@ -94,9 +95,6 @@ async function parseWordPressXml() {
           for (const meta of metas) {
             if (meta['wp:meta_key'] === '_thumbnail_id') {
               thumbnailId = parseInt(meta['wp:meta_value'], 10);
-              if (thumbnailId && attachmentMap.has(thumbnailId)) {
-                featuredImage = attachmentMap.get(thumbnailId);
-              }
               break;
             }
           }
@@ -106,11 +104,12 @@ async function parseWordPressXml() {
         const postSlug = String(item['wp:post_name'] || '').trim();
         const postTitle = String(item.title || '').trim();
         const postDate = String(item.pubDate || item['wp:post_date'] || '').trim();
-        const postContent = String(item['content:encoded'] || '').trim();
+        const postContent = normalizeWpContentImageUrls(String(item['content:encoded'] || '').trim());
+        const thumbnail = thumbnailId ? attachmentMap.get(thumbnailId) || '' : '';
 
-        // スラッグが空、または URL エンコード形式の場合はスキップ
+        // Skip empty or URL encoded slug
         if (!postSlug || postSlug.includes('%')) {
-          console.warn(`⚠ Skipping post ID ${postId} with invalid slug: "${postSlug}" (title: "${postTitle}")`);
+          console.warn(`Skipping post ID ${postId} with invalid slug: "${postSlug}"`);
           return null;
         }
 
@@ -121,14 +120,13 @@ async function parseWordPressXml() {
           date: postDate,
           status: 'publish',
           content: postContent,
-          categories,
-          thumbnail_id: thumbnailId,
-          featured_image: featuredImage,
+          categories: Array.from(new Set(categories)),
+          tags: Array.from(new Set(tags)),
+          thumbnail
         };
       })
-      .filter((p: Post | null): p is Post => p !== null);
+      .filter((p: ImportedPost | null): p is ImportedPost => p !== null);
 
-    // 重複排除（IDで判定）
     for (const post of filePosts) {
       if (!processedIds.has(post.id)) {
         allPosts.push(post);
@@ -137,15 +135,14 @@ async function parseWordPressXml() {
     }
   }
 
-  // 日付でソート（新しい順）
   allPosts.sort(
-    (a: Post, b: Post) =>
+    (a: ImportedPost, b: ImportedPost) =>
       new Date(b.date).getTime() - new Date(a.date).getTime()
   );
 
   fs.writeFileSync(outputFile, JSON.stringify(allPosts, null, 2));
-  console.log(`\n✓ Generated ${allPosts.length} posts to ${outputFile}`);
-  console.log('\nRecent posts:');
+  console.log(`Generated ${allPosts.length} posts -> ${outputFile}`);
+  console.log('Recent posts:');
   allPosts.slice(0, 5).forEach((p) => {
     console.log(`  - ${p.slug}: ${p.title}`);
   });

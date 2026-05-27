@@ -12,6 +12,8 @@
     "preview": "astro preview",
     "preview:lan": "astro preview --host 0.0.0.0",
     "astro": "astro",
+    "wp:import": "tsx scripts/parse-wordpress-xml.ts",
+    "wp:sync": "npm run wp:import",
     "gsc": "tsx scripts/gsc/sync.ts",
     "gsc:sync": "npm run build && npm run gsc -- sync",
     "sachi:sync": "npm run gsc:sync"
