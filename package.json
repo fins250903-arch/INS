@@ -8,12 +8,16 @@
   "scripts": {
     "dev": "astro dev",
     "dev:lan": "astro dev --host 0.0.0.0",
-    "build": "astro build",
+    "build": "npm run wp:resolve-images && astro build",
     "preview": "astro preview",
     "preview:lan": "astro preview --host 0.0.0.0",
     "astro": "astro",
     "wp:import": "tsx scripts/parse-wordpress-xml.ts",
-    "wp:sync": "npm run wp:import",
+    "wp:cache-images": "node scripts/cache-post-images.cjs",
+    "wp:resolve-images": "node scripts/resolve-local-images.cjs",
+    "wp:sync": "npm run wp:import && npm run wp:resolve-images",
+    "wp:audit:thumbs": "node scripts/export-thumbnail-audit.cjs",
+    "blog:migrate": "node scripts/migrate-wp-md-to-content.cjs",
     "gsc": "tsx scripts/gsc/sync.ts",
     "gsc:sync": "npm run build && npm run gsc -- sync",
     "sachi:sync": "npm run gsc:sync"

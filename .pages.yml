@@ -1,0 +1,89 @@
+media:
+  - name: blog-images
+    label: ブログ画像
+    input: public/blog-images
+    output: /blog-images
+    rename: safe
+    extensions: [jpg, jpeg, png, webp, gif]
+
+content:
+  - name: blog
+    label: ブログ記事
+    type: collection
+    path: src/content/blog
+    view:
+      primary: title
+      fields: [region, title, date, draft, thumbnail]
+      sort: [date desc]
+    filename: "{fields.region}/{primary}.md"
+    fields:
+      - name: title
+        label: タイトル
+        type: string
+        required: true
+      - name: date
+        label: 公開日
+        type: date
+        required: true
+        options:
+          time: false
+          format: yyyy-MM-dd
+      - name: region
+        label: 地域（識別子）
+        type: select
+        required: true
+        options:
+          values:
+            - fukuoka
+            - osaka
+            - hyougo
+            - siga
+          labels:
+            fukuoka: 福岡
+            osaka: 大阪
+            hyougo: 兵庫
+            siga: 滋賀
+      - name: regionFull
+        label: 地域名（正式）
+        type: string
+        required: true
+        description: 例）大阪府、兵庫県
+      - name: areaLabel
+        label: 地域の件名
+        type: string
+        description: 一覧表示用の地域ラベル（例）大阪・近畿エリア
+      - name: thumbnail
+        label: サムネイル画像
+        type: image
+        options:
+          media: blog-images
+          path: public/blog-images
+          extensions: [jpg, jpeg, png, webp]
+      - name: images
+        label: 記事内画像
+        type: image
+        options:
+          media: blog-images
+          path: public/blog-images
+          multiple:
+            max: 12
+          unique: true
+          extensions: [jpg, jpeg, png, webp]
+      - name: canonicalUrl
+        label: カノニカル URL
+        type: string
+        description: 未入力時はサイト上の自身の URL を自動設定します
+      - name: draft
+        label: 下書き
+        type: boolean
+      - name: categories
+        label: カテゴリ
+        type: string
+        description: カンマ区切り（例）souji, seisou
+      - name: tags
+        label: タグ
+        type: string
+        description: カンマ区切り
+      - name: body
+        label: 本文
+        type: rich-text

@@ -3,25 +3,17 @@ const path = require('path');
 
 const dataDir = path.join(__dirname, '../src/data');
 const postsPath = path.join(dataDir, 'wp-posts.json');
-const WP_UPLOADS_PATH = '/wp1/wp-content/uploads/';
-const INSBS_UPLOADS_BASE = `https://insbs.net${WP_UPLOADS_PATH}`;
 
 function normalizeWpImageUrl(url) {
   if (!url || typeof url !== 'string') return '';
   const trimmed = url.trim();
   if (!trimmed) return '';
-  const idx = trimmed.indexOf(WP_UPLOADS_PATH);
-  if (idx === -1) return trimmed;
-  const relative = trimmed.slice(idx + WP_UPLOADS_PATH.length);
-  return `${INSBS_UPLOADS_BASE}${relative}`;
+  return trimmed;
 }
 
 function normalizeWpContentImageUrls(html) {
   if (!html || typeof html !== 'string') return '';
-  return html.replace(
-    /https?:\/\/[a-z0-9.-]*insbs\.net\/wp1\/wp-content\/uploads\//gi,
-    INSBS_UPLOADS_BASE
-  );
+  return html;
 }
 
 // Read existing posts

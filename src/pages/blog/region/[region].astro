@@ -1,0 +1,96 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import FloatingCTA from '../../../components/FloatingCTA.astro';
+import BlogCta from '../../../components/BlogCta.astro';
+import { BLOG_REGIONS, BLOG_REGION_BY_SLUG } from '../../../data/blog-regions';
+import { buildPageJsonLd } from '../../../lib/json-ld-site';
+import {
+  formatBlogDateLong,
+  getBlogPath,
+  getPostsForRegion,
+  getAreaLabel,
+  resolveBlogImage
+} from '../../../lib/blog-content';
+
+export async function getStaticPaths() {
+  return BLOG_REGIONS.map((region) => ({
+    params: { region: region.slug },
+    props: { region }
+  }));
+}
+
+const { region } = Astro.props;
+const posts = await getPostsForRegion(region.slug);
+const regionMeta = BLOG_REGION_BY_SLUG[region.slug];
+
+const regionJsonLd = buildPageJsonLd({
+  path: `/blog/region/${region.slug}/`,
+  title: `${regionMeta.regionFull}の記事一覧｜ブログ`,
+  description: `${regionMeta.regionFull}向けのブログ記事一覧です。`,
+  pageType: 'CollectionPage'
+});
+---
+
+<Layout
+  title={`${regionMeta.regionFull}の記事一覧｜ブログ`}
+  description={`${regionMeta.regionFull}向けのブログ記事一覧です。`}
+  canonical={`/blog/region/${region.slug}/`}
+  jsonLd={regionJsonLd}
+>
+  <Header />
+  <main class="bg-white">
+    <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
+      <nav class="text-sm text-gray-500">
+        <a href="/blog/" class="underline hover:text-primary">ブログ一覧</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-800">{regionMeta.regionFull}</span>
+      </nav>
+
+      <h1 class="mt-4 text-2xl font-bold sm:text-3xl">{regionMeta.regionFull}の記事</h1>
+      <p class="mt-2 text-sm leading-relaxed text-gray-600">
+        {regionMeta.name}サイト（{regionMeta.legacyBase.replace('https://', '')}）から移行した記事です。
+      </p>
+
+      {
+        posts.length > 0 ? (
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => {
+              const thumb = resolveBlogImage(post.data.thumbnail);
+              return (
+                <a
+                  href={getBlogPath(post)}
+                  class="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:shadow-lg"
+                >
+                  {thumb ? (
+                    <div class="h-40 w-full shrink-0 bg-gray-100">
+                      <img src={thumb} alt="" class="h-full w-full object-cover" loading="lazy" />
+                    </div>
+                  ) : (
+                    <div class="flex h-40 w-full shrink-0 items-center justify-center bg-gray-100">
+                      <span class="text-sm text-gray-400">No Image</span>
+                    </div>
+                  )}
+                  <div class="flex flex-grow flex-col p-4">
+                    <div class="text-xs text-gray-500">{formatBlogDateLong(post.data.date)}</div>
+                    <div class="mt-2 line-clamp-2 font-semibold leading-snug text-gray-900">{post.data.title}</div>
+                    <div class="mt-auto pt-2 text-xs text-gray-500">{getAreaLabel(post)}</div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        ) : (
+          <p class="mt-8 rounded-xl border border-amber-100 bg-amber-50/80 p-6 text-sm text-gray-800">
+            この地域の公開記事はまだありません。
+          </p>
+        )
+      }
+    </section>
+
+    <BlogCta regionFull={regionMeta.regionFull} />
+  </main>
+  <Footer regionFull={regionMeta.regionFull} />
+  <FloatingCTA />
+</Layout>

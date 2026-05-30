@@ -1,0 +1,111 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import FloatingCTA from '../../../components/FloatingCTA.astro';
+import BlogCta from '../../../components/BlogCta.astro';
+import { buildBlogPostJsonLd } from '../../../lib/blog-json-ld';
+import {
+  getBlogSlug,
+  resolveBlogCanonical,
+  resolveBlogImage,
+  formatBlogDate,
+  getAreaLabel
+} from '../../../lib/blog-content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => {
+    const slug = getBlogSlug(post);
+    return {
+      params: { region: post.data.region, slug },
+      props: { post }
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const slug = getBlogSlug(post);
+const pagePath = `/blog/${post.data.region}/${slug}/`;
+const headerImage = resolveBlogImage(post.data.thumbnail);
+const canonical = resolveBlogCanonical(post, pagePath);
+
+const blogJsonLd = buildBlogPostJsonLd({
+  path: pagePath,
+  title: post.data.title,
+  description: post.data.title,
+  datePublished: post.data.date.toISOString()
+});
+---
+
+<Layout
+  title={`${post.data.title}｜アイエヌエス車内清掃`}
+  description={post.data.title}
+  canonical={canonical}
+  jsonLd={blogJsonLd}
+>
+  <Header />
+  <main class="bg-white">
+    <article class="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-12">
+      <nav class="text-sm text-gray-500">
+        <a href="/blog/" class="underline hover:text-primary">ブログ一覧</a>
+        <span class="mx-2">/</span>
+        <a href={`/blog/region/${post.data.region}/`} class="underline hover:text-primary">
+          {post.data.regionFull}
+        </a>
+      </nav>
+
+      <p class="mt-4 text-xs text-gray-500">{formatBlogDate(post.data.date)}</p>
+      <p class="mt-1 text-xs font-medium text-primary">{getAreaLabel(post)}</p>
+      <h1 class="mt-2 text-2xl font-bold leading-snug sm:text-3xl">{post.data.title}</h1>
+
+      {post.data.categories.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {post.data.categories.map((cat) => (
+            <a
+              href={`/blog/category/${encodeURIComponent(cat)}/`}
+              class="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-200"
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+      )}
+
+      {headerImage && (
+        <div class="mt-8 mb-8">
+          <img
+            src={headerImage}
+            alt={post.data.title}
+            class="w-full max-w-3xl rounded-xl object-cover shadow-md"
+          />
+        </div>
+      )}
+
+      {
+        post.data.images && post.data.images.length > 0 && (
+          <div class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {post.data.images.map((image) => (
+              <img
+                src={resolveBlogImage(image)}
+                alt=""
+                class="aspect-square w-full rounded-lg object-cover"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        )
+      }
+
+      <div class="prose mt-8 max-w-none wp-content">
+        <Content />
+      </div>
+    </article>
+
+    <BlogCta regionFull={post.data.regionFull} />
+  </main>
+  <Footer regionFull={post.data.regionFull} />
+  <FloatingCTA />
+</Layout>

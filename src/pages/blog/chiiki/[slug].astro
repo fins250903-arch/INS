@@ -3,11 +3,17 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
-import posts from '../../../data/wp-posts.json';
+import BlogCta from '../../../components/BlogCta.astro';
 import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
 import { buildPageJsonLd } from '../../../lib/json-ld-site';
+import {
+  formatBlogDateLong,
+  getBlogPath,
+  getPublishedBlogPosts,
+  getAreaLabel
+} from '../../../lib/blog-content';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
   return CHIIKI_REGIONS.map((region) => ({
     params: { slug: region.slug },
     props: { region }
@@ -16,28 +22,19 @@ export function getStaticPaths() {
 
 const { region } = Astro.props as { region: (typeof CHIIKI_REGIONS)[number] };
 
-const published = posts.filter((post) => post.status === 'publish');
+const published = await getPublishedBlogPosts();
 const filtered = published
-  .filter((post) => (post.categories || []).includes(region.categoryLabel))
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  .filter((post) => post.data.categories.includes(region.categoryLabel))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const formatDate = (dateStr: string) => {
-  try {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}年${month}月${day}日`;
-  } catch {
-    return dateStr;
+const fallbackArticles: { title: string; region: string; slug: string }[] = [
+  { title: '車内で嘔吐！でも大丈夫な対応方法', region: 'fukuoka', slug: 'outo1' },
+  { title: '知らなかった！やってはいけない嘔吐物処理とは', region: 'fukuoka', slug: 'outo2' },
+  {
+    title: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
+    region: 'fukuoka',
+    slug: 'no1'
   }
-};
-
-/** 都道府県タグが付いていない記事向けに、同一内容の解説を代表記事へ集約 */
-const fallbackArticles: { title: string; slug: string }[] = [
-  { title: '車内で嘔吐！でも大丈夫な対応方法', slug: 'outo1' },
-  { title: '知らなかった！やってはいけない嘔吐物処理とは', slug: 'outo2' },
-  { title: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術', slug: 'no1' }
 ];
 
 const chiikiJsonLd = buildPageJsonLd({
@@ -56,25 +53,28 @@ const chiikiJsonLd = buildPageJsonLd({
 >
   <Header />
   <main class="bg-white">
-    <section class="max-w-6xl mx-auto px-6 py-12">
+    <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
       <nav class="text-sm text-gray-500">
         <a href="/blog/" class="underline hover:text-primary">ブログ一覧</a>
         <span class="mx-2">/</span>
         <span class="text-gray-800">{region.name}</span>
       </nav>
-      <h1 class="mt-4 text-3xl font-bold">{region.name}の記事</h1>
-      <p class="mt-2 text-sm text-gray-600">
-        WordPress のカテゴリ「{region.categoryLabel}」が付いた記事のみを表示しています。
+      <h1 class="mt-4 text-2xl font-bold sm:text-3xl">{region.name}の記事</h1>
+      <p class="mt-2 text-sm leading-relaxed text-gray-600">
+        カテゴリ「{region.categoryLabel}」が付いた記事を表示しています。
       </p>
 
       {
         filtered.length > 0 ? (
-          <div class="mt-8 grid gap-4 md:grid-cols-2">
+          <div class="mt-8 grid gap-4 sm:grid-cols-2">
             {filtered.map((post) => (
-              <a href={`/blog/${post.slug}/`} class="block rounded-xl border border-gray-200 p-4 hover:shadow">
-                <div class="text-xs text-gray-500">{formatDate(post.date)}</div>
-                <div class="mt-2 font-semibold text-gray-900">{post.title}</div>
-                <div class="mt-2 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
+              <a
+                href={getBlogPath(post)}
+                class="block rounded-xl border border-gray-200 p-4 transition hover:shadow"
+              >
+                <div class="text-xs text-gray-500">{formatBlogDateLong(post.data.date)}</div>
+                <div class="mt-2 font-semibold leading-snug text-gray-900">{post.data.title}</div>
+                <div class="mt-2 text-xs text-gray-500">{getAreaLabel(post)}</div>
               </a>
             ))}
           </div>
@@ -82,13 +82,16 @@ const chiikiJsonLd = buildPageJsonLd({
           <div class="mt-8 rounded-xl border border-amber-100 bg-amber-50/80 p-6 text-gray-800">
             <p class="font-semibold">この都道府県カテゴリの記事はまだありません。</p>
             <p class="mt-2 text-sm leading-relaxed">
-              内容が同じ解説記事は全国向けに一本化しており、以下の代表記事をご参照ください。
+              内容が同じ解説記事は代表記事への案内を表示します。
             </p>
             <ul class="mt-4 list-disc space-y-2 pl-5 text-sm">
-              {fallbackArticles.map((a) => (
+              {fallbackArticles.map((article) => (
                 <li>
-                  <a href={`/blog/${a.slug}/`} class="font-medium text-primary underline hover:no-underline">
-                    {a.title}
+                  <a
+                    href={`/blog/${article.region}/${article.slug}/`}
+                    class="font-medium text-primary underline hover:no-underline"
+                  >
+                    {article.title}
                   </a>
                 </li>
               ))}
@@ -97,6 +100,8 @@ const chiikiJsonLd = buildPageJsonLd({
         )
       }
     </section>
+
+    <BlogCta regionFull={region.name} />
   </main>
   <Footer regionFull={region.name} />
   <FloatingCTA />

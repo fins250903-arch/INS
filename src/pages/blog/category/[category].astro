@@ -3,14 +3,21 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
-import posts from '../../../data/wp-posts.json';
+import BlogCta from '../../../components/BlogCta.astro';
 import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
 import { buildPageJsonLd } from '../../../lib/json-ld-site';
+import {
+  formatBlogDateLong,
+  getAllBlogCategories,
+  getBlogPath,
+  getPostsForCategory,
+  getPublishedBlogPosts,
+  getAreaLabel
+} from '../../../lib/blog-content';
 
-export function getStaticPaths() {
-  const categories = Array.from(
-    new Set(posts.filter((post) => post.status === 'publish').flatMap((post) => post.categories || []))
-  );
+export async function getStaticPaths() {
+  const posts = await getPublishedBlogPosts();
+  const categories = getAllBlogCategories(posts);
   return categories.map((category) => ({
     params: { category },
     props: { category }
@@ -18,25 +25,10 @@ export function getStaticPaths() {
 }
 
 const { category } = Astro.props;
-const filtered = posts
-  .filter(
-    (post) => post.status === 'publish' && (post.categories || []).includes(category)
-  )
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
+const filtered = await getPostsForCategory(category);
 const chiikiMatch = CHIIKI_REGIONS.find((r) => r.categoryLabel === category);
 
-const formatDate = (dateStr: string) => {
-  try {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return `${year}年${month}月${day}日`;
-  } catch {
-    return dateStr;
-  }
-};
+const formatDate = formatBlogDateLong;
 const categoryPath = `/blog/category/${encodeURIComponent(category)}/`;
 const categoryJsonLd = buildPageJsonLd({
   path: categoryPath,
@@ -54,18 +46,25 @@ const categoryJsonLd = buildPageJsonLd({
 >
   <Header />
   <main class="bg-white">
-    <section class="max-w-6xl mx-auto px-6 py-12">
-      <h1 class="text-3xl font-bold">{category} の記事</h1>
-      <div class="mt-6 grid gap-4 md:grid-cols-2">
+    <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
+      <nav class="text-sm text-gray-500">
+        <a href="/blog/" class="underline hover:text-primary">ブログ一覧</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-800">{category}</span>
+      </nav>
+      <h1 class="mt-4 text-2xl font-bold sm:text-3xl">{category} の記事</h1>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
         {filtered.map((post) => (
-          <a href={`/blog/${post.slug}/`} class="block rounded-xl border border-gray-200 p-4 hover:shadow">
-            <div class="text-xs text-gray-500">{formatDate(post.date)}</div>
-            <div class="mt-2 font-semibold text-gray-900">{post.title}</div>
-            <div class="mt-2 text-xs text-gray-500">{post.categories?.join(' / ')}</div>
+          <a href={getBlogPath(post)} class="block rounded-xl border border-gray-200 p-4 transition hover:shadow">
+            <div class="text-xs text-gray-500">{formatDate(post.data.date)}</div>
+            <div class="mt-2 font-semibold leading-snug text-gray-900">{post.data.title}</div>
+            <div class="mt-2 text-xs text-gray-500">{getAreaLabel(post)}</div>
           </a>
         ))}
       </div>
     </section>
+
+    <BlogCta regionFull={chiikiMatch?.name} />
   </main>
   <Footer regionFull={chiikiMatch?.name} />
   <FloatingCTA />

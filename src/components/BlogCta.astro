@@ -1,0 +1,27 @@
+---
+import CtaBundle from './CtaBundle.astro';
+
+interface Props {
+  regionFull?: string;
+  className?: string;
+}
+
+const { regionFull, className = '' } = Astro.props;
+const regionLine = regionFull ? `${regionFull}エリアも対応` : '全国エリア対応';
+---
+
+<section class={`blog-cta-section px-4 py-10 sm:px-6 sm:py-12 ${className}`} aria-label="お問い合わせ">
+  <div class="mx-auto max-w-xl text-center">
+    <p class="mb-4 text-sm font-bold leading-relaxed text-gray-700 sm:text-base">
+      {regionLine}・365日24時間受付
+    </p>
+    <CtaBundle />
+  </div>
+</section>
+
+<style>
+  .blog-cta-section {
+    background: linear-gradient(180deg, #ffffff 0%, #f7faf3 100%);
+    border-top: 1px solid #e8efe0;
+  }
+</style>

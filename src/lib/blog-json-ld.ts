@@ -5,12 +5,12 @@ import { siteOrganizationNode, siteWebSiteNode, webPageNode } from './json-ld-si
 
 /** ブログ記事用 JSON-LD（@graph：BlogPosting + WebPage） */
 export function buildBlogPostJsonLd(input: {
-  slug: string;
+  path: string;
   title: string;
   description: string;
   datePublished: string;
 }): Record<string, unknown> {
-  const path = `/blog/${input.slug}/`;
+  const path = input.path.endsWith('/') ? input.path : `${input.path}/`;
   const url = canonicalUrl(path);
   const baseId = pageId(path);
   const articleId = `${baseId}#article`;
