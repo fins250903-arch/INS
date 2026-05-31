@@ -2,7 +2,7 @@
 title: 100均2品で解決！シエンタのコーヒー染みを5分で消す方法
 date: 2026-05-31
 region: fukuoka
-regionFull: 福岡県
+regionFull: 千葉県
 areaLabel: 千葉
 thumbnail: /blog-images/file-1.jpg
 images:
