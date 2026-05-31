@@ -1,16 +1,15 @@
 ---
-title: "車内の腐敗臭、原因特定やはりアレでした　処理は業者にお任せ。"
-date: "2026-05-08"
-region: "fukuoka"
-regionFull: "福岡県"
-areaLabel: "福岡・九州エリア"
-thumbnail: "nezumi2.jpg"
+title: 車内の腐敗臭、原因特定やはりアレでした　処理は業者にお任せ。
+date: 2026-05-31
+region: fukuoka
+regionFull: 福岡県
+areaLabel: 福岡・九州エリア
+thumbnail: /blog-images/nezumi2.jpg
+images:
+  - /blog-images/nezumi2.jpg
 draft: false
-categories:
-  - "souji"
-  - "seisou"
+categories: souji,seisou,
 ---
-
 どこからともなく漂ってくる、あの鼻をつく嫌な匂い。 自分なりに座席の下を覗いたり、消臭剤を片っ端から試したりしてみましたが、どうしても原因が掴めません。 密室である車内があの状態で、正直、運転するのも苦痛なほどでした。 最後はもう藁をも掴む思いで、プロの出張清掃業者さんに助けを求めることにしました。
 
 プロの仕事は、やはり視点が違います。 担当の方は車内に乗り込むなり「これは、何か腐敗している匂いですね」と一言。 迷いのない手つきで後部座席の右側付近を重点的に調べ始め、ついにその場所を突き止めました。
