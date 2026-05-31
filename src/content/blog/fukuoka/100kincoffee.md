@@ -1,15 +1,15 @@
 ---
-title: "100均2品で解決！シエンタのコーヒー染みを5分で消す方法"
-date: "2026-02-12"
-region: "fukuoka"
-regionFull: "福岡県"
-areaLabel: "福岡・九州エリア"
-thumbnail: "kohikobosi2.jpg"
+title: 100均2品で解決！シエンタのコーヒー染みを5分で消す方法
+date: 2026-05-31
+region: fukuoka
+regionFull: 福岡県
+areaLabel: 千葉
+thumbnail: /blog-images/file-1.jpg
+images:
+  - /blog-images/file-1.jpg
 draft: false
-categories:
-  - "seisou"
+categories: seisou,
 ---
-
 仕事へ向かう途中の車内、不意に手が滑ってシエンタのシートにコーヒーが広がった瞬間、頭の中が真っ白になりますよね。 3年大事に乗ってきた愛車の、あの少し明るい色味のファブリックに染み込んでいく茶色の液体。 あぁ、もう終わりだ、クリーニング代いくらかかるんだろうと、絶望が隣り合わせになる気持ちは痛いほど分かります。 でも、諦めて放置するのはまだ早いです。 実は、仕事帰りにダイソーやセリアに寄って手に入る、たった2つのアイテムでこの絶望は拭い去れます。
 
 じつは、化学の力で浮かせて絡め取るだけ  
