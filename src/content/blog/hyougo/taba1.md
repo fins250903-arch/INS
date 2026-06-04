@@ -5,6 +5,8 @@ region: hyougo
 regionFull: 兵庫県
 areaLabel: 兵庫・近畿エリア
 thumbnail: tennjyo.jpg
+images:
+  - tennjyo.jpg
 draft: false
 categories:
   - souji
