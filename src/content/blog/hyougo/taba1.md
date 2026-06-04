@@ -1,14 +1,14 @@
 ---
-title: "業者不要！8年分の車タバコ臭を3手順で撃退する裏技"
-date: "2025-12-16"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "febreze-smell-tobacco_3.jpg"
+title: 業者不要！8年分の車タバコ臭を3手順で撃退する裏技
+date: 2025-12-16
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: tennjyo.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
 ---
 
 **業者頼まず1500円！8年目の車タバコ臭を消す3つの手順**
