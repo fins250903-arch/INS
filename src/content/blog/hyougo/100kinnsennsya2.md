@@ -1,16 +1,15 @@
 ---
-title: "100均5品で家族の愛車復活！1週間後の嘔吐臭を消す5手順"
-date: "2026-01-30"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "大阪市.jpg"
+title: 100均5品で家族の愛車復活！1週間後の嘔吐臭を消す5手順
+date: 2026-05-31
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: /blog-images/25368698.jpg
+images:
+  - /blog-images/25368698.jpg
 draft: false
-categories:
-  - "souji"
-  - "outo1"
+categories: souji,outo1,
 ---
-
 1週間もあの独特なニオイと付き合うのは、本当に苦痛ですよね。名古屋の湿気や気温も手伝って、家族の愛車のドアを開けるたびに「うっ」となるあの感じ。特にお子さんがいらっしゃると、放っておくわけにもいきません。
 
 でも、諦めなくて大丈夫です。実はプロの車内清掃の世界でも、化学の力を借りるのが鉄則。100均のダイソーやセリアにある「重曹」と「アルカリ電解水」さえあれば、1週間経って固まった汚れも、理屈の上でしっかり分解できるからです。
