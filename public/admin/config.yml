@@ -1,0 +1,123 @@
+# Decap CMS — INS Astro blog (https://decapcms.org/docs/basic-steps/)
+backend:
+  name: github
+  repo: fins250903-arch/INS
+  branch: main
+  base_url: https://insbs.net/api/decap
+  auth_endpoint: auth
+
+local_backend: false
+
+site_url: https://insbs.net
+display_url: https://insbs.net
+logo_url: https://insbs.net/favicon.png
+
+media_folder: public/blog-images
+public_folder: /blog-images
+
+slug:
+  encoding: unicode
+  clean_accents: true
+
+collections:
+  - name: blog
+    label: ブログ記事
+    label_singular: ブログ記事
+    folder: src/content/blog
+    path: '{{region}}/{{slug}}'
+    create: true
+    slug: '{{slug}}'
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    nested:
+      depth: 2
+      subfolders: false
+      summary: '{{title}}'
+    summary: '{{title}}（{{region}}）'
+    sortable_fields: ['commit_date', 'title', 'date', 'region']
+    view_filters:
+      - label: 下書き
+        field: draft
+        pattern: true
+      - label: 公開済み
+        field: draft
+        pattern: false
+    view_groups:
+      - label: 地域
+        field: region
+        pattern: '{{region}}'
+    preview_path: 'blog/{{region}}/{{filename}}'
+    fields:
+      - label: タイトル
+        name: title
+        widget: string
+        required: true
+      - label: 公開日
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: true
+      - label: 地域（識別子）
+        name: region
+        widget: select
+        required: true
+        options:
+          - { label: 福岡, value: fukuoka }
+          - { label: 大阪, value: osaka }
+          - { label: 兵庫, value: hyougo }
+          - { label: 滋賀, value: siga }
+      - label: 地域名（正式）
+        name: regionFull
+        widget: string
+        required: true
+        hint: '例）大阪府、兵庫県'
+      - label: 地域の件名
+        name: areaLabel
+        widget: string
+        required: false
+        hint: '一覧表示用（例）大阪・近畿エリア'
+      - label: サムネイル画像
+        name: thumbnail
+        widget: image
+        required: false
+        media_library:
+          config:
+            multiple: false
+      - label: 記事内画像
+        name: images
+        widget: list
+        required: false
+        field:
+          label: 画像
+          name: image
+          widget: image
+      - label: カノニカル URL
+        name: canonicalUrl
+        widget: string
+        required: false
+      - label: 下書き
+        name: draft
+        widget: boolean
+        default: false
+      - label: カテゴリ
+        name: categories
+        widget: list
+        required: false
+        field:
+          label: カテゴリ
+          name: category
+          widget: string
+      - label: タグ
+        name: tags
+        widget: list
+        required: false
+        field:
+          label: タグ
+          name: tag
+          widget: string
+      - label: 本文
+        name: body
+        widget: markdown
+        required: true
