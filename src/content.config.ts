@@ -16,6 +16,8 @@ const blog = defineCollection({
     thumbnail: z.string().optional(),
     /** 記事内で参照する画像（Pages CMS メディアライブラリ） */
     images: z.array(z.string()).optional(),
+    /** Decap CMS: ファイル名用スラッグ（未使用時はファイル名から推定） */
+    urlSlug: z.string().optional(),
     /** SEO 用カノニカル URL（未指定時は Astro.site + パスから自動生成） */
     canonicalUrl: z.string().url().optional(),
     draft: z.boolean().default(false),

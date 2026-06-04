@@ -23,16 +23,14 @@ collections:
     label: ブログ記事
     label_singular: ブログ記事
     folder: src/content/blog
-    path: '{{region}}/{{slug}}'
+    path: '{{region}}/{{fields.urlSlug}}'
     create: true
-    slug: '{{slug}}'
+    slug: '{{fields.urlSlug}}'
     extension: md
     format: frontmatter
     identifier_field: title
-    nested:
-      depth: 2
-      subfolders: false
-      summary: '{{title}}'
+    media_folder: public/blog-images
+    public_folder: /blog-images
     summary: '{{title}}（{{region}}）'
     sortable_fields: ['commit_date', 'title', 'date', 'region']
     view_filters:
@@ -46,12 +44,18 @@ collections:
       - label: 地域
         field: region
         pattern: '{{region}}'
-    preview_path: 'blog/{{region}}/{{filename}}'
+    preview_path: 'blog/{{region}}/{{fields.urlSlug}}'
     fields:
       - label: タイトル
         name: title
         widget: string
         required: true
+      - label: URLスラッグ（ファイル名）
+        name: urlSlug
+        widget: string
+        required: true
+        hint: '英数字・ハイフン（例: sinnnyuubousi）。既存記事は現在のファイル名と同じにしてください。'
+        pattern: ['^[a-z0-9][a-z0-9-]*$', '英小文字・数字・ハイフンのみ']
       - label: 公開日
         name: date
         widget: datetime
