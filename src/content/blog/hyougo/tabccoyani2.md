@@ -1,6 +1,6 @@
 ---
 title: 5分で激落ち！車内天井のヤニを真っ白にする3つの時短テク
-date: 2026-01-02
+date: 2026-06-05
 region: hyougo
 regionFull: 兵庫県
 areaLabel: 兵庫・近畿エリア
