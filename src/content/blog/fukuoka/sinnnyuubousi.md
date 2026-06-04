@@ -1,14 +1,16 @@
 ---
-title: "3分で完結！シエンタの車内を守る3つの動物侵入対策"
-date: "2026-04-27"
-region: "fukuoka"
-regionFull: "福岡県"
-areaLabel: "福岡・九州エリア"
-thumbnail: "animal_okojo.jpg"
+title: 3分で完結！シエンタの車内を守る3つの動物侵入対策
+date: 2026-06-04
+region: fukuoka
+regionFull: 福岡県
+areaLabel: 福岡・九州エリア
+thumbnail: シエンタ　家族旅行.jpg
+images:
+  - シエンタ　家族旅行.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
 ---
 
 外回りで疲れ果てて、ようやく一息つけると思った瞬間のあの「異臭」。ドアを開けた瞬間に鼻を突く、なんとも言えない生臭さと埃っぽさが混じったような空気は、本当に堪えますよね。 「うわ、マジか……」と立ち尽くすお気持ち、痛いほどよく分かります。私も以前、整備の現場で似たような状況を何度も目にしてきましたが、愛車が知らない誰か（それも招かざる小動物）の寝床になっているのを知るのは、精神的にもかなりくるものです。
