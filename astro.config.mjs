@@ -3,10 +3,15 @@ import { defineConfig, envField } from 'astro/config';
 
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
+import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://insbs.net',
+
+  markdown: {
+    rehypePlugins: [rehypeBlogImages]
+  },
 
   env: {
     schema: {

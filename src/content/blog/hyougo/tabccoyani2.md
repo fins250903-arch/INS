@@ -1,14 +1,18 @@
 ---
-title: "5分で激落ち！車内天井のヤニを真っ白にする3つの時短テク"
-date: "2026-01-02"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "tennjyo.jpg"
+title: 5分で激落ち！車内天井のヤニを真っ白にする3つの時短テク
+date: 2026-06-05
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: tennjyo.jpg
+images:
+  - tennjyo.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
+tags:
+  - tabccoyani2
 ---
 
 せっかくのアルファードなのに、ふと見上げた天井がどんより黄色いとガッカリしますよね。 泉南の潮風を感じながらドライブを楽しむ週末、隣に座る奥さんや後ろでゲームに夢中な息子に「なんかタバコ臭い」なんて言われたら、パパの肩身も狭くなってしまいます。 広々とした車内が自慢の愛車だからこそ、天井の汚れは部屋の壁紙と同じくらい目立つものです。
