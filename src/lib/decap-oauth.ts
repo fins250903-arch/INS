@@ -1,3 +1,5 @@
+import { getSecret } from 'astro:env/server';
+
 const GITHUB_AUTHORIZE = 'https://github.com/login/oauth/authorize';
 const GITHUB_TOKEN = 'https://github.com/login/oauth/access_token';
 
@@ -7,13 +9,18 @@ export type DecapOAuthConfig = {
   redirectUri: string;
 };
 
-export function getDecapOAuthConfig(request: Request): DecapOAuthConfig | null {
-  const clientId = import.meta.env.DECAP_GITHUB_CLIENT_ID;
-  const clientSecret = import.meta.env.DECAP_GITHUB_CLIENT_SECRET;
+function readSecret(key: string): string | undefined {
+  const value = getSecret(key);
+  return typeof value === 'string' && value.length > 0 ? value : undefined;
+}
+
+export function getDecapOAuthConfig(request: Request, callbackPath = '/callback'): DecapOAuthConfig | null {
+  const clientId = readSecret('DECAP_GITHUB_CLIENT_ID');
+  const clientSecret = readSecret('DECAP_GITHUB_CLIENT_SECRET');
   if (!clientId || !clientSecret) return null;
 
-  const siteUrl = (import.meta.env.DECAP_SITE_URL || new URL(request.url).origin).replace(/\/$/, '');
-  const redirectUri = `${siteUrl}/api/decap/callback`;
+  const siteUrl = (readSecret('DECAP_SITE_URL') || new URL(request.url).origin).replace(/\/$/, '');
+  const redirectUri = `${siteUrl}${callbackPath.startsWith('/') ? callbackPath : `/${callbackPath}`}`;
 
   return { clientId, clientSecret, redirectUri };
 }
@@ -59,11 +66,14 @@ export async function exchangeGitHubCode(
 
 export function renderDecapOAuthCallbackHtml(status: 'success' | 'error', payload: unknown): string {
   const provider = 'github';
-  const serialized = JSON.stringify(payload);
-  const message =
+  const content =
     status === 'success'
-      ? `authorization:${provider}:success:${serialized}`
-      : `authorization:${provider}:error:${serialized}`;
+      ? payload
+      : {
+          provider,
+          error: payload instanceof Error ? payload.message : String(payload)
+        };
+  const message = `authorization:${provider}:${status}:${JSON.stringify(content)}`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -72,10 +82,10 @@ export function renderDecapOAuthCallbackHtml(status: 'success' | 'error', payloa
     <script>
       (function () {
         var provider = ${JSON.stringify(provider)};
-        var message = ${JSON.stringify(message)};
+        var authMessage = ${JSON.stringify(message)};
         function receiveMessage(event) {
           if (window.opener) {
-            window.opener.postMessage(message, event.origin);
+            window.opener.postMessage(authMessage, event.origin);
             window.removeEventListener('message', receiveMessage, false);
           }
         }

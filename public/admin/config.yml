@@ -3,8 +3,7 @@ backend:
   name: github
   repo: fins250903-arch/INS
   branch: main
-  base_url: https://insbs.net/api/decap
-  auth_endpoint: auth
+  base_url: https://insbs.net
 
 local_backend: false
 
