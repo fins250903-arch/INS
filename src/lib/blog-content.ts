@@ -18,7 +18,13 @@ export function getBlogPath(entry: BlogEntry): string {
 export function resolveBlogImage(src?: string | null): string {
   const trimmed = String(src || '').trim();
   if (!trimmed) return '';
-  if (trimmed.startsWith('/') || /^https?:\/\//i.test(trimmed)) return trimmed;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith('/blog-images/')) return trimmed;
+  if (trimmed.startsWith('blog-images/')) return `/${trimmed}`;
+  if (trimmed.startsWith('/')) {
+    const name = trimmed.split('/').pop() || trimmed;
+    return `/blog-images/${name}`;
+  }
   return `/blog-images/${trimmed.replace(/^blog-images\//, '')}`;
 }
 

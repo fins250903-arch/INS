@@ -1,0 +1,48 @@
+name: Sync blog to production site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/blog/**'
+      - 'public/blog-images/**'
+      - 'public/admin/**'
+      - 'scripts/validate-blog-content.mjs'
+      - 'scripts/fix-blog-media-paths.mjs'
+      - '.github/workflows/sync-blog-to-production.yml'
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Optional Pages CMS payload JSON
+        required: false
+        type: string
+
+concurrency:
+  group: sync-blog-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-build:
+    name: Validate blog content and build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Move stray blog images to public/blog-images
+        run: node scripts/fix-blog-media-paths.mjs
+
+      - name: Validate blog paths and frontmatter
+        run: node scripts/validate-blog-content.mjs
+
+      - name: Build production site
+        run: npm run build

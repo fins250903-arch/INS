@@ -1,5 +1,6 @@
 ---
 title: 業者不要！8年分の車タバコ臭を3手順で撃退する裏技
+urlSlug: taba1
 date: 2026-06-04
 region: hyougo
 regionFull: 兵庫県

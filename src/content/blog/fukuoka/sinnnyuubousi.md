@@ -1,5 +1,6 @@
 ---
 title: 3分で完結！シエンタの車内を守る3つの動物侵入対策
+urlSlug: sinnnyuubousi
 date: 2026-06-04
 region: fukuoka
 regionFull: 福岡県
