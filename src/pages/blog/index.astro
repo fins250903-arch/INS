@@ -35,10 +35,6 @@ const blogIndexJsonLd = buildPageJsonLd({
   pageType: 'CollectionPage'
 });
 
-// 新着順にソート
-const sortedPosts = posts.sort((a, b) => 
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
 ---
 
 <Layout

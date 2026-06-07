@@ -24,6 +24,8 @@ interface Props {
   region: (typeof CHIIKI_REGIONS)[number];
 }
 
+const { region } = Astro.props;
+
 const published = await getPublishedBlogPosts();
 const filtered = published
   .filter((post) => post.data.categories.includes(region.categoryLabel))
