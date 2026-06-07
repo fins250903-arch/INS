@@ -20,7 +20,9 @@ export async function getStaticPaths() {
   }));
 }
 
-const { region } = Astro.props as { region: (typeof CHIIKI_REGIONS)[number] };
+interface Props {
+  region: (typeof CHIIKI_REGIONS)[number];
+}
 
 const published = await getPublishedBlogPosts();
 const filtered = published
