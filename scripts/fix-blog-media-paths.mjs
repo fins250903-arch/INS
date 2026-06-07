@@ -36,3 +36,15 @@ for (const filePath of walk(BLOG_ROOT)) {
 
 if (moved === 0) console.log('No stray blog images to move.');
 else console.log(`Moved ${moved} image(s).`);
+
+let removedMarkdown = 0;
+for (const entry of fs.readdirSync(BLOG_ROOT, { withFileTypes: true })) {
+  if (!entry.isFile() || !entry.name.endsWith('.md')) continue;
+  const filePath = path.join(BLOG_ROOT, entry.name);
+  fs.unlinkSync(filePath);
+  console.log(`Removed stray root blog markdown: ${entry.name}`);
+  removedMarkdown += 1;
+}
+
+if (removedMarkdown === 0) console.log('No stray root blog markdown to remove.');
+else console.log(`Removed ${removedMarkdown} stray root markdown file(s).`);

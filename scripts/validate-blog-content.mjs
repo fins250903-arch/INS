@@ -41,6 +41,17 @@ function listStrayImages(dir, base = dir, acc = []) {
   return acc;
 }
 
+function unquoteYamlScalar(value) {
+  const trimmed = value.trim();
+  if (
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"))
+  ) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
+}
+
 function parseSimpleFrontmatter(raw) {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return { error: 'missing frontmatter' };
@@ -50,7 +61,7 @@ function parseSimpleFrontmatter(raw) {
     const m = line.match(/^([a-zA-Z]+):\s*(.*)$/);
     if (!m) continue;
     const [, key, value] = m;
-    data[key] = value.trim();
+    data[key] = unquoteYamlScalar(value);
   }
   return { data };
 }
