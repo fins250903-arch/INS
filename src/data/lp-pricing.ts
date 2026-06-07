@@ -7,9 +7,7 @@ export const pricingSet = [
 
 export const pricingPartial = [
   { label: '座席シート単体（1脚）', price: '18,000円' },
-  { label: '後部座席シートのみ', price: '22,000円' },
-  { label: 'フロア床のみ（前席）', price: '9,000円' },
-  { label: 'フロア床のみ（後部席）', price: '8,000円' }
+  { label: '後部座席シートのみ', price: '22,000円' }
 ] as const;
 
 export const pricingOptions = [
