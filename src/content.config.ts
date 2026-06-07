@@ -18,6 +18,22 @@ const blog = defineCollection({
     images: z.array(z.string()).optional(),
     /** SEO 用カノニカル URL（未指定時は Astro.site + パスから自動生成） */
     canonicalUrl: z.string().url().optional(),
+    /** SEO settings edited via Decap CMS */
+    seo: z
+      .object({
+        meta_title: z.string().optional(),
+        meta_description: z.string().optional(),
+        keywords: z.string().optional(),
+        noindex: z.boolean().optional()
+      })
+      .optional(),
+    /** OGP settings edited via Decap CMS */
+    ogp: z
+      .object({
+        og_image: z.string().optional(),
+        og_type: z.enum(['article', 'website']).optional()
+      })
+      .optional(),
     draft: z.boolean().default(false),
     categories: z
       .preprocess(

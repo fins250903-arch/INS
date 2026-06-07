@@ -120,3 +120,53 @@ collections:
         name: body
         widget: markdown
         required: true
+      # SEO & marketing fields
+      - label: SEO対策（検索エンジン用設定）
+        name: seo
+        widget: object
+        summary: SEO設定
+        required: false
+        collapsed: true
+        fields:
+          - label: メタ・タイトル（未入力時は上記タイトルを使用）
+            name: meta_title
+            widget: string
+            required: false
+            hint: 検索結果に表示されるタイトルです（推奨：30〜35文字）
+          - label: メタ・ディスクリプション（記事の要約）
+            name: meta_description
+            widget: text
+            required: false
+            hint: 検索結果の解説文です。SNSのシェア時にも使われます（推奨：120文字前後）
+          - label: 主要キーワード（フォーカスキーワード）
+            name: keywords
+            widget: string
+            required: false
+            hint: この記事で狙うSEOキーワード（カンマ区切り：例 Astro, SEO, ブログ）
+          - label: インデックス拒否（noindex）
+            name: noindex
+            widget: boolean
+            default: false
+            hint: チェックを入れると、検索エンジンにインデックスされなくなります（下書きや低品質ページの隠蔽用）
+      - label: SNS・マーケティング設定（OGP）
+        name: ogp
+        widget: object
+        summary: SNSシェア設定
+        required: false
+        collapsed: true
+        fields:
+          - label: OGP画像（未入力時はサムネイル画像を使用）
+            name: og_image
+            widget: image
+            required: false
+            hint: X（旧Twitter）やFacebookでシェアされた際に表示される画像です
+            media_library:
+              config:
+                multiple: false
+          - label: 記事のタイプ
+            name: og_type
+            widget: select
+            options:
+              - article
+              - website
+            default: article
