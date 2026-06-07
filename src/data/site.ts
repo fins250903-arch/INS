@@ -5,7 +5,7 @@
 export const SITE_CANONICAL_ORIGIN = 'https://insbs.net' as const;
 
 /** サイト本文・料金表・FAQの最終見直し日（JSON-LD dateModified 等） */
-export const SITE_CONTENT_UPDATED = '2026-05-23' as const;
+export const SITE_CONTENT_UPDATED = '2026-06-07' as const;
 
 export const BUSINESS_NAME = 'アイエヌエスINS出張車内清掃' as const;
 

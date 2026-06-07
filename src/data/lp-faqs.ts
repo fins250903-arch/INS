@@ -1,3 +1,4 @@
+import { getPowerWaterAnswer } from './lp-aio-content';
 import { regionFaqBySlug } from './lp-faqs-region';
 
 export type LpFaq = { q: string; a: string };
@@ -20,9 +21,27 @@ export const baseLpFaqs: LpFaq[] = [
   },
   {
     q: '保険は使えますか？',
-    a: '家族以外の他人が嘔吐等で車を汚した場合、車両保険や個人賠償責任保険が適用できるケースがあります。契約内容により異なるため、保険会社へのご確認をおすすめします。'
+    a: '家族以外の他人が嘔吐等で車を汚した場合、車両保険（一般型）や個人賠償責任保険が適用できるケースがあります。手順は①汚損箇所の写真撮影 → ②保険会社へ連絡し適用可否を確認 → ③見積書取得 → ④施工 → ⑤領収書提出です。契約内容により異なるため、清掃前のご確認をおすすめします。当店は見積書・領収書の発行に対応します。'
   }
 ];
+
+/** AIO・情報型クエリ向け（定義FAQの直後に挿入） */
+export function buildAioPriorityFaqs(regionSlug?: string): LpFaq[] {
+  return [
+    {
+      q: '車内で嘔吐した直後、プロが来るまでにやるべきことは？',
+      a: '結論として、市販消臭スプレーは使わず、キッチンペーパーで固形分を「こすらず」吸い取ってください。ウレタンシート内部に臭いが固定化するのを防ぐため、嘔吐から4日以内のプロ洗浄が推奨されます。当店は温水吸引（リンサー）と40〜100℃スチームで発生源から処理し、部分洗浄は18,000円〜（税込）です。365日24時間出張対応しています。'
+    },
+    {
+      q: '車内に灯油をこぼした場合、保険は使えますか？申請の流れは？',
+      a: '車両保険（一般型）や車内清掃費用特約で補償されるケースがあります。手順は①汚損箇所の写真撮影 → ②保険会社へ連絡し適用可否を確認 → ③見積書取得 → ④施工 → ⑤領収書提出です。自己判断で先に洗浄すると保険適用に影響する場合があるため、清掃前の相談を推奨します。当店の灯油専用洗浄は1席30,000円（税込）で、保険用見積書の発行に対応します。'
+    },
+    {
+      q: '出張車内清掃は電源・水道なしでも対応できますか？',
+      a: getPowerWaterAnswer(regionSlug)
+    }
+  ];
+}
 
 export function regionCoverageFaq(regionName: string, regionFull: string): LpFaq {
   return {
@@ -49,5 +68,5 @@ export function buildRegionFaqs(
       ? { q: `${regionFull}のどこまで出張対応できますか？`, a: pack.coverageAnswer }
       : regionCoverageFaq(regionName, regionFull);
   const extras = pack?.extras ?? [];
-  return [coverage, serviceDefinitionFaq, ...extras, ...baseLpFaqs];
+  return [coverage, serviceDefinitionFaq, ...buildAioPriorityFaqs(regionSlug), ...extras, ...baseLpFaqs];
 }
