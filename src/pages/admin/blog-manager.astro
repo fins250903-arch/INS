@@ -1,0 +1,372 @@
+---
+// サーバーレンダリングを有効化（認証が必要なため）
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { BlogManager } from '../../lib/blog-manager';
+
+// 管理者認証チェック
+const ADMIN_PASSWORD = 'admin123'; // 本番環境では環境変数から取得してください
+const authToken = Astro.cookies.get('admin_auth')?.value;
+const isAuthenticated = authToken === ADMIN_PASSWORD;
+
+// ログイン処理
+let loginError = '';
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const submittedPassword = formData.get('password')?.toString() || '';
+  const action = formData.get('action')?.toString() || '';
+
+  // ログイン処理
+  if (action === 'login') {
+    if (submittedPassword === ADMIN_PASSWORD) {
+      // クッキーを設定して認証
+      Astro.cookies.set('admin_auth', ADMIN_PASSWORD, {
+        path: '/',
+        httpOnly: true,
+        secure: false, // 開発環境用（本番ではtrue）
+        sameSite: 'lax',
+      });
+      // リロードさせる
+      return Astro.redirect('/admin/blog-manager/');
+    } else {
+      loginError = 'パスワードが間違っています';
+    }
+  }
+}
+
+// ブログ管理処理（認証後のみ）
+let actionMessage = '';
+let actionType = '';
+
+if (isAuthenticated && Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const action = formData.get('action')?.toString();
+  const selectedSlugs = formData.getAll('selected_slugs') as string[];
+
+  if (action === 'delete' && selectedSlugs.length > 0) {
+    const success = BlogManager.deletePostsBySlugs(selectedSlugs);
+    actionMessage = success
+      ? `${selectedSlugs.length}件の記事を削除しました`
+      : '削除に失敗しました';
+    actionType = success ? 'success' : 'error';
+  }
+
+  if (action === 'update_status' && selectedSlugs.length > 0) {
+    const newStatus = formData.get('new_status')?.toString() as any;
+    const success = BlogManager.updatePostsStatus(selectedSlugs, newStatus);
+    actionMessage = success
+      ? `${selectedSlugs.length}件の記事のステータスを更新しました`
+      : '更新に失敗しました';
+    actionType = success ? 'success' : 'error';
+  }
+}
+
+// ブログポストを取得
+const allPosts = isAuthenticated ? BlogManager.getAllPosts() : [];
+
+const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
+---
+
+<Layout
+  title="ブログ管理画面"
+  description="ブログ記事を管理する画面です"
+  canonical="/admin/blog-manager/"
+>
+  <main class="min-h-screen bg-gray-50">
+    {
+      !isAuthenticated ? (
+        // ログイン画面
+        <div class="flex items-center justify-center min-h-screen">
+          <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h1 class="text-2xl font-bold mb-6 text-center">管理画面ログイン</h1>
+            
+            {loginError && (
+              <div class="mb-4 p-3 bg-red-100 text-red-800 rounded-lg text-sm">
+                {loginError}
+              </div>
+            )}
+            
+            <form method="POST" class="space-y-4">
+              <input type="hidden" name="action" value="login" />
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                  パスワード
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="パスワードを入力"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                  autofocus
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+              >
+                ログイン
+              </button>
+            </form>
+            
+            <div class="mt-4 p-3 bg-blue-50 rounded text-sm text-gray-600">
+              <p class="font-semibold mb-1">テスト用パスワード:</p>
+              <p>admin123</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        // 管理画面コンテンツ
+        <div class="max-w-7xl mx-auto px-6 py-8">
+          <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">ブログ管理画面</h1>
+            <div class="flex gap-4">
+              <a href="/blog/" class="text-blue-600 hover:underline">
+                ← ブログに戻る
+              </a>
+              <form method="POST" style="display: inline;">
+                <input type="hidden" name="action" value="logout" />
+                <button type="submit" class="text-red-600 hover:underline">
+                  ログアウト
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {
+            actionMessage && (
+              <div
+                class={`mb-6 p-4 rounded-lg ${
+                  actionType === 'success'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
+                }`}
+              >
+                {actionMessage}
+              </div>
+            )
+          }
+
+          <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b">
+              <h2 class="text-xl font-semibold mb-4">
+                記事一覧 （全 {allPosts.length} 件）
+              </h2>
+
+              <form id="blog-manager-form" method="POST" class="space-y-4">
+                {allPosts.length === 0 ? (
+                  <p class="text-gray-500">記事がありません</p>
+                ) : (
+                  <>
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-sm">
+                        <thead class="bg-gray-100">
+                          <tr>
+                            <th class="px-4 py-3 text-left w-12">
+                              <input
+                                type="checkbox"
+                                id="select-all"
+                                class="w-4 h-4 cursor-pointer"
+                              />
+                            </th>
+                            <th class="px-4 py-3 text-left">タイトル</th>
+                            <th class="px-4 py-3 text-left">スラッグ</th>
+                            <th class="px-4 py-3 text-left">日付</th>
+                            <th class="px-4 py-3 text-left">ステータス</th>
+                            <th class="px-4 py-3 text-left">カテゴリ</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                          {allPosts.map((post) => (
+                            <tr class="hover:bg-gray-50">
+                              <td class="px-4 py-3">
+                                <input
+                                  type="checkbox"
+                                  name="selected_slugs"
+                                  value={post.slug}
+                                  class="w-4 h-4 post-checkbox cursor-pointer"
+                                />
+                              </td>
+                              <td class="px-4 py-3 font-medium max-w-xs truncate">
+                                {post.title}
+                              </td>
+                              <td class="px-4 py-3 text-gray-600 text-xs font-mono">
+                                {post.slug}
+                              </td>
+                              <td class="px-4 py-3 text-gray-600 text-xs">
+                                {formatDate(post.date)}
+                              </td>
+                              <td class="px-4 py-3">
+                                <span
+                                  class={`px-2 py-1 rounded text-xs font-medium ${
+                                    post.status === 'publish'
+                                      ? 'bg-green-100 text-green-800'
+                                      : post.status === 'draft'
+                                      ? 'bg-yellow-100 text-yellow-800'
+                                      : 'bg-red-100 text-red-800'
+                                  }`}
+                                >
+                                  {post.status === 'publish'
+                                    ? '公開'
+                                    : post.status === 'draft'
+                                    ? '下書き'
+                                    : 'ゴミ箱'}
+                                </span>
+                              </td>
+                              <td class="px-4 py-3 text-gray-600 text-xs max-w-xs truncate">
+                                {post.categories?.join(', ')}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mt-6 pt-4 border-t">
+                      <select
+                        id="bulk-action"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="">一括操作を選択</option>
+                        <option value="publish">公開にする</option>
+                        <option value="draft">下書きにする</option>
+                        <option value="trash">ゴミ箱へ移動</option>
+                        <option value="delete">完全に削除</option>
+                      </select>
+                      <button
+                        type="button"
+                        id="apply-bulk-action"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled
+                      >
+                        適用
+                      </button>
+
+                      <div class="flex-grow"></div>
+
+                      <span class="text-sm text-gray-600 py-2">
+                        <span id="selected-count">0</span> 件選択中
+                      </span>
+                    </div>
+                  </>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 管理画面スクリプト
+      const selectAllCheckbox = document.getElementById('select-all');
+      const postCheckboxes = document.querySelectorAll('.post-checkbox');
+      const bulkActionSelect = document.getElementById('bulk-action');
+      const applyButton = document.getElementById('apply-bulk-action');
+      const selectedCountSpan = document.getElementById('selected-count');
+      const form = document.getElementById('blog-manager-form');
+
+      if (!form) return; // 管理画面でない場合はスキップ
+
+      function updateSelectedCount() {
+        const selected = Array.from(postCheckboxes).filter((cb: any) => cb.checked).length;
+        if (selectedCountSpan) selectedCountSpan.textContent = String(selected);
+        if (applyButton) applyButton.disabled = selected === 0;
+      }
+
+      // 全選択チェックボックス
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', (e: any) => {
+          postCheckboxes.forEach((cb: any) => {
+            cb.checked = e.target.checked;
+          });
+          updateSelectedCount();
+        });
+      }
+
+      // 個別チェックボックス
+      postCheckboxes.forEach((checkbox: any) => {
+        checkbox.addEventListener('change', updateSelectedCount);
+      });
+
+      // 一括操作ボタン
+      if (applyButton) {
+        applyButton.addEventListener('click', () => {
+          const action = (bulkActionSelect as any)?.value;
+          if (!action) {
+            alert('操作を選択してください');
+            return;
+          }
+
+          const selected = Array.from(postCheckboxes)
+            .filter((cb: any) => cb.checked)
+            .map((cb: any) => cb.value);
+
+          if (selected.length === 0) {
+            alert('記事を選択してください');
+            return;
+          }
+
+          let confirmed = true;
+          if (action === 'delete') {
+            confirmed = confirm(
+              `${selected.length}件の記事を完全に削除してもよろしいですか？\nこの操作は取り消せません。`
+            );
+          } else if (action === 'trash') {
+            confirmed = confirm(`${selected.length}件の記事をゴミ箱へ移動しますか？`);
+          }
+
+          if (confirmed) {
+            // フォームにhiddenフィールドを追加
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action === 'delete' ? 'delete' : 'update_status';
+            form.appendChild(actionInput);
+
+            if (action !== 'delete') {
+              const statusInput = document.createElement('input');
+              statusInput.type = 'hidden';
+              statusInput.name = 'new_status';
+              statusInput.value = action;
+              form.appendChild(statusInput);
+            }
+
+            // 選択された記事をフォームに追加
+            selected.forEach((slug: string) => {
+              const hiddenInput = document.createElement('input');
+              hiddenInput.type = 'hidden';
+              hiddenInput.name = 'selected_slugs';
+              hiddenInput.value = slug;
+              form.appendChild(hiddenInput);
+            });
+
+            form.submit();
+          }
+        });
+      }
+
+      // 初期化
+      updateSelectedCount();
+    });
+  </script>
+
+  <style>
+    input[type='checkbox'] {
+      cursor: pointer;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: none;
+    }
+  </style>
+</Layout>
