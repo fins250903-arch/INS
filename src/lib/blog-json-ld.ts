@@ -9,6 +9,8 @@ export function buildBlogPostJsonLd(input: {
   title: string;
   description: string;
   datePublished: string;
+  imageUrl?: string;
+  keywords?: string;
 }): Record<string, unknown> {
   const path = input.path.endsWith('/') ? input.path : `${input.path}/`;
   const url = canonicalUrl(path);
@@ -28,6 +30,13 @@ export function buildBlogPostJsonLd(input: {
     publisher: { '@id': SITE_ORGANIZATION_ID },
     mainEntityOfPage: { '@id': webpageId }
   };
+
+  if (input.imageUrl) {
+    article.image = input.imageUrl;
+  }
+  if (input.keywords) {
+    article.keywords = input.keywords;
+  }
 
   const webpage = webPageNode({
     path,

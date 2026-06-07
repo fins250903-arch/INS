@@ -1,0 +1,51 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	canonical: string;
+	jsonLd: Record<string, unknown>;
+	noindex?: boolean;
+	keywords?: string;
+	ogImage?: string;
+	ogType?: 'website' | 'article';
+}
+
+const {
+	title,
+	description,
+	canonical,
+	jsonLd,
+	noindex = false,
+	keywords,
+	ogImage,
+	ogType = 'website'
+} = Astro.props;
+
+const twitterCard = ogImage ? 'summary_large_image' : 'summary';
+const jsonLdHtml = JSON.stringify(jsonLd);
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="google-site-verification" content="IolN3zW9p79labypkA-LK5HKHJMM6bmrUGlrRaN__RQ" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<meta name="generator" content={Astro.generator} />
+<title>{title}</title>
+<meta name="description" content={description} />
+{keywords && <meta name="keywords" content={keywords} />}
+<link rel="canonical" href={canonical} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content="ja_JP" />
+{ogImage && <meta property="og:image" content={ogImage} />}
+<meta name="twitter:card" content={twitterCard} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<script type="application/ld+json" set:html={jsonLdHtml} />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

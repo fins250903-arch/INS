@@ -8,11 +8,11 @@ import BlogCta from '../../../components/BlogCta.astro';
 import { buildBlogPostJsonLd } from '../../../lib/blog-json-ld';
 import {
   getBlogSlug,
-  resolveBlogCanonical,
   resolveBlogImage,
   formatBlogDate,
   getAreaLabel
 } from '../../../lib/blog-content';
+import { resolveBlogSeoMeta } from '../../../lib/blog-seo';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -30,21 +30,27 @@ const { Content } = await render(post);
 const slug = getBlogSlug(post);
 const pagePath = `/blog/${post.data.region}/${slug}/`;
 const headerImage = resolveBlogImage(post.data.thumbnail);
-const canonical = resolveBlogCanonical(post, pagePath);
+const seo = resolveBlogSeoMeta(post, pagePath);
 
 const blogJsonLd = buildBlogPostJsonLd({
   path: pagePath,
   title: post.data.title,
-  description: post.data.title,
-  datePublished: post.data.date.toISOString()
+  description: seo.description,
+  datePublished: post.data.date.toISOString(),
+  imageUrl: seo.ogImage,
+  keywords: seo.keywords
 });
 ---
 
 <Layout
-  title={`${post.data.title}｜アイエヌエス車内清掃`}
-  description={post.data.title}
-  canonical={canonical}
+  title={seo.title}
+  description={seo.description}
+  canonical={seo.canonical}
   jsonLd={blogJsonLd}
+  noindex={seo.noindex}
+  keywords={seo.keywords}
+  ogImage={seo.ogImage}
+  ogType={seo.ogType}
 >
   <Header />
   <main class="bg-white">
