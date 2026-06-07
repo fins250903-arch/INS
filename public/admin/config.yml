@@ -124,13 +124,13 @@ collections:
         name: body
         widget: markdown
         required: true
-      # SEO & marketing fields
+      # ==========================================
+      # ここから下を追加（SEO & マーケティング用フィールド）
+      # ==========================================
       - label: SEO対策（検索エンジン用設定）
         name: seo
         widget: object
         summary: SEO設定
-        required: false
-        collapsed: true
         fields:
           - label: メタ・タイトル（未入力時は上記タイトルを使用）
             name: meta_title
@@ -140,7 +140,7 @@ collections:
           - label: メタ・ディスクリプション（記事の要約）
             name: meta_description
             widget: text
-            required: false
+            required: true
             hint: 検索結果の解説文です。SNSのシェア時にも使われます（推奨：120文字前後）
           - label: 主要キーワード（フォーカスキーワード）
             name: keywords
@@ -156,17 +156,12 @@ collections:
         name: ogp
         widget: object
         summary: SNSシェア設定
-        required: false
-        collapsed: true
         fields:
-          - label: OGP画像（未入力時はサムネイル画像を使用）
+          - label: アイキャッチ・OGP画像
             name: og_image
             widget: image
             required: false
             hint: X（旧Twitter）やFacebookでシェアされた際に表示される画像です
-            media_library:
-              config:
-                multiple: false
           - label: 記事のタイプ
             name: og_type
             widget: select
