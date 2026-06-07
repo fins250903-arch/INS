@@ -14,7 +14,7 @@ import { buildRegionFaqs } from '../../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
 import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../../data/site';
 import { buildKeywordLpJsonLd } from '../../lib/lp-json-ld';
-import posts from '../../data/wp-posts.json';
+import { getCollection } from 'astro:content';
 
 // 画像アセットのインポート (Astro:assetsの最適化を利用)
 import bgHero from '../../assets/images/images-1-e1756888161530.jpg';
@@ -116,18 +116,20 @@ const jsonLd = buildKeywordLpJsonLd({
 });
 
 // ブログ・ポストのロードと地域フィルタ
-const publishedPosts = posts.filter((post) => post.status === 'publish');
+const publishedPosts = await getCollection('blog');
 const regionKeywords = [regionName, regionFull].map((v) => v?.trim()).filter(Boolean);
 const hasRegionKeyword = (content?: string) => {
   if (!content || regionKeywords.length === 0) return false;
   return regionKeywords.some((keyword) => content.includes(keyword));
 };
-const regionPosts = publishedPosts.filter((post) => hasRegionKeyword(post.content));
+const regionPosts = publishedPosts.filter((post) => hasRegionKeyword(post.body));
 const blogPosts = (regionPosts.length > 0 ? regionPosts : publishedPosts)
-  .sort((a, b) => (a.date < b.date ? 1 : -1))
+  .sort((a, b) => (a.data.date < b.data.date ? 1 : -1))
   .slice(0, 6);
 
-const formatDate = (value: string) => value.split(' ')[0].replace(/-/g, '.');
+const formatDate = (date: Date) => {
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+};
 
 // お客様の声カルーセル
 const surveyItems = [
@@ -613,10 +615,10 @@ const flowSteps = [
         <p class="mt-2 text-center text-sm text-gray-500">お悩み別の対策や、出張施工の様子を公開しています。</p>
         <div class="mt-8 grid gap-6 md:grid-cols-2">
           {blogPosts.map((post) => (
-            <a href={`/blog/${post.slug}/`} class="block bg-slate-50 border border-slate-200/80 rounded-2xl p-5 hover:shadow hover:border-emerald-500/40 transition-all">
-              <div class="text-xs text-gray-400">{formatDate(post.date)}</div>
-              <div class="mt-2 font-bold text-base text-slate-900 line-clamp-1">{post.title}</div>
-              <div class="mt-2 text-[10px] inline-block bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-semibold">{post.categories?.join(' / ')}</div>
+            <a href={`/blog/${post.id}/`} class="block bg-slate-50 border border-slate-200/80 rounded-2xl p-5 hover:shadow hover:border-emerald-500/40 transition-all">
+              <div class="text-xs text-gray-400">{formatDate(post.data.date)}</div>
+              <div class="mt-2 font-bold text-base text-slate-900 line-clamp-1">{post.data.title}</div>
+              <div class="mt-2 text-[10px] inline-block bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-semibold">{post.data.categories?.join(' / ')}</div>
             </a>
           ))}
         </div>
