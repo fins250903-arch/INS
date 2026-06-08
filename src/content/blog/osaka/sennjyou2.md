@@ -1,13 +1,23 @@
 ---
-title: "3時間で新車気分。諦めていた「あの臭い」と決別するプロの車内清掃"
-date: "2026-05-08"
-region: "osaka"
-regionFull: "大阪府"
-areaLabel: "大阪・近畿エリア"
-thumbnail: "2ecb5d41b6bca78ebaebd1ab940f1778_t.jpeg"
+title: 3時間で新車気分。諦めていた「あの臭い」と決別するプロの車内清掃
+urlSlug: sennjyou2
+date: 2026-05-08
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: /blog-images/deiz1.jpg
+images:
+  - /blog-images/deiz1.jpg
 draft: false
 categories:
-  - "seisou"
+  - seisou
+seo:
+  meta_title: 3時間で新車気分。諦めていた「あの臭い」と決別するプロの車内清掃
+  meta_description: 「よし、今度の休みは徹底的に掃除するぞ」と意気込んでも、掃除機とコロコロだけで半日が潰れる。しかも、頑張った割にはシートのシミが落ちていない……なんて経験、私にもあります
+  keywords: 「よし、今度の休みは徹底的に掃除するぞ」と意気込んでも、掃除機とコロコロだけで半日が潰れる。しかも、頑張った割にはシートのシミが落ちていない……なんて経験、私にもあります
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 ## 車内クリーニング どこまで?
