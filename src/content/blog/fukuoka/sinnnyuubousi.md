@@ -5,13 +5,19 @@ date: 2026-06-04
 region: fukuoka
 regionFull: 福岡県
 areaLabel: 福岡・九州エリア
-thumbnail: シエンタ　家族旅行.jpg
+thumbnail: /blog-images/times_sienta_4779-scaled.webp
 images:
   - シエンタ　家族旅行.jpg
 draft: false
 categories:
   - souji
   - seisou
+seo:
+  meta_description: 車内の気圧を調整するために欠かせない部品なのですが、これが地面から比較的近い位置にあるんですね。北九州のような自然と街が隣り合わせの場所だと、彼らにとっては「どうぞお入りください」と言わんばかりの絶好の入り口になってしまいます
+  noindex: false
+ogp:
+  og_image: /blog-images/times_sienta_4779-scaled.webp
+  og_type: article
 ---
 
 外回りで疲れ果てて、ようやく一息つけると思った瞬間のあの「異臭」。ドアを開けた瞬間に鼻を突く、なんとも言えない生臭さと埃っぽさが混じったような空気は、本当に堪えますよね。 「うわ、マジか……」と立ち尽くすお気持ち、痛いほどよく分かります。私も以前、整備の現場で似たような状況を何度も目にしてきましたが、愛車が知らない誰か（それも招かざる小動物）の寝床になっているのを知るのは、精神的にもかなりくるものです。
