@@ -6,6 +6,8 @@ region: hyougo
 regionFull: 兵庫県
 areaLabel: 兵庫・近畿エリア
 thumbnail: /blog-images/nezumi_tori.jpg
+images:
+  - /blog-images/nezumi_tori.jpg
 draft: false
 categories:
   - souji
