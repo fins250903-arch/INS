@@ -1,19 +1,29 @@
 ---
-title: "30分で愛車の犬臭が激減。プロのオゾン脱臭を選ぶべき理由"
-date: "2025-12-11"
-region: "osaka"
-regionFull: "大阪府"
-areaLabel: "大阪・近畿エリア"
-thumbnail: "オゾン発生装置.jpg"
+title: 30分で愛車の犬臭が激減。プロのオゾン脱臭を選ぶべき理由
+urlSlug: ozon1
+date: 2026-06-15
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: /blog-images/オゾン発生装置.jpg
+images:
+  - /blog-images/オゾン発生装置.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
 tags:
-  - "快適ドライブ"
+  - 快適ドライブ
+seo:
+  meta_description: |
+    「パパの車、なんか臭い…」
+    週末、家族で出かけようとドアを開けた瞬間。奥さんや後ろの席の息子からボソッと言われた一言に、背中がヒヤッとしたことはありませんか。
+  noindex: false
+ogp:
+  og_image: /blog-images/オゾン発生装置.jpg
+  og_type: article
 ---
 
-* * *
 
 ### 家庭用と業務用は、違うの？
 
@@ -85,6 +95,6 @@ tags:
 
 そして月曜日、自信を持ってお客様を乗せられる清々しさを。
 
-北九州はこれから湿気も多くなりますし、カビ臭対策としてもオゾンは強力な味方になります。あなたのシエンタを、家族みんなが深呼吸できる空間へ戻してあげてください。
+大阪はこれから湿気も多くなりますし、カビ臭対策としてもオゾンは強力な味方になります。あなたのシエンタを、家族みんなが深呼吸できる空間へ戻してあげてください。
 
-* * *
+- - -
