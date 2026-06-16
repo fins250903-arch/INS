@@ -7,7 +7,13 @@
     <title>Content Manager</title>
   </head>
   <body>
-    <!-- Include the script that builds the page and powers Decap CMS -->
-    <script src="https://unpkg.com/decap-cms@^3.14.1"></script>
+    <div id="nc-root"></div>
+    <!-- Use the specific stable version with explicit root mounting -->
+    <script src="https://unpkg.com/decap-cms@^3.1.0/dist/decap-cms.js"></script>
+    <script>
+      if (window.CMS) {
+        window.CMS.init();
+      }
+    </script>
   </body>
 </html>
