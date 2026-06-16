@@ -1,5 +1,5 @@
 ---
-title: 30分で愛車の犬臭が激減。プロのオゾン脱臭を選ぶべき理由
+title: 犬臭が激減オゾン脱臭でスッキリ車内快適プロ技
 urlSlug: ozon1
 date: 2026-06-10
 region: hyougo
