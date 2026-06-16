@@ -1,17 +1,23 @@
 ---
 title: 業者不要！8年分の車タバコ臭を3手順で撃退する裏技
 urlSlug: taba1
-date: 2026-06-04
+date: 2026-06-16
 region: hyougo
 regionFull: 兵庫県
 areaLabel: 兵庫・近畿エリア
-thumbnail: tennjyo.jpg
+thumbnail: /blog-images/pose_kusai_woman.jpg
 images:
   - tennjyo.jpg
 draft: false
 categories:
   - souji
   - seisou
+seo:
+  meta_description: 毎日仕事で走り回っているN-BOXも、気づけばもう8年。営業車としても家族の足としても頑張ってくれてるけど、ひとつだけどうしても解決できない悩みがある。
+  noindex: false
+ogp:
+  og_image: /blog-images/pose_kusai_woman.jpg
+  og_type: article
 ---
 
 **業者頼まず1500円！8年目の車タバコ臭を消す3つの手順**
