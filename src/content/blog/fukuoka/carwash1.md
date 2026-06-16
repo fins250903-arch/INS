@@ -1,7 +1,7 @@
 ---
 title: 3000円フリードの輝きが戻る茶色の車を水跡から守る3つの近道
 urlSlug: carwash1
-date: 2026-01-25
+date: 2026-06-16
 region: fukuoka
 regionFull: 福岡県
 areaLabel: 福岡・九州エリア
