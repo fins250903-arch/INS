@@ -1,13 +1,22 @@
 ---
-title: "出張車内清掃で家族も笑顔に"
-date: "2026-05-08"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
-thumbnail: "images-2.jpg"
+title: 出張車内清掃で家族も笑顔に
+urlSlug: syuttyou33
+date: 2026-06-19
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: /blog-images/car_clean_man.png
+images:
+  - /blog-images/シエンタ車内.jpg
 draft: false
 categories:
-  - "seisou"
+  - seisou
+seo:
+  meta_description: 営業職として忙しく働く山田さんの愛車シエンタは、家族の思い出が詰まっている分、どうしてもお疲れモードが隠せません。
+  noindex: false
+ogp:
+  og_image: /blog-images/car_clean_man.png
+  og_type: article
 ---
 
 扉を開けた瞬間、ふっと鼻をくすぐる「生活の匂い」。 お菓子の粉がシートの隙間に白く溜まり、ジュースの跡が地図のように広がっている。営業職として忙しく働く山田さんの愛車シエンタは、家族の思い出が詰まっている分、どうしてもお疲れモードが隠せません。
