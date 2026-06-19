@@ -1,17 +1,26 @@
 ---
-title: "ミニバンシート下の水濡れ故障を防ぐ5つの対策と安全な洗浄法"
-date: "2026-04-23"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "unnamed.jpg"
+title: ミニバンシート下の水濡れ故障を防ぐ5つの対策と安全な洗浄法
+urlSlug: era
+date: 2026-06-19
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: /blog-images/床水.jpg
+images:
+  - /blog-images/車内後部席取り外し洗浄　ネズミ駆除後.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
 tags:
-  - "自分で水洗い"
-  - "車内洗浄"
+  - 自分で水洗い
+  - 車内洗浄
+seo:
+  meta_description: 家族を守るミニバンが突然のエラー？シート下の「精密機械」を守るために
+  noindex: false
+ogp:
+  og_image: /blog-images/床水.jpg
+  og_type: article
 ---
 
 家族の思い出を乗せて走るミニバン。広々とした車内はまるで動くリビングのようですが、その足元に「静かな脅威」が潜んでいることは、意外と知られていません。 特に気をつけてほしいのが、シート下の水濡れです。 「たかが水くらい」と思うかもしれません。でも、現代の車にとって、その一口の飲みこぼしが、家族の安全を守るはずのシステムを狂わせる引き金になることもあるのです。
