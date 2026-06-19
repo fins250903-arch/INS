@@ -1,14 +1,21 @@
 ---
-title: "3時間で新車気分。諦めていた「あの臭い」と決別するプロの車内清掃"
-date: "2026-05-08"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "2ecb5d41b6bca78ebaebd1ab940f1778_t.jpeg"
+title: 3時間で新車気分。諦めていた「あの臭い」と決別するプロの車内清掃
+urlSlug: sennjyou2
+date: 2026-06-19
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: /blog-images/シエンタ車内.jpg
 draft: false
 categories:
-  - "blog"
-  - "seisou"
+  - blog
+  - seisou
+seo:
+  meta_description: 4歳になる息子がこぼしたジュースの跡、隙間に入り込んだお菓子のかけら、そして愛犬のミニチュアダックスフンドの抜け毛。
+  noindex: false
+ogp:
+  og_type: article
+  og_image: /blog-images/シエンタ車内.jpg
 ---
 
 ## 車内クリーニング どこまで?
