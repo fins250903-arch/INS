@@ -1,14 +1,23 @@
 ---
-title: "車内のネズミ死骸臭、3分で決める「自力」か「プロ」かの境界線"
-date: "2025-11-30"
-region: "osaka"
-regionFull: "大阪府"
-areaLabel: "大阪・近畿エリア"
-thumbnail: "nezumi_tori.jpg"
+title: 車内のネズミ死骸臭、3分で決める「自力」か「プロ」かの境界線
+urlSlug: nezumi
+date: 2026-06-25
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: /blog-images/nezumi_tori.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
+seo:
+  noindex: false
+  meta_description: |-
+    ノアのようなミニバンは快適装備が多い分、内側の構造が複雑怪奇だからです。
+
+    ダッシュボードの裏側、天井の内張り、エアコンの配管。ネズミは暖かい場所を求めて、驚くほど狭い隙間に入り込みます
+ogp:
+  og_type: article
 ---
 
 仕事も忙しく　妻の軽四で買い物もしていたので、ノアに乗る機会がしばらくなかった。久々に、家族でドライブに行こうと、ドアを開けた瞬間　車内から「得体の知れない」しかも、強烈に鼻を突く匂いがする！！
