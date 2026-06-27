@@ -1,14 +1,21 @@
 ---
-title: "車内のネズミ腐敗臭、3分で決める「自力」か「プロ」かの境界線"
-date: "2026-04-30"
-region: "fukuoka"
-regionFull: "福岡県"
-areaLabel: "福岡・九州エリア"
-thumbnail: "nezumi_tori.jpg"
+title: 車内のネズミ腐敗臭、3分で決める「自力」か「プロ」かの境界線
+urlSlug: nezumi
+date: 2026-06-28
+region: fukuoka
+regionFull: 福岡県
+areaLabel: 福岡・九州エリア
+thumbnail: /blog-images/車内後部席取り外し洗浄　ネズミ駆除後.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
+seo:
+  meta_description: 普通のゴミを出し忘れた時の臭いとは明らかに違う。生き物がその一生を終えて、形を失っていく時の、あの澱んだ空気です
+  noindex: false
+ogp:
+  og_image: /blog-images/車内後部席取り外し洗浄　ネズミ駆除後.jpg
+  og_type: article
 ---
 
 仕事に追われていたせいで、しばらくノアは駐車場に置き去りでした。買い物は妻の軽自動車で済ませていたし、自分の愛車なのに少し距離ができていたんです。ようやくひと段落して、久しぶりに家族で出かけようとドアを引いた、その瞬間のこと。
