@@ -1,0 +1,564 @@
+---
+export const prerender = false;
+
+import Layout from '../../../layouts/Layout.astro';
+import { BLOG_REGIONS } from '../../../data/blog-regions';
+import { JAPAN_PREFECTURES } from '../../../data/japan-prefectures';
+import {
+  getAdminPassword,
+  isAdminAuthenticated,
+  setAdminAuthCookie
+} from '../../../lib/admin-auth';
+import { getMdPost, getAllMdPosts, type BlogMdPost } from '../../../lib/blog-md-store';
+
+const isAuthenticated = isAdminAuthenticated(Astro.cookies);
+
+if (!isAuthenticated) {
+  if (Astro.request.method === 'POST') {
+    const formData = await Astro.request.formData();
+    const password = formData.get('password')?.toString() || '';
+    if (password === getAdminPassword()) {
+      setAdminAuthCookie(Astro.cookies);
+      return Astro.redirect(Astro.url.pathname + Astro.url.search);
+    }
+  }
+}
+
+const region = Astro.url.searchParams.get('region') || 'osaka';
+const slug = Astro.url.searchParams.get('slug') || '';
+const isNew = !slug;
+
+let post: BlogMdPost | null = null;
+if (isAuthenticated && slug) {
+  post = getMdPost(region, slug);
+}
+
+const defaultPost: BlogMdPost = {
+  region: (region as BlogMdPost['region']) || 'osaka',
+  slug: '',
+  filePath: '',
+  title: '',
+  date: new Date().toISOString().slice(0, 10),
+  regionFull: BLOG_REGIONS.find((r) => r.slug === region)?.regionFull || '大阪府',
+  areaLabel: '',
+  urlSlug: '',
+  thumbnail: '',
+  draft: true,
+  categories: [],
+  tags: [],
+  body: ''
+};
+
+const editPost = post || defaultPost;
+const categoriesStr = editPost.categories.join(', ');
+const existingCategories = isAuthenticated
+  ? [...new Set(getAllMdPosts().flatMap((p) => p.categories))]
+  : [];
+---
+
+<Layout
+  title={isNew ? '新規記事作成' : '記事を編集'}
+  description="ブログ記事の作成・編集"
+  canonical="/admin/blog-manager/edit/"
+>
+  <main class="min-h-screen bg-slate-50">
+    {
+      !isAuthenticated ? (
+        <div class="flex min-h-screen items-center justify-center px-4">
+          <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+            <h1 class="mb-6 text-center text-xl font-bold">ログインが必要です</h1>
+            <form method="POST" class="space-y-4">
+              <input
+                type="password"
+                name="password"
+                placeholder="パスワード"
+                class="w-full rounded-lg border px-4 py-2"
+                required
+              />
+              <button type="submit" class="w-full rounded-lg bg-blue-600 py-2 text-white">
+                ログイン
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <div class="mx-auto max-w-[1600px] px-4 py-6 sm:px-6">
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <a href="/admin/blog-manager/" class="text-sm text-blue-600 hover:underline">
+                ← 記事一覧に戻る
+              </a>
+              <h1 class="mt-2 text-2xl font-bold text-slate-900">
+                {isNew ? '新規記事作成' : '記事を編集'}
+              </h1>
+            </div>
+            <button
+              id="save-btn"
+              type="button"
+              class="rounded-lg bg-blue-600 px-6 py-2.5 font-medium text-white shadow transition hover:bg-blue-700"
+            >
+              記事を保存
+            </button>
+          </div>
+
+          <div id="save-status" class="mb-4 hidden rounded-lg p-3 text-sm"></div>
+
+          <div class="grid gap-6 lg:grid-cols-[1fr_380px]">
+            <div class="space-y-4">
+              <div class="rounded-xl border border-slate-200 bg-white shadow-sm">
+                <div class="flex border-b border-slate-200">
+                  <button
+                    type="button"
+                    data-tab="edit"
+                    class="tab-btn border-b-2 border-blue-600 px-4 py-3 text-sm font-medium text-blue-600"
+                  >
+                    編集
+                  </button>
+                  <button
+                    type="button"
+                    data-tab="preview"
+                    class="tab-btn border-b-2 border-transparent px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700"
+                  >
+                    プレビュー
+                  </button>
+                </div>
+
+                <div class="border-b border-slate-100 bg-slate-50 px-4 py-2">
+                  <div class="flex flex-wrap gap-1.5">
+                    <button type="button" data-insert="## " class="toolbar-btn">H2</button>
+                    <button type="button" data-insert="### " class="toolbar-btn">H3</button>
+                    <button type="button" data-insert="**太字**" class="toolbar-btn">太字</button>
+                    <button type="button" data-insert="[リンクテキスト](https://)" class="toolbar-btn">
+                      リンク
+                    </button>
+                    <button type="button" data-insert="cta" class="toolbar-btn bg-amber-50 text-amber-800">
+                      ✨ CTA挿入
+                    </button>
+                  </div>
+                </div>
+
+                <div id="panel-edit" class="p-4">
+                  <textarea
+                    id="body"
+                    rows="24"
+                    class="w-full resize-y rounded-lg border border-slate-200 p-4 font-mono text-sm leading-relaxed focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    placeholder="Markdownで本文を入力..."
+                  >{editPost.body}</textarea>
+                </div>
+
+                <div id="panel-preview" class="hidden p-6">
+                  <article
+                    id="preview-content"
+                    class="prose prose-slate max-w-none prose-headings:font-bold prose-h2:border-b prose-h2:border-slate-200 prose-h2:pb-2 prose-h2:text-xl"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 class="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  記事設定
+                </h2>
+
+                <div class="space-y-4">
+                  <div>
+                    <label for="title" class="mb-1 block text-sm font-medium text-slate-700">
+                      タイトル
+                    </label>
+                    <input
+                      type="text"
+                      id="title"
+                      value={editPost.title}
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="urlSlug" class="mb-1 block text-sm font-medium text-slate-700">
+                      URLスラッグ
+                    </label>
+                    <div class="flex gap-2">
+                      <input
+                        type="text"
+                        id="urlSlug"
+                        value={editPost.urlSlug || editPost.slug}
+                        class="flex-1 rounded-lg border border-slate-300 px-3 py-2 font-mono text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      />
+                      <button
+                        type="button"
+                        id="gen-slug"
+                        class="rounded-lg border border-slate-300 px-3 py-2 text-xs text-slate-600 hover:bg-slate-50"
+                      >
+                        自動生成
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label for="date" class="mb-1 block text-sm font-medium text-slate-700">
+                      公開日
+                    </label>
+                    <input
+                      type="date"
+                      id="date"
+                      value={editPost.date}
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="region" class="mb-1 block text-sm font-medium text-slate-700">
+                      地域サイト
+                    </label>
+                    <select
+                      id="region"
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    >
+                      {BLOG_REGIONS.map((r) => (
+                        <option value={r.slug} selected={editPost.region === r.slug}>
+                          {r.regionFull}（{r.slug}）
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label for="regionFull" class="mb-1 block text-sm font-medium text-slate-700">
+                      地域名称（都道府県）
+                    </label>
+                    <select
+                      id="regionFull"
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    >
+                      {JAPAN_PREFECTURES.map((pref) => (
+                        <option value={pref} selected={editPost.regionFull === pref}>
+                          {pref}
+                        </option>
+                      ))}
+                    </select>
+                    <p class="mt-1 text-xs text-slate-500">全国の都道府県から選択できます</p>
+                  </div>
+
+                  <div>
+                    <label for="areaLabel" class="mb-1 block text-sm font-medium text-slate-700">
+                      地域の件名（表示用）
+                    </label>
+                    <input
+                      type="text"
+                      id="areaLabel"
+                      value={editPost.areaLabel || ''}
+                      placeholder="例）大阪・近畿エリア"
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="thumbnail" class="mb-1 block text-sm font-medium text-slate-700">
+                      サムネイル画像パス
+                    </label>
+                    <input
+                      type="text"
+                      id="thumbnail"
+                      value={editPost.thumbnail || ''}
+                      placeholder="/blog-images/example.jpg"
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 font-mono text-xs focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" id="draft" checked={editPost.draft} class="h-4 w-4" />
+                    <label for="draft" class="text-sm text-slate-700">下書きとして保存</label>
+                  </div>
+
+                  <div>
+                    <label for="categories" class="mb-1 block text-sm font-medium text-slate-700">
+                      カテゴリ（カンマ区切り）
+                    </label>
+                    <input
+                      type="text"
+                      id="categories"
+                      value={categoriesStr}
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                    {existingCategories.length > 0 && (
+                      <div class="mt-2 flex flex-wrap gap-1.5">
+                        {existingCategories.slice(0, 12).map((cat) => (
+                          <button
+                            type="button"
+                            data-category={cat}
+                            class="category-chip rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs text-slate-600 hover:border-blue-300 hover:bg-blue-50"
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  画像追加
+                </h2>
+                <div
+                  id="drop-zone"
+                  class="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 p-6 transition hover:border-blue-400 hover:bg-blue-50"
+                >
+                  <p class="text-sm text-slate-600">ドラッグ＆ドロップまたはクリック</p>
+                  <p class="mt-1 text-xs text-slate-400">JPEG / PNG / WebP / GIF</p>
+                  <input type="file" id="file-input" accept="image/*" class="hidden" />
+                </div>
+
+                <div id="upload-preview" class="mt-4 hidden">
+                  <img id="uploaded-img" src="" alt="" class="mb-3 max-h-40 rounded-lg object-cover" />
+                  <button
+                    type="button"
+                    id="insert-img-btn"
+                    class="w-full rounded-lg bg-emerald-600 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+                  >
+                    カーソル位置に挿入
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </main>
+
+  <style>
+    .toolbar-btn {
+      border-radius: 0.25rem;
+      border: 1px solid #e2e8f0;
+      background: white;
+      padding: 0.25rem 0.625rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #475569;
+      transition: background 0.15s;
+    }
+    .toolbar-btn:hover {
+      background: #f1f5f9;
+    }
+  </style>
+
+  <script
+    define:vars={{
+      initialSlug: editPost.slug,
+      initialRegion: editPost.region,
+      isNewPost: isNew
+    }}
+  >
+    const CTA_BLOCK = `
+
+<div class="my-8 rounded-xl border border-blue-200 bg-blue-50 p-6 text-center">
+  <p class="mb-2 text-lg font-bold text-slate-900">車内清掃のご相談はお気軽に</p>
+  <p class="mb-4 text-sm text-slate-600">プロの技術で愛車を新品同様に</p>
+  <p class="text-blue-700 font-semibold">📞 お電話でのお問い合わせ歓迎</p>
+</div>
+
+`;
+
+    let uploadedImagePath = '';
+
+    function getField(id) {
+      return document.getElementById(id);
+    }
+
+    function insertAtCursor(text) {
+      const textarea = getField('body');
+      if (!textarea) return;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const before = textarea.value.substring(0, start);
+      const after = textarea.value.substring(end);
+      textarea.value = before + text + after;
+      textarea.selectionStart = textarea.selectionEnd = start + text.length;
+      textarea.focus();
+    }
+
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .slice(0, 60) || `post-${Date.now()}`;
+    }
+
+    function simpleMarkdownToHtml(md) {
+      return md
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="rounded-lg max-w-full" />')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 underline">$1</a>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^(?!<[h|p|d|i])/gm, (line) => (line.trim() ? `<p>${line}</p>` : ''));
+    }
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-btn').forEach((b) => {
+          b.classList.toggle('border-blue-600', b.dataset.tab === tab);
+          b.classList.toggle('text-blue-600', b.dataset.tab === tab);
+          b.classList.toggle('border-transparent', b.dataset.tab !== tab);
+          b.classList.toggle('text-slate-500', b.dataset.tab !== tab);
+        });
+        getField('panel-edit')?.classList.toggle('hidden', tab !== 'edit');
+        getField('panel-preview')?.classList.toggle('hidden', tab !== 'preview');
+        if (tab === 'preview') {
+          const body = getField('body')?.value || '';
+          const preview = getField('preview-content');
+          if (preview) preview.innerHTML = simpleMarkdownToHtml(body);
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-insert]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const val = btn.dataset.insert;
+        if (val === 'cta') {
+          insertAtCursor(CTA_BLOCK);
+        } else {
+          insertAtCursor(val || '');
+        }
+      });
+    });
+
+    getField('gen-slug')?.addEventListener('click', () => {
+      const title = getField('title')?.value || '';
+      const slugField = getField('urlSlug');
+      if (slugField) slugField.value = slugify(title);
+    });
+
+    document.querySelectorAll('.category-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const cat = chip.dataset.category;
+        const input = getField('categories');
+        if (!input || !cat) return;
+        const current = input.value
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        if (!current.includes(cat)) {
+          current.push(cat);
+          input.value = current.join(', ');
+        }
+      });
+    });
+
+    const dropZone = getField('drop-zone');
+    const fileInput = getField('file-input');
+
+    dropZone?.addEventListener('click', () => fileInput?.click());
+
+    dropZone?.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-blue-500', 'bg-blue-50');
+    });
+
+    dropZone?.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+    });
+
+    dropZone?.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+      const file = e.dataTransfer?.files?.[0];
+      if (file) uploadFile(file);
+    });
+
+    fileInput?.addEventListener('change', () => {
+      const file = fileInput.files?.[0];
+      if (file) uploadFile(file);
+    });
+
+    async function uploadFile(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/admin/blog/upload-image', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Upload failed');
+
+        uploadedImagePath = data.path;
+        const preview = getField('upload-preview');
+        const img = getField('uploaded-img');
+        const thumbField = getField('thumbnail');
+        if (img) img.src = data.path;
+        if (preview) preview.classList.remove('hidden');
+        if (thumbField && !thumbField.value) thumbField.value = data.path;
+      } catch (err) {
+        alert('画像のアップロードに失敗しました: ' + err.message);
+      }
+    }
+
+    getField('insert-img-btn')?.addEventListener('click', () => {
+      if (!uploadedImagePath) return;
+      insertAtCursor(`\n\n![画像](${uploadedImagePath})\n\n`);
+    });
+
+    getField('save-btn')?.addEventListener('click', async () => {
+      const statusEl = getField('save-status');
+      const categories = (getField('categories')?.value || '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const urlSlug = getField('urlSlug')?.value?.trim() || slugify(getField('title')?.value || '');
+      const payload = {
+        region: getField('region')?.value || 'osaka',
+        slug: isNewPost ? urlSlug : initialSlug,
+        urlSlug,
+        title: getField('title')?.value || '',
+        date: getField('date')?.value || new Date().toISOString().slice(0, 10),
+        regionFull: getField('regionFull')?.value || '',
+        areaLabel: getField('areaLabel')?.value || '',
+        thumbnail: getField('thumbnail')?.value || '',
+        draft: getField('draft')?.checked ?? true,
+        categories,
+        tags: [],
+        body: getField('body')?.value || '',
+        filePath: '',
+        previousSlug: isNewPost ? undefined : initialSlug
+      };
+
+      try {
+        const res = await fetch('/api/admin/blog/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Save failed');
+
+        if (statusEl) {
+          statusEl.textContent = '✅ 記事を保存しました';
+          statusEl.className = 'mb-4 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800';
+          statusEl.classList.remove('hidden');
+        }
+
+        if (isNewPost || data.slug !== initialSlug || data.region !== initialRegion) {
+          setTimeout(() => {
+            window.location.href = `/admin/blog-manager/edit/?region=${data.region}&slug=${data.slug}`;
+          }, 800);
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.textContent = '❌ 保存に失敗しました: ' + err.message;
+          statusEl.className = 'mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-800';
+          statusEl.classList.remove('hidden');
+        }
+      }
+    });
+  </script>
+</Layout>
