@@ -1,8 +1,52 @@
-/** 料金表（税込）— WordPress osak.insbs.net/wp1 と同一 */
+/** 料金表（税込）— お客様請求金額一覧に準拠 */
+
+export const pricingVehicleConfirmNote =
+  '※実際の金額は、原車（現車）を確認させていただいてからのご案内となります' as const;
+
+export const pricingTruckHighRoofNote = '※ハイルーフは別途費用がかかります' as const;
+
+/** セットパック（車内清掃＋床面洗浄） */
 export const pricingSet = [
-  { label: '軽自動車・軽SUV（4人乗り以下）', price: '22,000円' },
-  { label: '普通車（3・5ナンバー / 5人乗り以下）', price: '28,000円' },
-  { label: '大型車・SUV・ミニバン（6人乗り以上）', price: '36,000円' }
+  {
+    label: '軽四　4人乗以下',
+    interiorCleaning: '24,000円',
+    addon: '2,000円',
+    total: '26,000円'
+  },
+  {
+    label: '普通車5人乗以下',
+    interiorCleaning: '29,000円',
+    addon: '3,000円',
+    total: '32,000円'
+  },
+  {
+    label: '大型車・ミニバン6人乗以上',
+    interiorCleaning: '38,000円',
+    addon: '4,000円',
+    total: '42,000円'
+  }
+] as const;
+
+/** トラック（トン数毎目安・スプレッドシート上からの順） */
+export const pricingTruck = [
+  {
+    label: '２ｔ',
+    interiorCleaning: '29,000円',
+    bunkBed: '無し',
+    total: '—'
+  },
+  {
+    label: '4ｔ',
+    interiorCleaning: '37,000円',
+    bunkBed: '8,000円',
+    total: '45,000円'
+  },
+  {
+    label: '10ｔ',
+    interiorCleaning: '39,000円',
+    bunkBed: '8,000円',
+    total: '47,000円'
+  }
 ] as const;
 
 export const pricingPartial = [

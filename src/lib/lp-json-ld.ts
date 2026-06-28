@@ -18,7 +18,7 @@ import {
   webPageNode
 } from './json-ld-site';
 
-const LP_PRICE_RANGE = '22000-36000';
+const LP_PRICE_RANGE = '26000-42000';
 
 const SERVICE_SUBJECT_OF = [
   { '@type': 'BlogPosting', url: canonicalUrl('/blog/outo1/'), name: '車内で嘔吐！でも大丈夫な対応方法' },
@@ -135,7 +135,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     '@type': 'Offer',
     position: i + 1,
     name: row.label,
-    price: yenToNumber(row.price),
+    price: yenToNumber(row.total),
     priceCurrency: 'JPY',
     availability: 'https://schema.org/InStock',
     url: pageUrl
@@ -211,7 +211,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
       '@type': 'Offer',
       itemOffered: { '@id': serviceId },
       priceCurrency: 'JPY',
-      description: `軽自動車 ${pricingSet[0].price}〜／${pricingSet[2].label} ${pricingSet[2].price}（税込・基本）`
+      description: `軽四 ${pricingSet[0].total}〜／${pricingSet[2].label} ${pricingSet[2].total}（税込・基本）`
     }
   };
 

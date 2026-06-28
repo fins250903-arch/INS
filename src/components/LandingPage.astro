@@ -5,7 +5,15 @@ import AntimicrobialCampaignBanner from './AntimicrobialCampaignBanner.astro';
 import CtaBundle from './CtaBundle.astro';
 import { getCollection } from 'astro:content';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
-import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../data/lp-pricing';
+import {
+  additionalNotes,
+  pricingOptions,
+  pricingPartial,
+  pricingSet,
+  pricingTruck,
+  pricingTruckHighRoofNote,
+  pricingVehicleConfirmNote
+} from '../data/lp-pricing';
 import {
   emergencyIntro,
   emergencyKeroseneSteps,
@@ -822,7 +830,7 @@ DIYは軽度向きで深部汚れは限界`}
       <p class="mt-2 text-sm leading-relaxed">
         「シート洗浄＋床面洗浄」がセットになったお得なプランです！<br />
         内容：簡易リンサー洗浄 / スチーム洗浄 / 掃除機 / 内装・シートベルト拭き上げ<br />
-        ＊別途：⚠️ 消臭・脱臭（嘔吐・糞尿・激臭・血液は追加費用）<br />
+        ＊別途：⚠️ 消臭・脱臭（嘔吐・糞尿・激臭・血液は下表「加算」欄の目安）<br />
         天井部洗浄・ペットの毛取りは含まれません。
       </p>
       <div class="mt-4 overflow-x-auto">
@@ -830,19 +838,61 @@ DIYは軽度向きで深部汚れは限界`}
           <thead>
             <tr class="bg-gray-100">
               <th class="p-3 text-left">車種区分（税込）</th>
-              <th class="p-3 text-left">料金</th>
+              <th class="p-3 text-left">車内清掃</th>
+              <th class="p-3 text-left">
+                <span class="inline-flex items-center gap-1">
+                  加算：嘔吐、うんち
+                  <span class="text-[10px] font-bold bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded">目安</span>
+                </span>
+              </th>
+              <th class="p-3 text-left">計</th>
             </tr>
           </thead>
           <tbody>
             {pricingSet.map((row) => (
               <tr class="border-t">
                 <td class="p-3">{row.label}</td>
-                <td class="p-3 font-semibold">{row.price}</td>
+                <td class="p-3 font-semibold">{row.interiorCleaning}</td>
+                <td class="p-3 font-semibold">{row.addon}</td>
+                <td class="p-3 font-bold text-base">{row.total}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <p class="mt-3 text-sm font-semibold text-cta-red text-center bg-red-50 border border-red-100 rounded-lg py-2 px-3">
+        {pricingVehicleConfirmNote}
+      </p>
+
+      <h3 class="mt-8 text-xl font-bold">🚚 トラック（トン数毎目安）</h3>
+      <p class="mt-2 text-sm font-bold text-amber-800 bg-amber-100 border border-amber-200 rounded-lg py-2 px-3 text-center">
+        {pricingTruckHighRoofNote}
+      </p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm border">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 text-left">トン数</th>
+              <th class="p-3 text-left">車内清掃</th>
+              <th class="p-3 text-left">寝台ベッド</th>
+              <th class="p-3 text-left">計</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricingTruck.map((row) => (
+              <tr class="border-t">
+                <td class="p-3 font-semibold">{row.label}</td>
+                <td class="p-3 font-semibold">{row.interiorCleaning}</td>
+                <td class="p-3">{row.bunkBed}</td>
+                <td class="p-3 font-bold">{row.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-sm font-semibold text-cta-red text-center">
+        {pricingVehicleConfirmNote}
+      </p>
 
       <h3 class="mt-6 text-xl font-bold">📍 【個別】部分クリーニング</h3>
       <p class="mt-2 text-sm">「ここだけ綺麗にしたい」というご要望にお応えします。※床マット・ドア内側・シートベルトは除きます。</p>
@@ -899,8 +949,8 @@ DIYは軽度向きで深部汚れは限界`}
       <h3 class="mt-6 text-xl font-bold">📝 お見積り例</h3>
       <p class="mt-2 text-sm font-semibold">普通車内で嘔吐し、座席と床面が汚れている場合</p>
       <ul class="mt-2 text-sm list-disc list-inside">
-        <li><strong>普通車セットプラン</strong>：28,000円 --- A</li>
-        <li><strong>消臭・脱臭オプション</strong>：4,000円 --- B</li>
+        <li><strong>普通車セット（車内清掃）</strong>：29,000円 --- A</li>
+        <li><strong>加算（嘔吐・うんち）</strong>：3,000円 --- B</li>
         <li>💰 A＋B <strong>合計：32,000円（税込）</strong></li>
       </ul>
     </div>

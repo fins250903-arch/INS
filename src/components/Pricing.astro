@@ -1,5 +1,13 @@
 ---
-import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../data/lp-pricing';
+import {
+  additionalNotes,
+  pricingOptions,
+  pricingPartial,
+  pricingSet,
+  pricingTruck,
+  pricingTruckHighRoofNote,
+  pricingVehicleConfirmNote
+} from '../data/lp-pricing';
 import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
 ---
 
@@ -24,14 +32,46 @@ import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
           <thead>
             <tr class="bg-gray-100">
               <th class="p-3 text-left">車種区分（税込）</th>
-              <th class="p-3 text-left">料金</th>
+              <th class="p-3 text-left">車内清掃</th>
+              <th class="p-3 text-left">加算：嘔吐、うんち</th>
+              <th class="p-3 text-left">計</th>
             </tr>
           </thead>
           <tbody>
             {pricingSet.map((row) => (
               <tr class="border-t border-gray-200">
                 <td class="p-3">{row.label}</td>
-                <td class="p-3 font-bold text-lg">{row.price}</td>
+                <td class="p-3 font-semibold">{row.interiorCleaning}</td>
+                <td class="p-3 font-semibold">{row.addon}</td>
+                <td class="p-3 font-bold text-lg">{row.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-sm font-semibold text-cta-red text-center">{pricingVehicleConfirmNote}</p>
+
+      <h3 class="mt-8 text-xl font-bold">🚚 トラック（トン数毎目安）</h3>
+      <p class="mt-2 text-sm font-bold text-amber-800 bg-amber-100 border border-amber-200 rounded-lg py-2 px-3 text-center">
+        {pricingTruckHighRoofNote}
+      </p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-sm border border-gray-200 bg-white">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-3 text-left">トン数</th>
+              <th class="p-3 text-left">車内清掃</th>
+              <th class="p-3 text-left">寝台ベッド</th>
+              <th class="p-3 text-left">計</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pricingTruck.map((row) => (
+              <tr class="border-t border-gray-200">
+                <td class="p-3 font-semibold">{row.label}</td>
+                <td class="p-3 font-semibold">{row.interiorCleaning}</td>
+                <td class="p-3">{row.bunkBed}</td>
+                <td class="p-3 font-bold">{row.total}</td>
               </tr>
             ))}
           </tbody>
