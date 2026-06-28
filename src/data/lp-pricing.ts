@@ -1,10 +1,5 @@
 /** 料金表（税込）— お客様請求金額一覧に準拠 */
 
-export const pricingVehicleConfirmNote =
-  '※実際の金額は、原車（現車）を確認させていただいてからのご案内となります' as const;
-
-export const pricingTruckHighRoofNote = '※ハイルーフは別途費用がかかります' as const;
-
 /** セットパック（車内清掃＋床面洗浄） */
 export const pricingSet = [
   {
@@ -24,28 +19,6 @@ export const pricingSet = [
     interiorCleaning: '38,000円',
     addon: '4,000円',
     total: '42,000円'
-  }
-] as const;
-
-/** トラック（トン数毎目安・スプレッドシート上からの順） */
-export const pricingTruck = [
-  {
-    label: '２ｔ',
-    interiorCleaning: '29,000円',
-    bunkBed: '無し',
-    total: '—'
-  },
-  {
-    label: '4ｔ',
-    interiorCleaning: '37,000円',
-    bunkBed: '8,000円',
-    total: '45,000円'
-  },
-  {
-    label: '10ｔ',
-    interiorCleaning: '39,000円',
-    bunkBed: '8,000円',
-    total: '47,000円'
   }
 ] as const;
 
