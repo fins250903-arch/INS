@@ -1,0 +1,23 @@
+/* Decap CMS collection list enhancements — thumbnails & dates */
+[class*='CollectionTop'] [class*='ListCard'] {
+  min-height: 72px;
+}
+
+/* Show thumbnail preview in entry list when available */
+[class*='ListCard'] img,
+[class*='EntryCard'] img {
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Emphasize summary line (date · region · title) */
+[class*='ListCard'] [class*='Summary'],
+[class*='EntryCard'] [class*='Summary'] {
+  font-size: 0.8125rem;
+  color: #64748b;
+}
+
+[class*='ListCard'] [class*='Title'],
+[class*='EntryCard'] [class*='Title'] {
+  font-weight: 600;
+}
