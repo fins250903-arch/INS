@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { isAuthorizedRequest } from '../../../../lib/admin-auth';
-import { saveMdPost, type BlogMdPost } from '../../../../lib/blog-md-store';
+import { publishBlogPost } from '../../../../lib/blog-publish';
+import type { BlogMdPost } from '../../../../lib/blog-md-store';
 
 export const prerender = false;
 
@@ -17,21 +18,28 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
-    const success = saveMdPost(post, previousSlug);
-    if (!success) {
-      return new Response(JSON.stringify({ error: 'Failed to save post' }), { status: 500 });
-    }
+    const result = await publishBlogPost(post, previousSlug);
 
     return new Response(
       JSON.stringify({
         ok: true,
-        slug: post.urlSlug || post.slug,
-        region: post.region
+        slug: result.slug,
+        region: result.region,
+        mode: result.mode,
+        published: result.published,
+        commitSha: result.commitSha,
+        message:
+          result.mode === 'github'
+            ? result.published
+              ? '記事を保存し、本番サイトへの公開を開始しました（1〜3分で反映されます）'
+              : '下書きとして保存しました（本番サイトへの反映を開始しました）'
+            : '記事をローカルに保存しました（GitHubトークン未設定のため自動公開されません）'
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
     console.error('Save post error:', error);
-    return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400 });
+    const message = error instanceof Error ? error.message : 'Save failed';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 };

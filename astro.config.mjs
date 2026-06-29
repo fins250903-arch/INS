@@ -22,6 +22,23 @@ export default defineConfig({
         access: 'public',
         optional: true,
         default: 'https://insbs.net'
+      }),
+      BLOG_PUBLISH_GITHUB_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      BLOG_PUBLISH_GITHUB_REPO: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+        default: 'fins250903-arch/INS'
+      }),
+      BLOG_PUBLISH_GITHUB_BRANCH: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'main'
       })
     }
   },

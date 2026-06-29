@@ -128,6 +128,11 @@ function formatDateValue(value: unknown): string {
   return text;
 }
 
+export function buildPostMarkdown(post: BlogMdPost): string {
+  const slug = post.urlSlug || post.slug;
+  return `${serializeFrontmatter({ ...post, urlSlug: slug, slug })}\n\n${post.body.trim()}\n`;
+}
+
 function serializeFrontmatter(data: BlogMdPost): string {
   const lines = ['---'];
 
@@ -245,8 +250,7 @@ export function saveMdPost(post: BlogMdPost, previousSlug?: string): boolean {
     fs.mkdirSync(regionDir, { recursive: true });
 
     const newPath = path.join(regionDir, `${slug}.md`);
-    const content = `${serializeFrontmatter({ ...post, urlSlug: slug, slug })}\n\n${post.body.trim()}\n`;
-    fs.writeFileSync(newPath, content, 'utf-8');
+    fs.writeFileSync(newPath, buildPostMarkdown(post), 'utf-8');
 
     if (previousSlug && previousSlug !== slug) {
       const oldPath = path.join(regionDir, `${previousSlug}.md`);

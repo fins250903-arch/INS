@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { isAuthorizedRequest } from '../../../../lib/admin-auth';
-import { uploadBlogImage } from '../../../../lib/blog-md-store';
+import { publishBlogImage } from '../../../../lib/blog-publish';
 
 export const prerender = false;
 
@@ -23,14 +23,23 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const path = uploadBlogImage(file.name, buffer);
+    const result = await publishBlogImage(file.name, buffer);
 
-    return new Response(JSON.stringify({ ok: true, path }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        path: result.path,
+        mode: result.mode,
+        message:
+          result.mode === 'github'
+            ? '画像をアップロードし、本番サイトへの反映を開始しました'
+            : '画像をローカルに保存しました'
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json' } }
+    );
   } catch (error) {
     console.error('Upload error:', error);
-    return new Response(JSON.stringify({ error: 'Upload failed' }), { status: 500 });
+    const message = error instanceof Error ? error.message : 'Upload failed';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 };

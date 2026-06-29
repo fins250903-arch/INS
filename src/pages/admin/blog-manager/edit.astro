@@ -10,6 +10,7 @@ import {
   setAdminAuthCookie
 } from '../../../lib/admin-auth';
 import { getMdPost, getAllMdPosts, type BlogMdPost } from '../../../lib/blog-md-store';
+import { canAutoPublish } from '../../../lib/blog-publish';
 
 const isAuthenticated = isAdminAuthenticated(Astro.cookies);
 
@@ -27,6 +28,7 @@ if (!isAuthenticated) {
 const region = Astro.url.searchParams.get('region') || 'osaka';
 const slug = Astro.url.searchParams.get('slug') || '';
 const isNew = !slug;
+const autoPublishEnabled = canAutoPublish();
 
 let post: BlogMdPost | null = null;
 if (isAuthenticated && slug) {
@@ -43,7 +45,7 @@ const defaultPost: BlogMdPost = {
   areaLabel: '',
   urlSlug: '',
   thumbnail: '',
-  draft: true,
+  draft: false,
   categories: [],
   tags: [],
   body: ''
@@ -102,6 +104,20 @@ const existingCategories = isAuthenticated
           </div>
 
           <div id="save-status" class="mb-4 hidden rounded-lg p-3 text-sm"></div>
+
+          {
+            autoPublishEnabled ? (
+              <div class="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
+                <strong>自動公開が有効です。</strong>
+                「記事を保存」を押すと GitHub へ自動コミットされ、1〜3分以内に本番サイト（insbs.net）へ反映されます。
+              </div>
+            ) : (
+              <div class="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                <strong>ローカル保存モードです。</strong>
+                本番への自動公開には Vercel の環境変数 <code class="rounded bg-amber-100 px-1">BLOG_PUBLISH_GITHUB_TOKEN</code> の設定が必要です。
+              </div>
+            )
+          }
 
           <div class="grid gap-6 lg:grid-cols-[1fr_380px]">
             <div class="space-y-4">
@@ -524,7 +540,7 @@ const existingCategories = isAuthenticated
         regionFull: getField('regionFull')?.value || '',
         areaLabel: getField('areaLabel')?.value || '',
         thumbnail: getField('thumbnail')?.value || '',
-        draft: getField('draft')?.checked ?? true,
+        draft: getField('draft')?.checked ?? false,
         categories,
         tags: [],
         body: getField('body')?.value || '',
@@ -542,7 +558,7 @@ const existingCategories = isAuthenticated
         if (!res.ok) throw new Error(data.error || 'Save failed');
 
         if (statusEl) {
-          statusEl.textContent = '✅ 記事を保存しました';
+          statusEl.textContent = '✅ ' + (data.message || '記事を保存しました');
           statusEl.className = 'mb-4 rounded-lg bg-emerald-50 p-3 text-sm text-emerald-800';
           statusEl.classList.remove('hidden');
         }
