@@ -1,16 +1,15 @@
 ---
 title: "イタグレの車内　粗相を丸ごと消臭・完全シミ抜きガイド"
+urlSlug: "siko"
 date: "2026-04-30"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
 thumbnail: "illust4847-1.png"
 draft: false
-categories:
-  - "blog"
-  - "souji"
-  - "seisou"
 ---
+
+![画像](/blog-images/dog_italian_greyhound2.png)
 
 【監修：自動車内装クリーニング専門チーム】
 
@@ -30,14 +29,10 @@ categories:
 
 私たちクリーニングのプロも、実はみんな大の犬好きです。 だからこそ、ニオイに悩んで愛犬とのドライブが億劫になってほしくない。手順さえ間違えなければ、あの清潔な車内は必ず取り戻せます。もし、どうしても自分では太刀打ちできないと感じた時は、無理をせず私たちのような専門チームを頼ってください。大切な愛車と家族の時間を、最高のコンディションで楽しんでほしいと願っています。
 
-## ご希望日お電話で
 
-電話番号をタップしてください
 
-[TEL:070-8428-0866
-
-（受付時間／365日24時間受付中）
-
-](tel:070-8428-0866)[
-
-メールでお問い合わせ](https://insbs.net/ok2/contact/)
+<div class="my-8 rounded-xl border border-blue-200 bg-blue-50 p-6 text-center">
+  <p class="mb-2 text-lg font-bold text-slate-900">車内清掃のご相談はお気軽に</p>
+  <p class="mb-4 text-sm text-slate-600">プロの技術で愛車を新品同様に</p>
+  <p class="text-blue-700 font-semibold">📞 お電話でのお問い合わせ歓迎</p>
+</div>
