@@ -1,7 +1,7 @@
 ---
 title: "3時間で新車気分  諦めていた「あの臭い」と決別 プロの車内清掃"
 urlSlug: "sennjyou2"
-date: "2026-04-23"
+date: "2026-07-01"
 region: "fukuoka"
 regionFull: "福岡県"
 areaLabel: "福岡・九州エリア"
