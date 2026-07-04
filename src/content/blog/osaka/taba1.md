@@ -1,14 +1,12 @@
 ---
-title: "業者不要！8年分の車タバコ臭を3手順で撃退する裏技"
-date: "2025-12-16"
+title: "最近頭痛の原因かも　独特のヤニ付きの香り湿度があがると復活ニオイ"
+urlSlug: "taba1"
+date: "2026-07-04"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
 thumbnail: "febreze-smell-tobacco_3.jpg"
 draft: false
-categories:
-  - "souji"
-  - "seisou"
 ---
 
 **業者頼まず1500円！8年目の車タバコ臭を消す3つの手順**
