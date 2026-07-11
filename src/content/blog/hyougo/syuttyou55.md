@@ -1,13 +1,12 @@
 ---
 title: "出張車内清掃で家族も笑顔に"
-date: "2026-04-27"
+urlSlug: "syuttyou55"
+date: "2026-07-11"
 region: "hyougo"
 regionFull: "兵庫県"
 areaLabel: "兵庫・近畿エリア"
 thumbnail: "images-1-e1756888161530.jpg"
 draft: false
-categories:
-  - "seisou"
 ---
 
 愛車が2時間で復活！プロの出張車内清掃で家族も笑顔に
