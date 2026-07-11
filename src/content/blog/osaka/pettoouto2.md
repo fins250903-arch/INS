@@ -1,15 +1,12 @@
 ---
 title: "運転席の隙間も5分で無臭！愛犬の嘔吐跡を消す3つの手順"
-date: "2025-12-13"
+urlSlug: "pettoouto2"
+date: "2026-07-11"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
 thumbnail: "愛犬オート.png"
 draft: false
-categories:
-  - "outo1"
-  - "souji"
-  - "seisou"
 ---
 
 運転席の横、あの狭い隙間に愛犬が戻してしまったときの絶望感。
