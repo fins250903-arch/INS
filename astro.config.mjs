@@ -45,8 +45,12 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      // thanks / compare は noindex のためサイトマップから除外
-      filter: (page) => !page.includes('/thanks/') && !page.includes('/compare/')
+      // thanks / compare / 広島(hirosima) / 岡山(okayama) は noindex のためサイトマップから除外
+      filter: (page) =>
+        !page.includes('/thanks/') &&
+        !page.includes('/compare/') &&
+        !page.includes('/hirosima/') &&
+        !page.includes('/okayama/')
     })
   ],
 
