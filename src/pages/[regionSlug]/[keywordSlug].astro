@@ -14,6 +14,7 @@ import { buildRegionFaqs } from '../../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
 import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../../data/site';
 import { buildKeywordLpJsonLd } from '../../lib/lp-json-ld';
+import { isNoindexRegion } from '../../data/noindex-regions';
 import { getCollection } from 'astro:content';
 
 // 画像アセットのインポート (Astro:assetsの最適化を利用)
@@ -68,6 +69,7 @@ export function getStaticPaths() {
 }
 
 const { regionSlug, regionName, keyword } = Astro.props;
+const noindex = isNoindexRegion(regionSlug);
 
 // 地域フルネームを取得 (例: "大阪府", "東京都", "奈良県")
 const regionDetail = regionBySlug.get(regionSlug);
@@ -193,6 +195,7 @@ const flowSteps = [
   description={pageDescription}
   canonical={canonical}
   jsonLd={jsonLd}
+  noindex={noindex}
 >
   <Header />
   
