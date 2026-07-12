@@ -6,6 +6,11 @@
       "permanent": true
     },
     {
+      "source": "/hirosima/",
+      "destination": "https://insbs.net/",
+      "permanent": true
+    },
+    {
       "source": "/hirosima/:path*",
       "destination": "https://insbs.net/",
       "permanent": true
