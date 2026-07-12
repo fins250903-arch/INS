@@ -8,7 +8,7 @@
  * ※ robots.txt での Disallow は行わない。クロール自体を止めると
  *   Google が noindex タグを読み取れず、逆にインデックスが残る恐れがあるため。
  */
-export const NOINDEX_REGION_SLUGS = new Set<string>(['hirosima', 'okayama']);
+export const NOINDEX_REGION_SLUGS = new Set<string>(['okayama']);
 
 /** 指定した地域スラッグが noindex 対象かどうかを返す。 */
 export function isNoindexRegion(slug: string): boolean {
