@@ -37,7 +37,8 @@ import voice06 from '../assets/images/放尿260206.jpg';
 import voice07 from '../assets/images/ふまん-2601-scaled.jpg';
 import voice08 from '../assets/images/お客様の声1-2510.jpg';
 import voice09 from '../assets/images/gasosut-251012-scaled.jpg';
-import voice10 from '../assets/images/お客様の声2508.jpg';
+// 2026年7月アンケート（サービスご利用番号196）。お客様の声ギャラリー先頭に最新として表示。
+import voiceLatest from '../assets/images/お客様の声2607.jpg';
 import voice11 from '../assets/images/軽四お客様喜び-1024x559.jpg';
 import commentPhoto from '../assets/images/car_zaseki_pikapika.jpg';
 import defaultRepresentative from '../assets/images/representative-new.png';
@@ -189,13 +190,13 @@ const flowSteps = [
 ];
 
 const voiceGallery = [
+  { image: voiceLatest, caption: '炎天下の作業ご苦労さまでした　生肉の匂いが取れました。' },
   { image: voice04, caption: '嘔吐クリーニングきれい' },
   { image: voice05, caption: '車内洗浄が終わった車の前で3人写った写真' },
   { image: voice06, caption: '車の中で放尿された' },
   { image: voice07, caption: 'ヤニ汚れが残っていた' },
   { image: voice08, caption: 'シート汚れがきれいで満足' },
-  { image: voice09, caption: 'ガソスタ　コーティングのプロよりも正解' },
-  { image: voice10, caption: '炎天下の作業ご苦労さまでした　生肉の匂いが取れました。' }
+  { image: voice09, caption: 'ガソスタ　コーティングのプロよりも正解' }
 ];
 
 const faqs = buildRegionFaqs(regionName, regionFull, regionSlug);
