@@ -19,7 +19,6 @@ export const regionLpLinks: RegionLpLink[] = [
   { slug: 'fukuoka', label: '福岡' },
   { slug: 'hyougo', label: '兵庫' },
   { slug: 'miyagi', label: '宮城' },
-  { slug: 'hirosima', label: '広島' },
   { slug: 'kumamoto', label: '熊本' },
   { slug: 'saga', label: '佐賀' },
   { slug: 'aiti', label: '愛知' },

@@ -1,6 +1,16 @@
 {
   "redirects": [
     {
+      "source": "/hirosima",
+      "destination": "https://insbs.net/",
+      "permanent": true
+    },
+    {
+      "source": "/hirosima/:path*",
+      "destination": "https://insbs.net/",
+      "permanent": true
+    },
+    {
       "source": "/wp1/blog/:path+",
       "has": [{ "type": "host", "value": "osak.insbs.net" }],
       "destination": "https://insbs.net/blog/:path+",
@@ -593,17 +603,17 @@
     },
     {
       "source": "/wp1/hirosima",
-      "destination": "https://insbs.net/hirosima/",
+      "destination": "https://insbs.net/",
       "permanent": true
     },
     {
       "source": "/wp1/hirosima/",
-      "destination": "https://insbs.net/hirosima/",
+      "destination": "https://insbs.net/",
       "permanent": true
     },
     {
       "source": "/wp1/hirosima/:path+",
-      "destination": "https://insbs.net/hirosima/:path+",
+      "destination": "https://insbs.net/",
       "permanent": true
     },
     {
