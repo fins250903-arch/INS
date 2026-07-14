@@ -1,25 +1,12 @@
 ---
 title: "落ち込んだ…個人賠償で車内シート洗浄0円"
-urlSlug: sienta-baisyou-0en
-date: 2026-07-13
-region: osaka
-regionFull: 大阪府
-areaLabel: 大阪・近畿エリア
-thumbnail: /blog-images/シエンタ　家族旅行.jpg
+urlSlug: "sienta-baisyou-0en"
+date: "2026-07-13"
+region: "osaka"
+regionFull: "大阪府"
+areaLabel: "大阪・近畿エリア"
+thumbnail: "/blog-images/sienta3retume-before.jpg"
 draft: false
-categories:
-  - blog
-  - souji
-  - seisou
-tags: []
-seo:
-  meta_title: 落ち込んだ…個人賠償で車内シート洗浄0円
-  meta_description: 大阪市北区のシエンタ2列目で起きたおもらし。拭き取り後のシミとニオイも、友人の個人賠償保険で車内シート洗浄が負担0円になった実例です。
-  noindex: false
-  keywords: 個人賠償責任保険,車内シート洗浄,おもらし,大阪,シエンタ
-ogp:
-  og_image: /blog-images/シエンタ　家族旅行.jpg
-  og_type: article
 ---
 
 ## 送ってあげたのに、車内が汚れた日
@@ -31,6 +18,10 @@ ogp:
 ドアを開けた瞬間に分かる、あの独特の空気。気分まで沈んでしまう感じを、現場で何度も見てきました。
 
 表面をきれいにしても、尿はシートのウレタン奥に潜ります。湿気のたびに臭いが戻ってくる。市販のスプレーだけでは、なかなか終わらない。プロの現場でも、拭き跡だけ残った車を見るたびに「もう少し早く相談してほしかった」と感じる。
+
+
+![画像](/blog-images/sienta3retume-before.jpg)
+
 
 ## 普通に頼むと、いくらかかるのか
 
