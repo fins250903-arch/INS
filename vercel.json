@@ -1,6 +1,26 @@
 {
   "redirects": [
     {
+      "source": "/blog/osaka/shanai-seiso-ranking",
+      "destination": "https://insbs.net/blog/osaka/ranking-osaka-carclean/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/osaka/shanai-seiso-ranking/",
+      "destination": "https://insbs.net/blog/osaka/ranking-osaka-carclean/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti/shanai-seiso-ranking",
+      "destination": "https://insbs.net/aiti/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti/shanai-seiso-ranking/",
+      "destination": "https://insbs.net/aiti/",
+      "permanent": true
+    },
+    {
       "source": "/hirosima",
       "destination": "https://insbs.net/",
       "permanent": true
