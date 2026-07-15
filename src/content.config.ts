@@ -7,7 +7,7 @@ const blog = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     /** 地域識別子（osaka / fukuoka など） */
-    region: z.enum(['fukuoka', 'osaka', 'hyougo', 'siga', 'aiti']),
+    region: z.enum(['fukuoka', 'osaka', 'hyougo', 'siga', 'aiti', 'saitama']),
     /** 地域の正式名称（例: 大阪府） */
     regionFull: z.string(),
     /** 地域の件名・表示ラベル（未指定時は regionFull を使用） */
