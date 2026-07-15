@@ -38,11 +38,13 @@ content:
             - osaka
             - hyougo
             - siga
+            - aiti
           labels:
             fukuoka: 福岡
             osaka: 大阪
             hyougo: 兵庫
             siga: 滋賀
+            aiti: 愛知
       - name: regionFull
         label: 地域名（正式）
         type: string
