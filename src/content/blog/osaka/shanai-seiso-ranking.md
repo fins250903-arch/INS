@@ -17,7 +17,7 @@ categories:
 tags: []
 seo:
   meta_title: "車内清掃どこがいい？おすすめ比較ランキング"
-  meta_description: "キーパーLABO・ENEOS・くらしのマーケット・出張専門など、大阪で頼める車内清掃の店舗を公式サイト付きで比較したランキングです。"
+  meta_description: "キーパーLABO・ENEOS・出張専門など、大阪で頼める車内清掃の店舗を公式サイト付きで比較したランキングです。"
   keywords: "車内清掃,おすすめ,ランキング,出張車内清掃,大阪,キーパー"
   noindex: false
 ogp:
