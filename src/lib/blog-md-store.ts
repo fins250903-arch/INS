@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { BLOG_REGION_SLUGS } from '../data/blog-regions';
 
-export type BlogRegionSlug = 'fukuoka' | 'osaka' | 'hyougo' | 'siga' | 'aiti';
+export type BlogRegionSlug = 'fukuoka' | 'osaka' | 'hyougo' | 'siga' | 'aiti' | 'saitama';
 
 export interface BlogMdPost {
   region: BlogRegionSlug;

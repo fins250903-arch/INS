@@ -39,12 +39,14 @@ content:
             - hyougo
             - siga
             - aiti
+            - saitama
           labels:
             fukuoka: 福岡
             osaka: 大阪
             hyougo: 兵庫
             siga: 滋賀
             aiti: 愛知
+            saitama: 埼玉
       - name: regionFull
         label: 地域名（正式）
         type: string
