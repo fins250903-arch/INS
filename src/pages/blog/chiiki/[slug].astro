@@ -5,6 +5,10 @@ import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
 import BlogCta from '../../../components/BlogCta.astro';
 import { CHIIKI_REGIONS } from '../../../data/blog-chiiki';
+import {
+  getStoreLpLinkLabel,
+  resolveStoreLpPath
+} from '../../../data/region-lp-links';
 import { buildPageJsonLd } from '../../../lib/json-ld-site';
 import {
   formatBlogDateLong,
@@ -47,6 +51,9 @@ const chiikiJsonLd = buildPageJsonLd({
   description: `${region.name}向けにカテゴリ分けしたブログ記事一覧です。`,
   pageType: 'CollectionPage'
 });
+
+const storePath = resolveStoreLpPath(region.slug) || resolveStoreLpPath(region.name);
+const storeLabel = getStoreLpLinkLabel(region.name);
 ---
 
 <Layout
@@ -67,6 +74,18 @@ const chiikiJsonLd = buildPageJsonLd({
       <p class="mt-2 text-sm leading-relaxed text-gray-600">
         カテゴリ「{region.categoryLabel}」が付いた記事を表示しています。
       </p>
+      {
+        storePath && (
+          <p class="mt-4">
+            <a
+              href={storePath}
+              class="inline-flex items-center rounded-full border-2 border-primary bg-white px-5 py-2.5 text-sm font-bold text-primary transition hover:bg-primary hover:text-white"
+            >
+              {storeLabel}
+            </a>
+          </p>
+        )
+      }
 
       {
         filtered.length > 0 ? (
@@ -105,7 +124,7 @@ const chiikiJsonLd = buildPageJsonLd({
       }
     </section>
 
-    <BlogCta regionFull={region.name} />
+    <BlogCta regionFull={region.name} regionSlug={region.slug} />
   </main>
   <Footer regionFull={region.name} />
   <FloatingCTA />

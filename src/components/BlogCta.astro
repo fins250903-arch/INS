@@ -1,13 +1,21 @@
 ---
 import CtaBundle from './CtaBundle.astro';
+import {
+  getStoreLpLinkLabel,
+  resolveStoreLpPath
+} from '../data/region-lp-links';
 
 interface Props {
   regionFull?: string;
+  /** Blog / chiiki / LP slug (例: osaka, aiti) */
+  regionSlug?: string;
   className?: string;
 }
 
-const { regionFull, className = '' } = Astro.props;
+const { regionFull, regionSlug, className = '' } = Astro.props;
 const regionLine = regionFull ? `${regionFull}エリアも対応` : '全国エリア対応';
+const storePath = resolveStoreLpPath(regionSlug) || resolveStoreLpPath(regionFull);
+const storeLabel = getStoreLpLinkLabel(regionFull);
 ---
 
 <section class={`blog-cta-section px-4 py-10 sm:px-6 sm:py-12 ${className}`} aria-label="お問い合わせ">
@@ -15,6 +23,20 @@ const regionLine = regionFull ? `${regionFull}エリアも対応` : '全国エ�
     <p class="mb-4 text-sm font-bold leading-relaxed text-gray-700 sm:text-base">
       {regionLine}・365日24時間受付
     </p>
+
+    {
+      storePath && (
+        <p class="mb-5">
+          <a
+            href={storePath}
+            class="store-site-link inline-flex items-center justify-center rounded-full border-2 border-primary bg-white px-5 py-3 text-sm font-bold text-primary transition hover:bg-primary hover:text-white sm:text-base"
+          >
+            {storeLabel}
+          </a>
+        </p>
+      )
+    }
+
     <CtaBundle />
   </div>
 </section>
@@ -23,5 +45,10 @@ const regionLine = regionFull ? `${regionFull}エリアも対応` : '全国エ�
   .blog-cta-section {
     background: linear-gradient(180deg, #ffffff 0%, #f7faf3 100%);
     border-top: 1px solid #e8efe0;
+  }
+
+  .store-site-link {
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(165, 195, 58, 0.18);
   }
 </style>
