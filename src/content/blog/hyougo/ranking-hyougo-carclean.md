@@ -7,19 +7,6 @@ regionFull: "兵庫県"
 areaLabel: "兵庫・近畿エリア"
 thumbnail: "/blog-images/hikakutenpo.jpg"
 draft: false
-categories:
-  - "blog"
-  - "souji"
-  - "seisou"
-  - "兵庫"
-seo:
-  meta_title: "兵庫の車内清掃ランキング｜実績・料金・トラブル汚れで選ぶ"
-  meta_description: "クリア、カークリーン神戸、KeePer LABO、ENEOSなど兵庫の車内清掃を、実績・料金・トラブル汚れ対応で公平に比較。嘔吐や灯油なら出張専門の選び方も解説。"
-  keywords: "兵庫,車内清掃,ランキング,キーパー,クリア,カークリーン神戸,出張車内清掃"
-  noindex: false
-ogp:
-  og_image: "/blog-images/hikakutenpo.jpg"
-  og_type: "article"
 ---
 
 兵庫で車内クリーニングを探すと、候補がいくつも出てくる。神戸や姫路の出張専門、キーパーの店舗、給油所や用品店のメニュー。迷うのは自然だと思う。私も最初の頃は、料金の安さだけで並べてしまう人の気持ちがよくわかった。
