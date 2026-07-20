@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 
 const BLOG_ROOT = path.join(process.cwd(), 'src/content/blog');
-const REGIONS = new Set(['fukuoka', 'osaka', 'hyougo', 'siga']);
+const REGIONS = new Set(['fukuoka', 'osaka', 'hyougo', 'siga', 'aiti', 'saitama']);
 const IMAGE_EXT = /\.(jpe?g|png|webp|gif)$/i;
 const REGION_DIR_RE = /^[a-z]+\//;
 
