@@ -1,14 +1,12 @@
 ---
 title: "業者不要！8年分の車タバコ臭を3手順で撃退する裏技"
-date: "2025-12-16"
+urlSlug: "taba1"
+date: "2026-07-25"
 region: "siga"
 regionFull: "滋賀県"
 areaLabel: "滋賀・近畿エリア"
 thumbnail: "febreze-smell-tobacco_3.jpg"
 draft: false
-categories:
-  - "souji"
-  - "seisou"
 ---
 
 **業者頼まず1500円！8年目の車タバコ臭を消す3つの手順**
