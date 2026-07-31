@@ -1,14 +1,12 @@
 ---
 title: "3分でN-BOXの嘔吐臭を消す！シートベルト洗浄術とプロの相場"
-date: "2025-12-20"
+urlSlug: "seatbeltwash"
+date: "2026-07-23"
 region: "siga"
 regionFull: "滋賀県"
 areaLabel: "滋賀・近畿エリア"
 thumbnail: "belt.jpg"
 draft: false
-categories:
-  - "souji"
-  - "seisou"
 ---
 
 仕事で外回りをしている最中、ふと車内に漂う酸っぱい臭いに顔をしかめる。そんな経験、ありませんか。特に4歳くらいのお子さんがいると、車酔いでの「もしも」は避けられませんよね。8年も連れ添ったN-BOXなら、なおさら愛着もあるし、清潔に保ちたいものです。
