@@ -1,19 +1,21 @@
 ---
 title: "15分で3年分の汚れをリセット！Voxyが輝きを取り戻す3つの秘策"
-date: "2025-12-24"
+urlSlug: "kusumi"
+date: "2026-08-02"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
-thumbnail: "car_clean_man.jpg"
+thumbnail: "kojima-voxy260720-1.jpg"
 draft: false
-categories:
-  - "souji"
-  - "seisou"
 ---
 
 週末のわずかな時間で、新車の頃のような清々しい空気と、家族が「うわっ、きれい！」と驚くシートの輝きを取り戻す方法を具体的に伝えます。
 
 * * *
+
+
+![画像](/blog-images/kojima-voxy260720-1.jpg)
+
 
 ## 3年間の思い出が、いつのまにか「くすみ」に変わっていたら
 
