@@ -8,6 +8,7 @@ import { buildRegionFaqs } from '../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../data/lp-region-case-studies';
 import { buildLpJsonLd } from '../lib/lp-json-ld';
 import { buildPageJsonLd } from '../lib/json-ld-site';
+import { isNoindexRegion } from '../data/noindex-regions';
 import pages from '../data/wp-pages.json';
 import regionLpsMain from '../data/region-lp.json';
 import regionLpsExtra from '../data/region-lp-extra.json';
@@ -56,6 +57,7 @@ const props = Astro.props as
 
 const regionCaseStudies =
   props.mode === 'region' ? getCaseStudiesForSlug(props.regionLp.slug) : undefined;
+const regionNoindex = props.mode === 'region' ? isNoindexRegion(props.regionLp.slug) : false;
 const regionJsonLd =
   props.mode === 'region'
     ? buildLpJsonLd({
@@ -91,6 +93,7 @@ const wpJsonLd =
       description={props.regionLp.layoutDescription}
       canonical={`/${props.regionLp.slug}/`}
       jsonLd={regionJsonLd}
+      noindex={regionNoindex}
     >
       <Header />
       <main>

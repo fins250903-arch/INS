@@ -1,6 +1,41 @@
 {
   "redirects": [
     {
+      "source": "/blog/osaka/shanai-seiso-ranking",
+      "destination": "https://insbs.net/blog/osaka/ranking-osaka-carclean/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/osaka/shanai-seiso-ranking/",
+      "destination": "https://insbs.net/blog/osaka/ranking-osaka-carclean/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti/shanai-seiso-ranking",
+      "destination": "https://insbs.net/aiti/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aiti/shanai-seiso-ranking/",
+      "destination": "https://insbs.net/aiti/",
+      "permanent": true
+    },
+    {
+      "source": "/hirosima",
+      "destination": "https://insbs.net/",
+      "permanent": true
+    },
+    {
+      "source": "/hirosima/",
+      "destination": "https://insbs.net/",
+      "permanent": true
+    },
+    {
+      "source": "/hirosima/:path*",
+      "destination": "https://insbs.net/",
+      "permanent": true
+    },
+    {
       "source": "/wp1/blog/:path+",
       "has": [{ "type": "host", "value": "osak.insbs.net" }],
       "destination": "https://insbs.net/blog/:path+",
@@ -593,17 +628,17 @@
     },
     {
       "source": "/wp1/hirosima",
-      "destination": "https://insbs.net/hirosima/",
+      "destination": "https://insbs.net/",
       "permanent": true
     },
     {
       "source": "/wp1/hirosima/",
-      "destination": "https://insbs.net/hirosima/",
+      "destination": "https://insbs.net/",
       "permanent": true
     },
     {
       "source": "/wp1/hirosima/:path+",
-      "destination": "https://insbs.net/hirosima/:path+",
+      "destination": "https://insbs.net/",
       "permanent": true
     },
     {

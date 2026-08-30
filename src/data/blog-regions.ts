@@ -45,6 +45,22 @@ export const BLOG_REGIONS: BlogRegion[] = [
     regionFull: '滋賀県',
     sourceDir: 'wp-convert4',
     legacyBase: 'https://siga.insbs.net/wp1'
+  },
+  {
+    id: 'aiti',
+    slug: 'aiti',
+    name: '愛知',
+    regionFull: '愛知県',
+    sourceDir: 'aiti',
+    legacyBase: 'https://insbs.net/aiti'
+  },
+  {
+    id: 'saitama',
+    slug: 'saitama',
+    name: '埼玉',
+    regionFull: '埼玉県',
+    sourceDir: 'saitama',
+    legacyBase: 'https://insbs.net/saitama'
   }
 ];
 

@@ -76,6 +76,8 @@ collections:
           - { label: 大阪, value: osaka }
           - { label: 兵庫, value: hyougo }
           - { label: 滋賀, value: siga }
+          - { label: 愛知, value: aiti }
+          - { label: 埼玉, value: saitama }
       - label: 地域名称（都道府県・全国）
         name: regionFull
         widget: select

@@ -186,20 +186,6 @@
     ]
   },
   {
-    "slug": "hirosima",
-    "regionName": "広島",
-    "regionFull": "広島県",
-    "layoutTitle": "広島地元密着｜アイエヌエスINS出張車内清掃｜車内クリーニング",
-    "layoutDescription": "広島県内の出張車内清掃・車内クリーニング。",
-    "showAreaList": true,
-    "serviceAreas": [
-      {
-        "label": "広島県内主要エリア",
-        "text": "広島市、呉市、竹原市、三原市、尾道市、福山市、府中市、三次市、庄原市、大竹市、東広島市、廿日市市、安芸高田市、江田島市、府中町、海田町、熊野町、坂町、安芸太田町、北広島町、大崎上島町、世羅町、神石高原町ほか県内全域（離島は要相談）"
-      }
-    ]
-  },
-  {
     "slug": "kagawa",
     "regionName": "香川",
     "regionFull": "香川県",
