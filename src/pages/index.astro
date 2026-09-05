@@ -8,6 +8,7 @@ import { getCaseStudiesForSlug } from '../data/lp-region-case-studies';
 import { buildLpJsonLd } from '../lib/lp-json-ld';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
+import { prepareRegionLpContent } from '../lib/blog-lp-feed';
 
 const layoutTitle = '大阪｜アイエヌエスINS出張車内清掃業者｜車内クリーニング';
 const layoutDescription =
@@ -16,6 +17,13 @@ const layoutDescription =
 const osakaCanonicalPath = '/osaka/';
 
 const osakaCaseStudies = getCaseStudiesForSlug('index');
+const osakaLpBlog = await prepareRegionLpContent({
+	regionSlug: 'osaka',
+	regionName: '大阪',
+	regionFull: '大阪府',
+	caseStudies: osakaCaseStudies
+});
+const mergedOsakaCaseStudies = osakaLpBlog.caseStudies ?? osakaCaseStudies;
 
 const jsonLd = buildLpJsonLd({
 	path: osakaCanonicalPath,
@@ -24,8 +32,8 @@ const jsonLd = buildLpJsonLd({
 	description: layoutDescription,
 	pageTitle: layoutTitle,
 	faqs: buildRegionFaqs('大阪', '大阪府', 'osaka'),
-	localBusinessDescription: osakaCaseStudies?.lead,
-	caseStudies: osakaCaseStudies,
+	localBusinessDescription: mergedOsakaCaseStudies?.lead,
+	caseStudies: mergedOsakaCaseStudies,
 	regionSlug: 'osaka'
 });
 ---
@@ -43,8 +51,9 @@ const jsonLd = buildLpJsonLd({
 			regionFull="大阪府"
 			showAreaList={true}
 			serviceAreas={osakaServiceAreas}
-			caseStudies={osakaCaseStudies}
+			caseStudies={mergedOsakaCaseStudies}
 			regionSlug="osaka"
+			blogFeed={osakaLpBlog.feed}
 		/>
 	</main>
 	<Footer regionFull="大阪府" regionName="大阪" />

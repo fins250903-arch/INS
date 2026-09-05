@@ -5,14 +5,18 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
 import BlogCta from '../../../components/BlogCta.astro';
+import BlogAioRelated from '../../../components/BlogAioRelated.astro';
 import { buildBlogPostJsonLd } from '../../../lib/blog-json-ld';
 import {
   getBlogSlug,
+  getPublishedBlogPosts,
   resolveBlogImage,
   formatBlogDate,
   getAreaLabel
 } from '../../../lib/blog-content';
 import { resolveBlogSeoMeta } from '../../../lib/blog-seo';
+import { collectLpHeadingLinks, collectRelatedBlogLinks, getBlogTopic, replaceRegionPlaceholder } from '../../../lib/blog-aio';
+import { resolveStoreLpPath } from '../../../data/region-lp-links';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -31,6 +35,18 @@ const slug = getBlogSlug(post);
 const pagePath = `/blog/${post.data.region}/${slug}/`;
 const headerImage = resolveBlogImage(post.data.thumbnail);
 const seo = resolveBlogSeoMeta(post, pagePath);
+const allPosts = await getPublishedBlogPosts();
+const topic = getBlogTopic(slug, post.data.title, post.data.categories);
+const answer = replaceRegionPlaceholder(topic.answer, post.data.regionFull);
+const related = collectRelatedBlogLinks({ current: post, allPosts, limit: 5 });
+const lpLinks = collectLpHeadingLinks({
+  slug,
+  title: post.data.title,
+  categories: post.data.categories,
+  regionSlug: post.data.region,
+  regionFull: post.data.regionFull
+});
+const storePath = resolveStoreLpPath(post.data.region) || resolveStoreLpPath(post.data.regionFull) || '/osaka/';
 
 const blogJsonLd = buildBlogPostJsonLd({
   path: pagePath,
@@ -38,7 +54,18 @@ const blogJsonLd = buildBlogPostJsonLd({
   description: seo.description,
   datePublished: post.data.date.toISOString(),
   imageUrl: seo.ogImage,
-  keywords: seo.keywords
+  keywords: seo.keywords,
+  regionFull: post.data.regionFull,
+  answer,
+  related: [...lpLinks, ...related].map((item) => ({ href: item.href, name: item.label })),
+  lpUrl: storePath,
+  faqs: [
+    { q: `${topic.label}はどうすればいいですか？`, a: answer },
+    {
+      q: `${post.data.regionFull}で出張車内清掃は依頼できますか？`,
+      a: `${post.data.regionFull}は駐車場完結の出張車内清掃に対応しています。料金・応急処置・保険の目安は地区ページで確認できます。`
+    }
+  ]
 });
 ---
 
@@ -105,9 +132,11 @@ const blogJsonLd = buildBlogPostJsonLd({
         )
       }
 
-      <div class="prose mt-8 max-w-none wp-content">
+      <div class="prose mt-8 max-w-none wp-content aio-article-body">
         <Content />
       </div>
+
+      <BlogAioRelated post={post} allPosts={allPosts} />
     </article>
 
     <BlogCta regionFull={post.data.regionFull} regionSlug={post.data.region} />
@@ -115,3 +144,14 @@ const blogJsonLd = buildBlogPostJsonLd({
   <Footer regionFull={post.data.regionFull} />
   <FloatingCTA />
 </Layout>
+
+<style>
+  .aio-article-body :global(h2:first-of-type) {
+    border-left: 4px solid #ba6022;
+    padding-left: 0.75rem;
+    background: #fff7ed;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+  }
+</style>
