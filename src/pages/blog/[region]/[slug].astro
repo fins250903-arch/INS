@@ -5,14 +5,21 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
 import BlogCta from '../../../components/BlogCta.astro';
+import BlogAioLead from '../../../components/BlogAioLead.astro';
+import BlogAioRelated from '../../../components/BlogAioRelated.astro';
+import BlogAioFaq from '../../../components/BlogAioFaq.astro';
 import { buildBlogPostJsonLd } from '../../../lib/blog-json-ld';
 import {
   getBlogSlug,
+  getPublishedBlogPosts,
   resolveBlogImage,
   formatBlogDate,
   getAreaLabel
 } from '../../../lib/blog-content';
 import { resolveBlogSeoMeta } from '../../../lib/blog-seo';
+import { collectLpHeadingLinks, collectRelatedBlogLinks, getBlogTopic, replaceRegionPlaceholder, buildTopicFaqs } from '../../../lib/blog-aio';
+import { resolveStoreLpPath } from '../../../data/region-lp-links';
+import { SITE_CONTENT_UPDATED, SITE_PERSON_NAME, SITE_PERSON_JOB_TITLE } from '../../../data/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -31,14 +38,40 @@ const slug = getBlogSlug(post);
 const pagePath = `/blog/${post.data.region}/${slug}/`;
 const headerImage = resolveBlogImage(post.data.thumbnail);
 const seo = resolveBlogSeoMeta(post, pagePath);
+const allPosts = await getPublishedBlogPosts();
+const topic = getBlogTopic(slug, post.data.title, post.data.categories);
+const answer = replaceRegionPlaceholder(topic.answer, post.data.regionFull);
+const related = collectRelatedBlogLinks({ current: post, allPosts, limit: 5 });
+const lpLinks = collectLpHeadingLinks({
+  slug,
+  title: post.data.title,
+  categories: post.data.categories,
+  regionSlug: post.data.region,
+  regionFull: post.data.regionFull
+});
+const storePath = resolveStoreLpPath(post.data.region) || resolveStoreLpPath(post.data.regionFull) || '/osaka/';
+const faqs = buildTopicFaqs({
+  slug,
+  title: post.data.title,
+  categories: post.data.categories,
+  regionFull: post.data.regionFull
+});
 
 const blogJsonLd = buildBlogPostJsonLd({
   path: pagePath,
   title: post.data.title,
   description: seo.description,
   datePublished: post.data.date.toISOString(),
+  dateModified: SITE_CONTENT_UPDATED,
   imageUrl: seo.ogImage,
-  keywords: seo.keywords
+  keywords: seo.keywords,
+  regionFull: post.data.regionFull,
+  answer,
+  related: [...lpLinks, ...related].map((item) => ({ href: item.href, name: item.label })),
+  lpUrl: storePath,
+  faqs,
+  howtoName: `${topic.label}の応急処置`,
+  howtoSteps: topic.bullets
 });
 ---
 
@@ -66,6 +99,16 @@ const blogJsonLd = buildBlogPostJsonLd({
       <p class="mt-4 text-xs text-gray-500">{formatBlogDate(post.data.date)}</p>
       <p class="mt-1 text-xs font-medium text-primary">{getAreaLabel(post)}</p>
       <h1 class="mt-2 text-2xl font-bold leading-snug sm:text-3xl">{post.data.title}</h1>
+      <p class="mt-2 text-xs text-gray-500">
+        監修：{SITE_PERSON_NAME}（{SITE_PERSON_JOB_TITLE}）／最終確認 {SITE_CONTENT_UPDATED}
+      </p>
+
+      <BlogAioLead
+        answer={answer}
+        bullets={topic.bullets}
+        regionFull={post.data.regionFull}
+        regionSlug={post.data.region}
+      />
 
       {post.data.categories.length > 0 && (
         <div class="mt-4 flex flex-wrap gap-2">
@@ -105,9 +148,12 @@ const blogJsonLd = buildBlogPostJsonLd({
         )
       }
 
-      <div class="prose mt-8 max-w-none wp-content">
+      <div class="prose mt-8 max-w-none wp-content aio-article-body">
         <Content />
       </div>
+
+      <BlogAioRelated post={post} allPosts={allPosts} />
+      <BlogAioFaq faqs={faqs} regionFull={post.data.regionFull} />
     </article>
 
     <BlogCta regionFull={post.data.regionFull} regionSlug={post.data.region} />
@@ -115,3 +161,14 @@ const blogJsonLd = buildBlogPostJsonLd({
   <Footer regionFull={post.data.regionFull} />
   <FloatingCTA />
 </Layout>
+
+<style>
+  .aio-article-body :global(h2:first-of-type) {
+    border-left: 4px solid #ba6022;
+    padding-left: 0.75rem;
+    background: #fff7ed;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-radius: 0 0.75rem 0.75rem 0;
+  }
+</style>

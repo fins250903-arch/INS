@@ -11,6 +11,8 @@ import {
 } from '../../../lib/admin-auth';
 import { getMdPost, getAllMdPosts, type BlogMdPost } from '../../../lib/blog-md-store';
 import { canAutoPublish } from '../../../lib/blog-publish';
+import { ARTICLE_TEMPLATES } from '../../../data/blog-article-templates';
+import { resolveStoreLpPath } from '../../../data/region-lp-links';
 
 const isAuthenticated = isAdminAuthenticated(Astro.cookies);
 
@@ -48,7 +50,7 @@ const defaultPost: BlogMdPost = {
   draft: false,
   categories: [],
   tags: [],
-  body: ''
+  body: isNew ? ARTICLE_TEMPLATES.find((item) => item.id === 'blank')?.body || '' : ''
 };
 
 const editPost = post || defaultPost;
@@ -56,6 +58,16 @@ const categoriesStr = editPost.categories.join(', ');
 const existingCategories = isAuthenticated
   ? [...new Set(getAllMdPosts().flatMap((p) => p.categories))]
   : [];
+const lpPathByPrefecture = Object.fromEntries(
+  JAPAN_PREFECTURES.map((pref) => [pref, resolveStoreLpPath(pref) || '/osaka/'])
+);
+const editorTemplates = ARTICLE_TEMPLATES.map((item) => ({
+  id: item.id,
+  label: item.label,
+  description: item.description,
+  suggestedCategories: item.suggestedCategories,
+  body: item.body
+}));
 ---
 
 <Layout
@@ -149,6 +161,9 @@ const existingCategories = isAuthenticated
                     </button>
                     <button type="button" data-insert="cta" class="toolbar-btn bg-amber-50 text-amber-800">
                       ✨ CTA挿入
+                    </button>
+                    <button type="button" data-insert="lp-links" class="toolbar-btn bg-emerald-50 text-emerald-800">
+                      LP見出しリンク
                     </button>
                   </div>
                 </div>
@@ -316,6 +331,33 @@ const existingCategories = isAuthenticated
 
               <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                 <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  AIO記事テンプレート
+                </h2>
+                <p class="mb-3 text-xs leading-relaxed text-slate-500">
+                  冒頭は結論ファースト、地区LPの料金・応急処置・保険見出しへリンクする構成です。公開すると該当地区LPの「投稿ブログ一覧」へ自動掲載されます。
+                </p>
+                <select
+                  id="aio-template"
+                  class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+                  <option value="">テンプレートを選択</option>
+                  {editorTemplates.map((item) => (
+                    <option value={item.id}>
+                      {item.label} — {item.description}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  id="apply-template"
+                  class="mt-3 w-full rounded-lg border border-emerald-300 bg-emerald-50 py-2 text-sm font-medium text-emerald-800 hover:bg-emerald-100"
+                >
+                  本文へ挿入（上書き確認あり）
+                </button>
+              </div>
+
+              <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
                   画像追加
                 </h2>
                 <div
@@ -365,7 +407,9 @@ const existingCategories = isAuthenticated
     define:vars={{
       initialSlug: editPost.slug,
       initialRegion: editPost.region,
-      isNewPost: isNew
+      isNewPost: isNew,
+      editorTemplates,
+      lpPathByPrefecture
     }}
   >
     const CTA_BLOCK = `
@@ -377,6 +421,26 @@ const existingCategories = isAuthenticated
 </div>
 
 `;
+
+    function currentLpPath() {
+      const pref = getField('regionFull')?.value || '大阪府';
+      return lpPathByPrefecture[pref] || '/osaka/';
+    }
+
+    function lpHeadingBlock() {
+      const lp = currentLpPath();
+      return `
+
+## 関連する店舗ページの項目
+
+- [応急処置（嘔吐・灯油・ペット）](${lp}#heading-emergency-first-aid)
+- [保険の判断目安](${lp}#heading-insurance-matrix)
+- [出張・店舗・DIYの比較](${lp}#heading-compare-outreach)
+- [料金表](${lp}#heading-pricing)
+- [よくある質問](${lp}#heading-faq)
+
+`;
+    }
 
     let uploadedImagePath = '';
 
@@ -440,10 +504,40 @@ const existingCategories = isAuthenticated
         const val = btn.dataset.insert;
         if (val === 'cta') {
           insertAtCursor(CTA_BLOCK);
+        } else if (val === 'lp-links') {
+          insertAtCursor(lpHeadingBlock());
         } else {
           insertAtCursor(val || '');
         }
       });
+    });
+
+    getField('apply-template')?.addEventListener('click', () => {
+      const id = getField('aio-template')?.value;
+      const template = (editorTemplates || []).find((item) => item.id === id);
+      if (!template) {
+        alert('テンプレートを選択してください');
+        return;
+      }
+      const textarea = getField('body');
+      if (!textarea) return;
+      if (textarea.value.trim() && !confirm('本文をテンプレートで上書きしますか？')) return;
+      const pref = getField('regionFull')?.value || '大阪府';
+      const lp = currentLpPath();
+      textarea.value = String(template.body)
+        .replaceAll('{regionFull}', pref)
+        .replaceAll('/osaka/', lp);
+      const catField = getField('categories');
+      if (catField && template.suggestedCategories?.length) {
+        const current = catField.value
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+        for (const cat of template.suggestedCategories) {
+          if (!current.includes(cat)) current.push(cat);
+        }
+        catField.value = current.join(', ');
+      }
     });
 
     getField('gen-slug')?.addEventListener('click', () => {

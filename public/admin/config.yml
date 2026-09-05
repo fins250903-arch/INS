@@ -179,6 +179,8 @@ collections:
         name: body
         widget: markdown
         required: true
+        hint: '冒頭は「## 結論（先に読む）」で答えを先に書いてください。地区LPの #heading-pricing / #heading-emergency-first-aid / #heading-insurance-matrix へリンクするとAIO評価が上がります。公開記事は該当地区LPへ自動掲載されます。'
+        default: "<!-- aio-answer-first -->\n## 結論（先に読む）\n\n**（質問への答えを2文で。地域名と料金目安を入れる）**\n\n- 要点1\n- 要点2\n- 要点3\n\n[料金表](/osaka/#heading-pricing) / [応急処置](/osaka/#heading-emergency-first-aid) / [保険の目安](/osaka/#heading-insurance-matrix)\n<!-- /aio-answer-first -->\n\n## 詳細\n"
       # ==========================================
       # ここから下を追加（SEO & マーケティング用フィールド）
       # ==========================================

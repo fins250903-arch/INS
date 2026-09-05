@@ -13,31 +13,31 @@ const osakaCaseStudyItems: CaseStudyItem[] = [
     body:
       '大阪府堺市での出張施工事例。スーパー帰りの牛乳パック破損でシートレールまで染み込んだケースを、酵素洗浄・スチーム・オゾン脱臭で対応（作業約3時間・35,500円の実績記載）。',
     linkLabel: '大阪府堺市：スズキ・スペイシア、お買い物帰りの牛乳パック落とし',
-    href: '/blog/sakaimilk/'
+    href: '/blog/osaka/sakaimilk/'
   },
   {
     body:
       '大阪府内のご家族向けに、シエンタ等のファミリーカーで「週末は家族優先、でも車内が限界」のときに出張清掃を選ぶメリットと、店舗持込との比較を整理した記事です。',
     linkLabel: '車内クリーニングを利用して気分一新　家族も笑顔に（シエンタ・出張の考え方）',
-    href: '/blog/syuttyou22/'
+    href: '/blog/osaka/syuttyou22/'
   },
   {
     body:
       '子どもの乗り物酔いによる車内嘔吐の初動・感染症リスク・プロ依頼の判断（記事カテゴリに大阪・京都・群馬・茨城を含む一次情報）です。',
     linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-    href: '/blog/outo1/'
+    href: '/blog/osaka/outo1/'
   },
   {
     body:
       '他人の車を子どもが汚したときの個人賠償責任保険の考え方と、清掃業者への依頼・見積もりの進め方を文章で整理しています。',
     linkLabel: 'こまった！他人の車に嘔吐は、個人賠償責任保険で解決できる？',
-    href: '/blog/outo3-2/'
+    href: '/blog/osaka/outo3-2/'
   },
   {
     body:
       '食べこぼし・生活臭が「拭いても戻る」理由と、温水吸引を前提にしたプロの脱臭手順（SUV・ミニバン共通）です。',
     linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-    href: '/blog/no1/'
+    href: '/blog/osaka/no1/'
   }
 ];
 
@@ -46,31 +46,31 @@ const aitiCaseStudyItems: CaseStudyItem[] = [
     body:
       '愛知県・名古屋の湿気を前提に、大型犬の尿をシート奥から「体重をかけて吸い出す」手順と、消臭スプレーで悪化しやすい点を解説した記事です。',
     linkLabel: 'シエンタ救済！大型犬の尿臭を15分で消す3つの自宅洗浄術',
-    href: '/blog/gorudendog/'
+    href: '/blog/osaka/gorudendog1/'
   },
   {
     body:
       '愛知県内の通勤・ドライブ中にコーヒーをこぼした際、100均のセスキ炭酸ソーダとマイクロファイバーで酸性汚れを中和する手順です。',
     linkLabel: '100均2品で解決！デリカのコーヒー染みを5分で消す方法',
-    href: '/blog/100kinnkohi/'
+    href: '/blog/osaka/100kinnkohi/'
   },
   {
     body:
       '名古屋の湿度を踏まえ、魚の汁・生臭さをお酢と水で中和する3分の初動（買い物帰りのトレー漏れにも応用）です。',
     linkLabel: '【3分で無臭】魚の汁の臭いを家にある2つで消す簡単掃除術',
-    href: '/blog/sakananioi3/'
+    href: '/blog/osaka/sakananioi3/'
   },
   {
     body:
       '愛知県の夏の車内高温を想定した、排泄物汚れの「つまみ取り→ぬるま湯叩き出し→ペット用消臭」の応急処置と、プロ依頼の目安です。',
     linkLabel: '【5分で解決】シエンタのシート汚れを消す3つの応急処置',
-    href: '/blog/untt3/'
+    href: '/blog/osaka/untt3/'
   },
   {
     body:
       '名古屋の湿ったマットに溜まりやすい生活臭を、重曹の中和と乾燥で抑える家庭でできる消臭術（芳香剤で誤魔化さない考え方）です。',
     linkLabel: '3年目のシエンタが5分で蘇る！100均でできる3つの消臭術',
-    href: '/blog/nioi1/'
+    href: '/blog/aiti/nioi1/'
   }
 ];
 
@@ -79,31 +79,31 @@ const kanagawaCaseStudyItems: CaseStudyItem[] = [
     body:
       '神奈川県で多い送迎・ミニバンでの嘔吐後、「拭いても臭いが残る」状態からプロ依頼に至る判断材料を整理した記事です。',
     linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-    href: '/blog/outo1/'
+    href: '/blog/osaka/outo1/'
   },
   {
     body:
       '横浜・川崎のファミリーカー（ノア・セレナ等）で出やすい生活臭・靴泥・食べこぼし臭の原因と、根こそぎ洗浄の考え方です。',
     linkLabel: 'トヨタノア　車内臭 根こそぎ　簡単な解決ガイド',
-    href: '/blog/jd1/'
+    href: '/blog/osaka/jd1/'
   },
   {
     body:
       '湘南・県央でペット同乗後に残りやすい犬臭・獣臭に、清掃とセットで検討されるオゾン脱臭のメリットと限界です。',
     linkLabel: '30分で愛車の犬臭が激減。プロのオゾン脱臭を選ぶべき理由',
-    href: '/blog/ozon1/'
+    href: '/blog/osaka/ozon1/'
   },
   {
     body:
       '釣り・スーパー帰りの魚臭を、重曹とクエン酸で中和する手順（フロアマット下まで届いた場合の注意も記載）です。',
     linkLabel: '100均で揃う　家族のホンダ　フリード救うプロ直伝の魚臭撃退',
-    href: '/blog/ksc/'
+    href: '/blog/osaka/ksc/'
   },
   {
     body:
       '嘔吐物処理で熱湯・漂白・強い摩擦がシートを傷める理由と、感染症リスクを上げない正しい順番です。',
     linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-    href: '/blog/outo2/'
+    href: '/blog/osaka/outo2/'
   }
 ];
 
@@ -112,31 +112,31 @@ const saitamaCaseStudyItems: CaseStudyItem[] = [
     body:
       '埼玉県の送迎・買い物帰りで多い子どもの車酔い・嘔吐の初動と、臭いが固定化する前に出張依頼する目安を整理しています。',
     linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-    href: '/blog/outo1/'
+    href: '/blog/osaka/outo1/'
   },
   {
     body:
       '自己処理後も臭いが戻るケースで重要な、嘔吐物の誤った扱い（こすり込み・漂白・芳香剤）とプロの吸引洗浄の違いです。',
     linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-    href: '/blog/outo2/'
+    href: '/blog/osaka/outo2/'
   },
   {
     body:
       '埼玉県内の通勤・家族利用車で蓄積した食べこぼし・皮脂臭を、発生源から落とすプロの脱臭・洗浄の考え方です。',
     linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-    href: '/blog/no1/'
+    href: '/blog/osaka/no1/'
   },
   {
     body:
       '1週間放置した嘔吐臭を、100均の重曹とアルカリ電解水で分解する手順（首都圏の湿気下でも応用できる化学的中和）です。',
     linkLabel: '100均5品で愛車フリード復活！1週間後の嘔吐臭を消す5手順',
-    href: '/blog/100kinnsennsya3/'
+    href: '/blog/osaka/100kinnsennsya3/'
   },
   {
     body:
       'ミニバンでの車酔い予防（座席位置・換気・運転のコツ）を、薬に頼らない観点で整理した記事です。',
     linkLabel: 'アルファードでの家族ドライブを快適に！薬に頼らない「酔わせない」5つのコツ',
-    href: '/blog/ky1/'
+    href: '/blog/osaka/ky1/'
   }
 ];
 
@@ -145,31 +145,31 @@ const tokyouCaseStudyItems: CaseStudyItem[] = [
     body:
       '東京都内の送迎・通勤利用で多い嘔吐・飲みこぼしの初動と、狭小駐車場でも検討できる出張清掃の判断ポイントです。',
     linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-    href: '/blog/outo1/'
+    href: '/blog/osaka/outo1/'
   },
   {
     body:
       '首都圏のファミリー層向けに、嘔吐物をこすらず中和・吸引する考え方と、感染症リスクを上げる誤処理を解説しています。',
     linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-    href: '/blog/outo2/'
+    href: '/blog/osaka/outo2/'
   },
   {
     body:
       '東京都でよくある「芳香剤でごまかすと混ざり臭になる」問題と、生活臭・食べこぼしを発生源から落とす脱臭術です。',
     linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-    href: '/blog/no1/'
+    href: '/blog/osaka/no1/'
   },
   {
     body:
       '放置後の嘔吐染みを重曹・アルカリ電解水・ペット用シーツで吸い出す手順（多湿・密閉車内での再発防止の考え方付き）です。',
     linkLabel: '100均5品で愛車フリード復活！1週間後の嘔吐臭を消す5手順',
-    href: '/blog/100kinnsennsya3/'
+    href: '/blog/osaka/100kinnsennsya3/'
   },
   {
     body:
       '運転席周りのペット嘔吐を短時間で処理する酵素・重曹の考え方（多摩・23区の日常利用車にも応用）です。',
     linkLabel: '運転席の隙間も5分で無臭！愛犬の嘔吐跡を消す3つの手順',
-    href: '/blog/pettoouto2/'
+    href: '/blog/osaka/pettoouto2/'
   }
 ];
 
@@ -178,31 +178,31 @@ const tibaCaseStudyItems: CaseStudyItem[] = [
     body:
       '千葉県の送迎・レジャー帰りで多い車酔い・嘔吐の初動と、プロの温水吸引が必要になるラインを整理した記事です。',
     linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-    href: '/blog/outo1/'
+    href: '/blog/osaka/outo1/'
   },
   {
     body:
       '湾岸・内房の釣り・鮮魚搬送後に残る魚臭を、重曹・クエン酸で中和し、マット下の汁まで考慮する手順です。',
     linkLabel: '100均で揃う　家族のホンダ　フリード救うプロ直伝の魚臭撃退',
-    href: '/blog/ksc/'
+    href: '/blog/osaka/ksc/'
   },
   {
     body:
       '千葉県内のファミリーカーで蓄積した生活臭・食べこぼし臭が戻るメカニズムと、プロの洗浄・消臭の流れです。',
     linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-    href: '/blog/no1/'
+    href: '/blog/osaka/no1/'
   },
   {
     body:
       '子どもの車酔いを減らす座席・換気・運転のコツ（成田・柏・船橋方面の長距離送迎でも応用）です。',
     linkLabel: 'アルファードでの家族ドライブを快適に！薬に頼らない「酔わせない」5つのコツ',
-    href: '/blog/ky1/'
+    href: '/blog/osaka/ky1/'
   },
   {
     body:
       '灯油・オイルを車内にこぼした際の危険性と、油分を乳化・吸引するプロ作業の必要性を解説した記事です。',
     linkLabel: '車内灯油こぼした　SOS！誰か助けて 目に染み立ち込める臭気',
-    href: '/blog/tt1/'
+    href: '/blog/osaka/tt1/'
   }
 ];
 
@@ -211,31 +211,31 @@ const hyougoCaseStudyItems: CaseStudyItem[] = [
     body:
       '兵庫県姫路市の体験記として、ミルクコーヒーのシミを中性洗剤・ぬるま湯叩き出しで落とす6ステップと、熱湯・漂白が逆効果になる理由を解説しています。',
     linkLabel: '車のシートに広がる絶望、コーヒーのシミを消し去る術',
-    href: '/blog/cof1/'
+    href: '/blog/hyougo/cof1/'
   },
   {
     body:
       '姫路の湿気・雨の日の送迎を想定した、車内カビの健康リスクとエタノール消毒・徹底乾燥のDIY手順です。',
     linkLabel: '車内のカビ・ニオイ対策ガイド',
-    href: '/blog/kb1/'
+    href: '/blog/hyougo/kb1/'
   },
   {
     body:
       '神戸・姫路のミニバン・セダンで多い嘔吐後の誤処理（こすり・芳香剤）と、プロが行う中和・吸引の違いです。',
     linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-    href: '/blog/outo2/'
+    href: '/blog/hyougo/outo2/'
   },
   {
     body:
       '兵庫県内の家族車で「拭いても戻る」生活臭・食べこぼし臭の原因と、温水スチーム吸引を含む根本洗浄の考え方です。',
     linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-    href: '/blog/no1/'
+    href: '/blog/hyougo/no1/'
   },
   {
     body:
       '阪神間のファミリーカー（ノア・ヴォクシー等）向けに、天井・シート・マットの臭いの層別と対処優先順位を整理した記事です。',
     linkLabel: 'トヨタノア　車内臭 根こそぎ　簡単な解決ガイド',
-    href: '/blog/jd1/'
+    href: '/blog/hyougo/jd1/'
   }
 ];
 
@@ -261,19 +261,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '奈良県内のミニバン・セダンで多い「嘔吐後、自分ではシミと臭いが残る」ケースの初動と、業者依頼の考え方です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/osaka/outo1/'
       },
       {
         body:
           '他人の車を子どもが汚してしまった場合の個人賠償責任保険と、清掃業者への依頼の流れを文章で整理した記事です。',
         linkLabel: 'こまった！他人の車に嘔吐は、個人賠償責任保険で解決できる？',
-        href: '/blog/outo3-2/'
+        href: '/blog/osaka/outo3-2/'
       },
       {
         body:
           '感染症リスクを踏まえた嘔吐物処理の注意点（記事カテゴリに京都・大阪・群馬・茨城を含む）です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/osaka/outo2/'
       }
     ]
   },
@@ -286,19 +286,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           'クーラーボックスからの汁こぼし等、魚臭がシートに染みた際の家庭でできる中和の考え方（名古屋の湿度の話も含む実用寄りの解説）です。',
         linkLabel: '100均で揃う　家族のホンダ　フリード救うプロ直伝の魚臭撃退',
-        href: '/blog/ksc/'
+        href: '/blog/osaka/ksc/'
       },
       {
         body:
           '子どもがジュースをこぼした後の糖分シミ対策（シエンタの例）。和歌山県内の送迎車でも同様のパターンが多いです。',
         linkLabel: '山崎家族の相棒トヨタ小型ミニバン　復活大作戦！',
-        href: '/blog/j1/'
+        href: '/blog/osaka/j1/'
       },
       {
         body:
           '灯油を車内にこぼしたときの初期対応と、油分を落とす手順の解説です。',
         linkLabel: '車内灯油こぼした　SOS！誰か助けて 目に染み立ち込める臭気',
-        href: '/blog/tt1/'
+        href: '/blog/osaka/tt1/'
       }
     ]
   },
@@ -311,19 +311,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           'アルファード等のミニバンで子どもの車酔いを減らす運転・座席の工夫を、薬に頼らない観点で整理した記事です。',
         linkLabel: 'アルファードでの家族ドライブを快適に！薬に頼らない「酔わせない」5つのコツ',
-        href: '/blog/ky1/'
+        href: '/blog/osaka/ky1/'
       },
       {
         body:
           '灯油をこぼした直後にやるべきこと／やってはいけないことの解説です。',
         linkLabel: '車内灯油こぼした　SOS！誰か助けて 目に染み立ち込める臭気',
-        href: '/blog/tt1/'
+        href: '/blog/osaka/tt1/'
       },
       {
         body:
           '嘔吐や汚染物処理の感染リスクと消毒の考え方（複数県向けカテゴリ付き）です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/osaka/outo2/'
       }
     ]
   },
@@ -336,19 +336,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '嘔吐物処理で感染症リスクを上げないための手順と、車内特有の難しさの解説です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/osaka/outo2/'
       },
       {
         body:
           '車内のカビ臭・不快臭のメカニズムと、家庭でできる安全な初動の整理です。',
         linkLabel: '車内のカビ・ニオイ対策ガイド',
-        href: '/blog/kb1/'
+        href: '/blog/osaka/kb1/'
       },
       {
         body:
           '尿臭が繊維に残る理由と、中和・吸引の考え方（高級車の事例解説）です。',
         linkLabel: 'ショック愛車のベンツが！DIY後部座席の尿のシミと臭いを消す',
-        href: '/blog/nyou/'
+        href: '/blog/osaka/nyou/'
       }
     ]
   },
@@ -361,19 +361,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           'コーヒーやジュースのシミが乾く前にすべきこと／乾いた後の色素の扱いを、プロの手順で整理しています。',
         linkLabel: '車のシートに広がる絶望、コーヒーのシミを消し去る術',
-        href: '/blog/cof1/'
+        href: '/blog/fukuoka/cof1/'
       },
       {
         body:
           '魚臭・生臭さの化学的な抜け方（重曹・クエン酸）の考え方です。',
         linkLabel: '100均で揃う　家族のホンダ　フリード救うプロ直伝の魚臭撃退',
-        href: '/blog/ksc/'
+        href: '/blog/osaka/ksc/'
       },
       {
         body:
           '嘔吐後の臭い・シミが自分で限界なときのプロ依頼の判断材料です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/osaka/outo1/'
       }
     ]
   },
@@ -386,19 +386,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '嘔吐物処理の失敗例と消毒の重要性（記事カテゴリに群馬・茨城・大阪・京都を含む）です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/osaka/outo2/'
       },
       {
         body:
           '車内にネズミが入り込んだ場合のリスクと対処の考え方です。',
         linkLabel: '車にネズミが入り込んだ！焦らず対処するためのステップ',
-        href: '/blog/nezumi/'
+        href: '/blog/osaka/nezumi/'
       },
       {
         body:
           '子どもの乗り物酔い・嘔吐の初動と依頼判断です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/osaka/outo1/'
       }
     ]
   },
@@ -411,19 +411,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '湿気が多い地域でのカビ・車内臭の予防と、家庭でできる除去の手順です。',
         linkLabel: '車内のカビ・ニオイ対策ガイド',
-        href: '/blog/kb1/'
+        href: '/blog/osaka/kb1/'
       },
       {
         body:
           '嘔吐物処理で感染症リスクを上げない注意点（記事カテゴリに茨城・群馬・大阪・京都を含む）です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/osaka/outo2/'
       },
       {
         body:
           '尿臭がシートの奥に残る理由と、自己処理の限界を含めた解説です。',
         linkLabel: 'ショック愛車のベンツが！DIY後部座席の尿のシミと臭いを消す',
-        href: '/blog/nyou/'
+        href: '/blog/osaka/nyou/'
       }
     ]
   },
@@ -436,19 +436,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           'ミニバン（アルファード等）で子どもの車酔いを減らす座席位置と換気・運転のコツを整理した記事です。',
         linkLabel: 'アルファードでの家族ドライブを快適に！薬に頼らない「酔わせない」5つのコツ',
-        href: '/blog/ky1/'
+        href: '/blog/osaka/ky1/'
       },
       {
         body:
           '嘔吐物処理でやってはいけないことと、車内特有の難しさ（記事カテゴリに京都を含む）です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/osaka/outo2/'
       },
       {
         body:
           '軽自動車・ファミリーカーでも応用できる、ノア／ミニバン系の車内臭の考え方です。',
         linkLabel: 'トヨタノア　車内臭 根こそぎ　簡単な解決ガイド',
-        href: '/blog/jd1/'
+        href: '/blog/osaka/jd1/'
       }
     ]
   },
@@ -467,19 +467,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '車内カビの見えない胞子と、除湿・乾燥を中心にした家庭でできる対策の整理です。',
         linkLabel: '車内のカビ・ニオイ対策ガイド',
-        href: '/blog/kb1/'
+        href: '/blog/osaka/kb1/'
       },
       {
         body:
           'ペットの嘔吐跡を素早く処理する手順（重曹・酵素の考え方）です。',
         linkLabel: '運転席の隙間も5分で無臭！愛犬の嘔吐跡を消す3つの手順',
-        href: '/blog/pettoouto2/'
+        href: '/blog/osaka/pettoouto2/'
       },
       {
         body:
           '犬臭などが残るときに、清掃とセットで検討されるオゾン脱臭の考え方です。',
         linkLabel: '30分で愛車の犬臭が激減。プロのオゾン脱臭を選ぶべき理由',
-        href: '/blog/ozon1/'
+        href: '/blog/osaka/ozon1/'
       }
     ]
   },
@@ -516,19 +516,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '福岡県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/fukuoka/outo1/'
       },
       {
         body:
           '嘔吐物処理でやってはいけないことと、車内特有の難しさの解説です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/fukuoka/outo2/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/fukuoka/no1/'
       }
     ]
   },
@@ -547,19 +547,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '宮城県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/osaka/outo1/'
       },
       {
         body:
           '湿気が多い時期に出やすい車内カビ・臭いの予防と、家庭でできる除去の手順です。',
         linkLabel: '車内のカビ・ニオイ対策ガイド',
-        href: '/blog/kb1/'
+        href: '/blog/osaka/kb1/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/osaka/no1/'
       }
     ]
   },
@@ -572,19 +572,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '広島県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/osaka/outo1/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/osaka/no1/'
       },
       {
         body:
           '釣り・鮮魚の搬送後に残る魚臭の中和と、家庭でできる手順の考え方です。',
         linkLabel: '100均で揃う　家族のホンダ　フリード救うプロ直伝の魚臭撃退',
-        href: '/blog/ksc/'
+        href: '/blog/osaka/ksc/'
       }
     ]
   },
@@ -597,19 +597,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '熊本県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/fukuoka/outo1/'
       },
       {
         body:
           '湿気が多い時期に出やすい車内カビ・臭いの予防と、家庭でできる除去の手順です。',
         linkLabel: '車内のカビ・ニオイ対策ガイド',
-        href: '/blog/kb1/'
+        href: '/blog/fukuoka/kb1/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/fukuoka/no1/'
       }
     ]
   },
@@ -622,19 +622,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '佐賀県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/fukuoka/outo1/'
       },
       {
         body:
           '嘔吐物処理でやってはいけないことと、車内特有の難しさの解説です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/fukuoka/outo2/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/fukuoka/no1/'
       }
     ]
   },
@@ -647,19 +647,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '福井県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/siga/outo1/'
       },
       {
         body:
           '嘔吐物処理でやってはいけないことと、車内特有の難しさの解説です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/siga/outo2/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/siga/no1/'
       }
     ]
   },
@@ -672,19 +672,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '滋賀県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/siga/outo1/'
       },
       {
         body:
           '嘔吐物処理でやってはいけないことと、車内特有の難しさの解説です。',
         linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-        href: '/blog/outo2/'
+        href: '/blog/siga/outo2/'
       },
       {
         body:
           '軽自動車・ファミリーカーでも応用できる、ノア／ミニバン系の車内臭の考え方です。',
         linkLabel: 'トヨタノア　車内臭 根こそぎ　簡単な解決ガイド',
-        href: '/blog/jd1/'
+        href: '/blog/siga/jd1/'
       }
     ]
   },
@@ -697,19 +697,19 @@ export const lpCaseStudiesByKey: Record<string, CaseStudiesBlock> = {
         body:
           '静岡県内で多い子どもの車酔い・嘔吐の初動と、プロ依頼の判断ポイントを整理した記事です。',
         linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-        href: '/blog/outo1/'
+        href: '/blog/osaka/outo1/'
       },
       {
         body:
           '湿気が多い時期に出やすい車内カビ・臭いの予防と、家庭でできる除去の手順です。',
         linkLabel: '車内のカビ・ニオイ対策ガイド',
-        href: '/blog/kb1/'
+        href: '/blog/osaka/kb1/'
       },
       {
         body:
           '車内の生活臭・食べこぼし臭が戻る原因と、家庭でできる脱臭の考え方です。',
         linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-        href: '/blog/no1/'
+        href: '/blog/osaka/no1/'
       }
     ]
   }
@@ -724,17 +724,17 @@ export const defaultRegionalCaseStudies: CaseStudiesBlock = {
     {
       body: '子どもの乗り物酔い・嘔吐の初動と、プロ依頼の判断ポイントです。',
       linkLabel: '車内で嘔吐！でも大丈夫な対応方法',
-      href: '/blog/outo1/'
+      href: '/blog/osaka/outo1/'
     },
     {
       body: '嘔吐物処理の注意点と、車内特有の難しさの整理です。',
       linkLabel: '知らなかった！やってはいけない嘔吐物処理とは',
-      href: '/blog/outo2/'
+      href: '/blog/osaka/outo2/'
     },
     {
       body: 'ニオイの原因と、家庭でできる脱臭の考え方です。',
       linkLabel: '【実証済み】愛車のニオイ撃退！プロが教える車内徹底消臭クリーニング術',
-      href: '/blog/no1/'
+      href: '/blog/osaka/no1/'
     }
   ]
 };

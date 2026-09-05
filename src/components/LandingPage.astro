@@ -3,8 +3,14 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import AntimicrobialCampaignBanner from './AntimicrobialCampaignBanner.astro';
 import CtaBundle from './CtaBundle.astro';
-import { getCollection } from 'astro:content';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
+import { getPublishedBlogPosts, getBlogSlug } from '../lib/blog-content';
+import {
+  isBlogHostRegion,
+  mergeLatestPostsIntoCaseStudies,
+  selectPostsForRegionLp,
+  type LpBlogFeedItem
+} from '../lib/blog-lp-feed';
 import {
   additionalNotes,
   pricingOptions,
@@ -61,6 +67,8 @@ interface Props {
   caseStudies?: CaseStudiesBlock;
   /** 地区FAQ・JSON-LD用（例: osaka, aiti, tokyou） */
   regionSlug?: string;
+  /** 親ページで算出済みなら渡し、未指定時は地区LP向けに自動抽出 */
+  blogFeed?: LpBlogFeedItem[];
 }
 
 const {
@@ -71,7 +79,8 @@ const {
   representativeImageFile,
   areaLead,
   caseStudies,
-  regionSlug
+  regionSlug,
+  blogFeed: blogFeedProp
 } = Astro.props;
 
 const serviceHeadingTarget = regionFull === '沖縄県' ? '沖縄本島' : regionFull;
@@ -94,22 +103,32 @@ const ownerPhoto = (() => {
 
 const serviceAreas: ServiceAreaRow[] = serviceAreasProp ?? [...osakaServiceAreas];
 
-const publishedPosts = await getCollection('blog');
+const publishedPosts = await getPublishedBlogPosts();
+const blogFeed =
+  blogFeedProp ??
+  selectPostsForRegionLp(publishedPosts, {
+    regionSlug,
+    regionName,
+    regionFull,
+    limit: 8
+  });
+const caseStudiesBlock = caseStudies
+  ? mergeLatestPostsIntoCaseStudies(caseStudies, blogFeed)
+  : undefined;
+const regionBlogIndexHref = isBlogHostRegion(regionSlug) ? `/blog/region/${regionSlug}/` : '/blog/';
 
-const regionKeywords = [regionName, regionFull]
-  .map((value) => value?.trim())
-  .filter((value): value is string => Boolean(value));
-
-const hasRegionKeyword = (content?: string) => {
-  if (!content || regionKeywords.length === 0) return false;
-  return regionKeywords.some((keyword) => content.includes(keyword));
-};
-
-const regionPosts = publishedPosts.filter((post) => hasRegionKeyword(post.body));
-
-const blogPosts = (regionPosts.length > 0 ? regionPosts : publishedPosts)
-  .sort((a, b) => (a.data.date < b.data.date ? 1 : -1))
-  .slice(0, 6);
+function hrefForSlug(slug: string): string {
+  const same = regionSlug
+    ? publishedPosts.find((post) => getBlogSlug(post) === slug && post.data.region === regionSlug)
+    : undefined;
+  const any = publishedPosts.find((post) => getBlogSlug(post) === slug);
+  const rankingFallback = slug.startsWith('ranking-')
+    ? publishedPosts.find((post) => getBlogSlug(post) === 'ranking-osaka-carclean') ||
+      publishedPosts.find((post) => getBlogSlug(post).startsWith('ranking-'))
+    : undefined;
+  const hit = same || any || rankingFallback;
+  return hit ? `/blog/${hit.data.region}/${getBlogSlug(hit)}/` : `/blog/${slug}/`;
+}
 
 const surveyItems = [
   {
@@ -258,12 +277,18 @@ const formatDate = (date: Date) => {
 
 <section class="py-10 bg-white border-b border-gray-100">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">出張車内清掃とは</h2>
+    <h2 id="heading-what-is" class="text-xl sm:text-2xl font-bold text-gray-900">出張車内清掃とは</h2>
     <p class="mt-3 text-sm sm:text-base text-gray-700 leading-relaxed font-semibold text-primary">
       {regionalIntro}
     </p>
     <p class="mt-3 text-sm sm:text-base text-gray-700 leading-relaxed">
       ご自宅・勤務先の<strong>駐車場へ専門スタッフが訪問</strong>し、シート・フロア・天井など車内を洗浄・消臭するサービスです。店舗に預けず、嘔吐・尿・灯油・タバコ臭など「自力では限界」の汚れを、温水吸引と専用洗剤で<strong>臭いの発生源から</strong>処理します。
+    </p>
+    <p class="mt-3 text-sm">
+      詳しく：
+      <a href={hrefForSlug('syuttyou22')} class="font-semibold text-cta-red underline hover:text-primary">出張車内清掃の流れ</a>
+      ／
+      <a href={hrefForSlug('diy3')} class="font-semibold text-cta-red underline hover:text-primary">自分で掃除する場合の注意</a>
     </p>
     <div class="mt-6 overflow-x-auto -mx-2 px-2">
       <table class="w-full min-w-[320px] text-xs sm:text-sm border-collapse">
@@ -314,23 +339,35 @@ const formatDate = (date: Date) => {
     <p class="mt-3 text-sm sm:text-base text-gray-800 leading-relaxed font-semibold">{emergencyIntro}</p>
     <div class="mt-6 grid gap-6 md:grid-cols-3">
       <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-        <h3 class="text-base font-bold text-cta-red">嘔吐（ゲロ）の場合</h3>
+        <h3 id="heading-emergency-vomit" class="text-base font-bold text-cta-red">嘔吐（ゲロ）の場合</h3>
         <ol class="mt-3 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
           {emergencyVomitSteps.map((step) => <li>{step}</li>)}
         </ol>
+        <p class="mt-3 text-sm">
+          <a href={hrefForSlug('outo1')} class="font-semibold text-cta-red underline hover:text-primary">嘔吐の対応を詳しく読む</a>
+        </p>
       </div>
       <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-        <h3 class="text-base font-bold text-cta-red">灯油こぼしの場合</h3>
+        <h3 id="heading-emergency-kerosene" class="text-base font-bold text-cta-red">灯油こぼしの場合</h3>
         <ol class="mt-3 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
           {emergencyKeroseneSteps.map((step) => <li>{step}</li>)}
         </ol>
+        <p class="mt-3 text-sm">
+          <a href={hrefForSlug('tt1')} class="font-semibold text-cta-red underline hover:text-primary">灯油こぼしの解説を読む</a>
+        </p>
       </div>
       <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-        <h3 class="text-base font-bold text-cta-red">ペット粗相（尿・うんち）の場合</h3>
+        <h3 id="heading-emergency-pet" class="text-base font-bold text-cta-red">ペット粗相（尿・うんち）の場合</h3>
         <ol class="mt-3 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
           {emergencyPetSteps.map((step) => <li>{step}</li>)}
         </ol>
+        <p class="mt-3 text-sm">
+          <a href={hrefForSlug('siko')} class="font-semibold text-cta-red underline hover:text-primary">ペット粗相の解説を読む</a>
+        </p>
       </div>
+    </div>
+    <div class="mt-8 max-w-lg mx-auto">
+      <CtaBundle />
     </div>
   </div>
 </section>
@@ -364,12 +401,20 @@ const formatDate = (date: Date) => {
       </table>
     </div>
     <p class="mt-4 text-xs sm:text-sm text-gray-600">{insuranceMatrixNote}</p>
+    <p class="mt-3 text-sm">
+      <a href={hrefForSlug('outo3-2')} class="font-semibold text-cta-red underline hover:text-primary">
+        個人賠償・車両保険の考え方を詳しく読む
+      </a>
+    </p>
+    <div class="mt-6">
+      <CtaBundle />
+    </div>
   </div>
 </section>
 
 <section class="py-12 bg-white">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900">こんなお悩みありませんか？</h2>
+    <h2 id="heading-worries" class="text-2xl sm:text-3xl font-bold text-center text-gray-900">こんなお悩みありませんか？</h2>
     <p class="mt-2 text-center text-sm text-gray-600">出張車内清掃 ご利用の方に多いお悩み</p>
     <div class="mt-6 grid gap-6 md:grid-cols-3">
       <figure class="bg-gray-50 rounded-xl overflow-hidden shadow-sm border border-gray-100">
@@ -473,7 +518,7 @@ const formatDate = (date: Date) => {
 
 <section class="py-12 bg-white">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">
+    <h2 id="heading-areas" class="text-2xl sm:text-3xl font-bold text-center">
       {serviceHeadingTarget}へ出張！最短あなたの街へ伺います
     </h2>
     <p class="mt-3 text-sm sm:text-base text-center text-gray-600 whitespace-pre-line">
@@ -562,20 +607,20 @@ DIYは軽度向きで深部汚れは限界`}
   </div>
 </section>
 
-{caseStudies && (
+{caseStudiesBlock && (
   <section class="py-12 bg-white" aria-labelledby="heading-regional-cases">
     <div class="max-w-6xl mx-auto px-6 text-gray-800">
       <h2 id="heading-regional-cases" class="text-2xl sm:text-3xl font-bold text-center text-gray-900">
-        {caseStudies.heading}
+        {caseStudiesBlock.heading}
       </h2>
       <p class="mt-3 text-sm sm:text-base text-center text-gray-600 whitespace-pre-line">
         {`地域内の相談傾向を短く整理
 現場の判断材料になる記事を厳選
-嘔吐・臭い・洗浄の対処を確認`}
+新しいブログは公開と同時に自動掲載`}
       </p>
-      <p class="mt-4 text-base text-center leading-relaxed text-gray-700">{caseStudies.lead}</p>
+      <p class="mt-4 text-base text-center leading-relaxed text-gray-700">{caseStudiesBlock.lead}</p>
       <ul class="mt-8 space-y-6 list-none p-0">
-        {caseStudies.items.map((item) => (
+        {caseStudiesBlock.items.map((item) => (
           <li class="rounded-xl border border-gray-200 bg-gray-50/80 p-5 sm:p-6">
             <p class="text-sm sm:text-base leading-relaxed whitespace-pre-line">{item.body}</p>
             <p class="mt-3 text-sm sm:text-base">
@@ -665,7 +710,7 @@ DIYは軽度向きで深部汚れは限界`}
 
 <section class="py-12 bg-gray-50">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">車内清掃ご利用頂いたお客様の声</h2>
+    <h2 id="heading-voices" class="text-2xl sm:text-3xl font-bold text-center">車内清掃ご利用頂いたお客様の声</h2>
     <p class="mt-2 text-center text-sm text-gray-600">ご利用頂いたお客様からの お喜びと 改善点も掲載しております。</p>
 
     <div class="mt-6 space-y-6">
@@ -695,7 +740,7 @@ DIYは軽度向きで深部汚れは限界`}
 
 <section class="py-12 bg-white">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">選ばれる理由</h2>
+    <h2 id="heading-reasons" class="text-2xl sm:text-3xl font-bold text-center">選ばれる理由</h2>
     <div class="mt-6 grid gap-4 md:grid-cols-2">
       {reasons.map((text) => (
         <div class="bg-gray-50 rounded-xl p-4 text-sm leading-relaxed">{text}</div>
@@ -791,7 +836,7 @@ DIYは軽度向きで深部汚れは限界`}
 
 <section class="py-12 bg-white">
   <div class="max-w-5xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">出張訪問車内クリーニング清掃の質問</h2>
+    <h2 id="heading-faq" class="text-2xl sm:text-3xl font-bold text-center">出張訪問車内クリーニング清掃の質問</h2>
     <div class="mt-6 space-y-4">
       {faqs.map((faq) => (
         <div class="border rounded-xl overflow-hidden">
@@ -800,12 +845,24 @@ DIYは軽度向きで深部汚れは限界`}
         </div>
       ))}
     </div>
+    <p class="mt-6 text-center text-sm text-gray-700">
+      関連ブログ：
+      <a href={hrefForSlug('outo1')} class="font-semibold text-cta-red underline hover:text-primary">嘔吐の応急処置</a>
+      ／
+      <a href={hrefForSlug('tt1')} class="font-semibold text-cta-red underline hover:text-primary">灯油こぼし</a>
+      ／
+      <a href={hrefForSlug('siko')} class="font-semibold text-cta-red underline hover:text-primary">ペット粗相</a>
+      ／
+      <a href={hrefForSlug('outo3-2')} class="font-semibold text-cta-red underline hover:text-primary">保険の使い方</a>
+      ／
+      <a href={hrefForSlug('no1')} class="font-semibold text-cta-red underline hover:text-primary">車内の臭い</a>
+    </p>
   </div>
 </section>
 
 <section class="py-12 bg-gray-50">
   <div class="max-w-5xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">出張車内清掃 ご依頼までのながれ</h2>
+    <h2 id="heading-flow" class="text-2xl sm:text-3xl font-bold text-center">出張車内清掃 ご依頼までのながれ</h2>
     <p class="mt-2 text-center text-sm text-gray-600">車内クリーニングは、まずはお問い合わせから</p>
     <div class="mt-6 grid gap-4">
       {flowSteps.map((step, index) => (
@@ -820,8 +877,13 @@ DIYは軽度向きで深部汚れは限界`}
 
 <section class="py-12 bg-white">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">出張🚗 車内クリーニング 料金表</h2>
+    <h2 id="heading-pricing" class="text-2xl sm:text-3xl font-bold text-center">出張🚗 車内クリーニング 料金表</h2>
     <p class="mt-2 text-center text-sm text-cta-red font-semibold">概算の料金です・施工前 お見積り致します。</p>
+    <p class="mt-3 text-center text-sm">
+      <a href={hrefForSlug(`ranking-${regionSlug}-carclean`)} class="font-semibold text-cta-red underline hover:text-primary">料金・業者の比較解説</a>
+      ／
+      <a href={hrefForSlug('outo3-2')} class="font-semibold text-cta-red underline hover:text-primary">保険で清掃費用を出す場合</a>
+    </p>
 
     <div class="mt-6 bg-gray-50 rounded-2xl p-6">
       <h3 class="text-xl font-bold">🏆 【一番人気】セットでお得なパック</h3>
@@ -942,18 +1004,31 @@ DIYは軽度向きで深部汚れは限界`}
   </div>
 </section>
 
-<section class="py-12 bg-white">
+<section class="py-12 bg-white" aria-labelledby="heading-blog-list">
   <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-center">投稿ブログ一覧</h2>
+    <h2 id="heading-blog-list" class="text-2xl sm:text-3xl font-bold text-center">投稿ブログ一覧</h2>
+    <p class="mt-3 text-sm sm:text-base text-center text-gray-600">
+      {regionFull}向けに公開した新しい記事は、保存と同時にこの一覧へ自動掲載されます。
+    </p>
     <div class="mt-6 grid gap-4 md:grid-cols-2">
-      {blogPosts.map((post) => (
-        <a href={`/blog/${post.id}/`} class="block bg-gray-50 rounded-xl p-4 hover:shadow transition-shadow">
-          <div class="text-xs text-gray-500">{formatDate(post.data.date)}</div>
-          <div class="mt-2 font-semibold text-base text-gray-900">{post.data.title}</div>
-          <div class="mt-2 text-xs text-gray-500">{post.data.categories?.join(' / ')}</div>
+      {blogFeed.map((item) => (
+        <a href={item.href} class="block bg-gray-50 rounded-xl p-4 hover:shadow transition-shadow">
+          <div class="text-xs text-gray-500">{formatDate(item.post.data.date)}</div>
+          <div class="mt-2 font-semibold text-base text-gray-900">{item.post.data.title}</div>
+          <div class="mt-2 text-xs text-gray-500">
+            {item.reason === 'featured' ? '全国共通の解説' : item.post.data.regionFull}
+            {item.reason !== 'featured' && item.post.data.categories?.length
+              ? ` / ${item.post.data.categories.slice(0, 3).join(' / ')}`
+              : ''}
+          </div>
         </a>
       ))}
     </div>
+    <p class="mt-6 text-center text-sm">
+      <a href={regionBlogIndexHref} class="font-semibold text-primary underline hover:text-cta-red">
+        ブログをもっと見る
+      </a>
+    </p>
   </div>
 </section>
 

@@ -1,0 +1,74 @@
+---
+import type { BlogEntry } from '../lib/blog-content';
+import { collectLpHeadingLinks, collectRelatedBlogLinks } from '../lib/blog-aio';
+import { getBlogSlug } from '../lib/blog-content';
+import { resolveStoreLpPath, getStoreLpLinkLabel } from '../data/region-lp-links';
+
+interface Props {
+  post: BlogEntry;
+  allPosts: BlogEntry[];
+}
+
+const { post, allPosts } = Astro.props;
+const slug = getBlogSlug(post);
+const blogLinks = collectRelatedBlogLinks({ current: post, allPosts, limit: 5 });
+const lpLinks = collectLpHeadingLinks({
+  slug,
+  title: post.data.title,
+  categories: post.data.categories,
+  regionSlug: post.data.region,
+  regionFull: post.data.regionFull
+});
+const storePath = resolveStoreLpPath(post.data.region) || resolveStoreLpPath(post.data.regionFull);
+const storeLabel = getStoreLpLinkLabel(post.data.regionFull);
+---
+
+<nav class="aio-related mt-12 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-5 sm:p-6" aria-labelledby="aio-related-heading">
+  <h2 id="aio-related-heading" class="text-lg font-bold text-gray-900 sm:text-xl">
+    関連記事と{post.data.regionFull}の店舗ページ
+  </h2>
+  <p class="mt-2 text-sm leading-relaxed text-gray-600">
+    同じ悩みの解説と、料金・応急処置・保険など地区LPの該当見出しへ移動できます。
+  </p>
+
+  {
+    lpLinks.length > 0 && (
+      <div class="mt-5">
+        <h3 class="text-sm font-semibold text-emerald-800">地区LPの関連項目</h3>
+        <ul class="mt-2 list-disc space-y-1.5 pl-5 text-sm">
+          {lpLinks.map((link) => (
+            <li>
+              <a href={link.href} class="font-medium text-primary underline hover:text-cta-red">
+                {link.label}
+              </a>
+            </li>
+          ))}
+          {storePath && (
+            <li>
+              <a href={storePath} class="font-medium text-primary underline hover:text-cta-red">
+                {storeLabel}
+              </a>
+            </li>
+          )}
+        </ul>
+      </div>
+    )
+  }
+
+  {
+    blogLinks.length > 0 && (
+      <div class="mt-5">
+        <h3 class="text-sm font-semibold text-emerald-800">関連ブログ</h3>
+        <ul class="mt-2 list-disc space-y-1.5 pl-5 text-sm">
+          {blogLinks.map((link) => (
+            <li>
+              <a href={link.href} class="font-medium text-primary underline hover:text-cta-red">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+</nav>

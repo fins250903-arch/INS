@@ -7,9 +7,12 @@ import { SITE_CANONICAL_ORIGIN } from '../data/site';
 export function canonicalUrl(path: string): string {
   const origin = SITE_CANONICAL_ORIGIN.replace(/\/$/, '');
   if (path === '/' || path === '') return `${origin}/`;
-  const normalized = path.startsWith('/') ? path : `/${path}`;
+  const hashIndex = path.indexOf('#');
+  const pathname = hashIndex >= 0 ? path.slice(0, hashIndex) : path;
+  const hash = hashIndex >= 0 ? path.slice(hashIndex + 1).replace(/\/$/, '') : '';
+  const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`;
   const withSlash = normalized.endsWith('/') ? normalized : `${normalized}/`;
-  return `${origin}${withSlash}`;
+  return hash ? `${origin}${withSlash}#${hash}` : `${origin}${withSlash}`;
 }
 
 /** JSON-LD @id 用（末尾スラッシュなしのページ URL） */

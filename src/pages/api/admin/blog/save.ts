@@ -31,9 +31,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         message:
           result.mode === 'github'
             ? result.published
-              ? '記事を保存し、本番サイトへの公開を開始しました（1〜3分で反映されます）'
+              ? '記事を保存し、本番サイトへの公開を開始しました。地区LPの投稿ブログ一覧へも自動掲載されます（1〜3分で反映）。'
               : '下書きとして保存しました（本番サイトへの反映を開始しました）'
-            : '記事をローカルに保存しました（GitHubトークン未設定のため自動公開されません）'
+            : '記事をローカルに保存しました。公開状態なら次のビルドで該当地区LPへ自動掲載されます。'
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }
     );
