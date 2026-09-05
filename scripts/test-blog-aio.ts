@@ -45,6 +45,13 @@ const rewritten = rewriteInternalBlogHrefs('/blog/fukuoka/outo3-2/', (slug, pref
 });
 assert.equal(rewritten, '/blog/osaka/outo3-2/');
 
+const keepDistinct = rewriteInternalBlogHrefs('/blog/fukuoka/outo3/', (slug) => {
+  if (slug === 'outo3') return { region: 'fukuoka', slug: 'outo3' };
+  if (slug === 'outo3-2') return { region: 'osaka', slug: 'outo3-2' };
+  return null;
+});
+assert.equal(keepDistinct, '/blog/fukuoka/outo3/');
+
 const once = upsertAnswerFirstBlock('本文のはじまり', block);
 const twice = upsertAnswerFirstBlock(once, block);
 assert.equal((twice.match(/## 結論（先に読む）/g) || []).length, 1);

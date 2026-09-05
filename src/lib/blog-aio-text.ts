@@ -93,7 +93,10 @@ export function rewriteInternalBlogHrefs(
 
   const resolveSlug = (rawSlug: string, preferredRegion?: string) => {
     const aliased = SLUG_ALIASES[rawSlug] || rawSlug;
-    return resolve(aliased, preferredRegion) || (aliased === rawSlug ? null : resolve(rawSlug, preferredRegion));
+    return (
+      resolve(rawSlug, preferredRegion) ||
+      (aliased === rawSlug ? null : resolve(aliased, preferredRegion))
+    );
   };
 
   return text.replace(/\/blog\/([A-Za-z0-9_-]+)(?:\/([^/\s)"']+))?\/?/g, (match, first: string, second?: string) => {
