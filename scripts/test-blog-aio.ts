@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { detectTopicId, getBlogTopic } from '../src/data/blog-topics.ts';
 import { buildAnswerFirstMarkdown, hasAnswerFirstBlock, rewriteInternalBlogHrefs, upsertAnswerFirstBlock } from '../src/lib/blog-aio-text.ts';
+import { canonicalUrl } from '../src/lib/canonical-url.ts';
 import { selectPostsForRegionLp } from '../src/lib/blog-lp-feed.ts';
 
 assert.equal(detectTopicId('outo1'), 'vomit');
@@ -51,6 +52,9 @@ const keepDistinct = rewriteInternalBlogHrefs('/blog/fukuoka/outo3/', (slug) => 
   return null;
 });
 assert.equal(keepDistinct, '/blog/fukuoka/outo3/');
+
+assert.equal(canonicalUrl('/osaka/#heading-pricing'), 'https://insbs.net/osaka/#heading-pricing');
+assert.equal(canonicalUrl('/blog/osaka/outo1/'), 'https://insbs.net/blog/osaka/outo1/');
 
 const once = upsertAnswerFirstBlock('本文のはじまり', block);
 const twice = upsertAnswerFirstBlock(once, block);
