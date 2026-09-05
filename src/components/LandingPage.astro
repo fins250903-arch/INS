@@ -961,7 +961,9 @@ DIYは軽度向きで深部汚れは限界`}
           <div class="mt-2 font-semibold text-base text-gray-900">{item.post.data.title}</div>
           <div class="mt-2 text-xs text-gray-500">
             {item.reason === 'featured' ? '全国共通の解説' : item.post.data.regionFull}
-            {item.post.data.categories?.length ? ` / ${item.post.data.categories.slice(0, 3).join(' / ')}` : ''}
+            {item.reason !== 'featured' && item.post.data.categories?.length
+              ? ` / ${item.post.data.categories.slice(0, 3).join(' / ')}`
+              : ''}
           </div>
         </a>
       ))}
