@@ -24,6 +24,19 @@ categories:
 
 - [出張車内清掃の料金表](/hyougo/#heading-pricing)
 - [よくある質問](/hyougo/#heading-faq)
+
+### 今すぐ兵庫県で依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [兵庫県の料金表](/hyougo/#heading-pricing)
+
+
+### 関連する解説
+
+- [愛車の白い内装が黒ずんだ、新車の輝きに復活させるDIY](/blog/fukuoka/s1/)
+- [手触りにこだわる白い内装を、新車の輝きに。](/blog/hyougo/k1/)
+- [プロの道具不要！身近なもので週末1時間の解決](/blog/hyougo/diy3/)
 <!-- /aio-answer-first -->
 
 海と山に囲まれた坂の街、神戸。  
@@ -50,4 +63,4 @@ categories:
 
 お客様の感想：シートが滑らなくなり、革本来の柔らかさが戻りました。自分の車じゃないみたいに綺麗です。
 
-https://hyg.insbs.net/wp1/
+/hyougo/

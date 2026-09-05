@@ -22,6 +22,20 @@ draft: false
 
 - [嘔吐・灯油・ペット粗相の応急処置](/hyougo/#heading-emergency-first-aid)
 - [出張車内清掃の料金表](/hyougo/#heading-pricing)
+
+### 今すぐ兵庫県で依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [兵庫県の料金表](/hyougo/#heading-pricing)
+
+
+### 関連する解説
+
+- [車内灯油こぼした　SOS！その時の対処方法です](/blog/hyougo/tt1/)
+- [100mlこぼれた灯油の臭いを消す！ボクシー専用5分でできる洗浄術](/blog/fukuoka/boxytoyu/)
+- [1Lこぼれた灯油の臭いを消す！セレナ専用5分でできる洗浄術](/blog/saitama/1l5/)
+- [【さいたま市】日産 セレナの灯油漏れトラブルを根こそぎ脱臭洗浄](/blog/fukuoka/saitamaseren/)
 <!-- /aio-answer-first -->
 
 セレナ　床下の断熱材まで灯油が達しやすい構造です。スピード勝負です！

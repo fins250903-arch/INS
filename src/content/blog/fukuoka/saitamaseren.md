@@ -24,6 +24,20 @@ categories:
 
 - [嘔吐・灯油・ペット粗相の応急処置](/fukuoka/#heading-emergency-first-aid)
 - [出張車内清掃の料金表](/fukuoka/#heading-pricing)
+
+### 今すぐ福岡県で依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [福岡県の料金表](/fukuoka/#heading-pricing)
+
+
+### 関連する解説
+
+- [車内の灯油臭を消す5つの手順！家にある物で今すぐできる消臭術](/blog/fukuoka/tt1/)
+- [100mlこぼれた灯油の臭いを消す！ボクシー専用5分でできる洗浄術](/blog/fukuoka/boxytoyu/)
+- [1Lこぼれた灯油の臭いを消す！ボクシー専用5分でできる洗浄術](/blog/fukuoka/boxytoyu1/)
+- [1Lこぼれた灯油の臭いを消す！セレナ専用5分でできる洗浄術](/blog/saitama/1l5/)
 <!-- /aio-answer-first -->
 
 大宮バイパスから少し入った住宅街。  
@@ -51,4 +65,4 @@ categories:
 
 お客様の感想：車を走らせるだけで頭痛がするレベルでしたが、全くニオイがしなくなりました。手品みたいです。
 
-https://insbs.net/ok2/saitama/
+/saitama/

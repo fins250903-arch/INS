@@ -22,6 +22,20 @@ draft: false
 
 - [嘔吐・灯油・ペット粗相の応急処置](/osaka/#heading-emergency-first-aid)
 - [出張車内清掃の料金表](/osaka/#heading-pricing)
+
+### 今すぐ大阪府で依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [大阪府の料金表](/osaka/#heading-pricing)
+
+
+### 関連する解説
+
+- [CX-５救済！大型犬の尿臭を15分で消す3つの自宅洗浄術](/blog/fukuoka/dgog2/)
+- [シエンタ救済！大型犬の尿臭を15分で消す3つの自宅洗浄術](/blog/osaka/gorudendog1/)
+- [運転席の隙間も5分で無臭！愛犬の嘔吐跡を消す3つの手順](/blog/osaka/pettoouto2/)
+- [30分で愛車の犬臭が激減。プロのオゾン脱臭を選ぶべき理由](/blog/osaka/ozon1/)
 <!-- /aio-answer-first -->
 
 ![画像](/blog-images/dog_italian_greyhound2.png)

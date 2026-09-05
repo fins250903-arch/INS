@@ -32,6 +32,20 @@ ogp:
 
 - [嘔吐が起きた直後にやること](/fukuoka/#heading-emergency-vomit)
 - [出張車内清掃の料金表](/fukuoka/#heading-pricing)
+
+### 今すぐ福岡県で依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [福岡県の料金表](/fukuoka/#heading-pricing)
+
+
+### 関連する解説
+
+- [これだけは、嘔吐物処理でやってはいけないんですぅ](/blog/fukuoka/outo2/)
+- [たいへん！他人の車に嘔吐　個人賠償責任保険で解決できる？](/blog/hyougo/outo3-2/)
+- [ダイハツタントの嘔吐臭を消す！シートベルト洗浄術とプロの方式](/blog/fukuoka/seatbeltwash/)
+- [薬いらず！家族が酔わない5つのコツ　アルファードでの遠出を快適に](/blog/fukuoka/ky1/)
 <!-- /aio-answer-first -->
 
 ## 子供が乗り物酔い、車内で嘔吐どうしよう・・・！

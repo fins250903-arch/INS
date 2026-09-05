@@ -23,6 +23,20 @@ categories:
 
 - [出張車内清掃の料金表](/siga/#heading-pricing)
 - [よくあるお悩み](/siga/#heading-worries)
+
+### 今すぐ滋賀県で依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [滋賀県の料金表](/siga/#heading-pricing)
+
+
+### 関連する解説
+
+- [100均2品で解決！セレナのコーヒー染みを5分で消す方法](/blog/siga/100kinnkohi/)
+- [100均2品で解決！シエンタのコーヒー染みを5分で消す方法](/blog/fukuoka/100kincoffee/)
+- [愛知県豊田市：トヨタ・パッソ、通勤中のコーヒー惨事](/blog/siga/passocoffee/)
+- [高橋家のソリオ復活大作戦！効果のある良い方法を教えて](/blog/siga/j1/)
 <!-- /aio-answer-first -->
 
 あーあ、やっちゃった。
