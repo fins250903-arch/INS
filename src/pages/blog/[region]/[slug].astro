@@ -5,7 +5,9 @@ import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import FloatingCTA from '../../../components/FloatingCTA.astro';
 import BlogCta from '../../../components/BlogCta.astro';
+import BlogAioLead from '../../../components/BlogAioLead.astro';
 import BlogAioRelated from '../../../components/BlogAioRelated.astro';
+import BlogAioFaq from '../../../components/BlogAioFaq.astro';
 import { buildBlogPostJsonLd } from '../../../lib/blog-json-ld';
 import {
   getBlogSlug,
@@ -15,8 +17,9 @@ import {
   getAreaLabel
 } from '../../../lib/blog-content';
 import { resolveBlogSeoMeta } from '../../../lib/blog-seo';
-import { collectLpHeadingLinks, collectRelatedBlogLinks, getBlogTopic, replaceRegionPlaceholder } from '../../../lib/blog-aio';
+import { collectLpHeadingLinks, collectRelatedBlogLinks, getBlogTopic, replaceRegionPlaceholder, buildTopicFaqs } from '../../../lib/blog-aio';
 import { resolveStoreLpPath } from '../../../data/region-lp-links';
+import { SITE_CONTENT_UPDATED, SITE_PERSON_NAME, SITE_PERSON_JOB_TITLE } from '../../../data/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -47,25 +50,28 @@ const lpLinks = collectLpHeadingLinks({
   regionFull: post.data.regionFull
 });
 const storePath = resolveStoreLpPath(post.data.region) || resolveStoreLpPath(post.data.regionFull) || '/osaka/';
+const faqs = buildTopicFaqs({
+  slug,
+  title: post.data.title,
+  categories: post.data.categories,
+  regionFull: post.data.regionFull
+});
 
 const blogJsonLd = buildBlogPostJsonLd({
   path: pagePath,
   title: post.data.title,
   description: seo.description,
   datePublished: post.data.date.toISOString(),
+  dateModified: SITE_CONTENT_UPDATED,
   imageUrl: seo.ogImage,
   keywords: seo.keywords,
   regionFull: post.data.regionFull,
   answer,
   related: [...lpLinks, ...related].map((item) => ({ href: item.href, name: item.label })),
   lpUrl: storePath,
-  faqs: [
-    { q: `${topic.label}はどうすればいいですか？`, a: answer },
-    {
-      q: `${post.data.regionFull}で出張車内清掃は依頼できますか？`,
-      a: `${post.data.regionFull}は駐車場完結の出張車内清掃に対応しています。料金・応急処置・保険の目安は地区ページで確認できます。`
-    }
-  ]
+  faqs,
+  howtoName: `${topic.label}の応急処置`,
+  howtoSteps: topic.bullets
 });
 ---
 
@@ -93,6 +99,16 @@ const blogJsonLd = buildBlogPostJsonLd({
       <p class="mt-4 text-xs text-gray-500">{formatBlogDate(post.data.date)}</p>
       <p class="mt-1 text-xs font-medium text-primary">{getAreaLabel(post)}</p>
       <h1 class="mt-2 text-2xl font-bold leading-snug sm:text-3xl">{post.data.title}</h1>
+      <p class="mt-2 text-xs text-gray-500">
+        監修：{SITE_PERSON_NAME}（{SITE_PERSON_JOB_TITLE}）／最終確認 {SITE_CONTENT_UPDATED}
+      </p>
+
+      <BlogAioLead
+        answer={answer}
+        bullets={topic.bullets}
+        regionFull={post.data.regionFull}
+        regionSlug={post.data.region}
+      />
 
       {post.data.categories.length > 0 && (
         <div class="mt-4 flex flex-wrap gap-2">
@@ -137,6 +153,7 @@ const blogJsonLd = buildBlogPostJsonLd({
       </div>
 
       <BlogAioRelated post={post} allPosts={allPosts} />
+      <BlogAioFaq faqs={faqs} regionFull={post.data.regionFull} />
     </article>
 
     <BlogCta regionFull={post.data.regionFull} regionSlug={post.data.region} />

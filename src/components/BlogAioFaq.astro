@@ -1,0 +1,24 @@
+---
+interface Props {
+  faqs: { q: string; a: string }[];
+  regionFull: string;
+}
+
+const { faqs, regionFull } = Astro.props;
+---
+
+<section class="aio-faq mt-12 rounded-2xl border border-gray-200 bg-white p-5 sm:p-6" aria-labelledby="aio-faq-heading">
+  <h2 id="aio-faq-heading" class="text-lg font-bold text-gray-900 sm:text-xl">
+    {regionFull}の出張車内清掃でよくある質問
+  </h2>
+  <div class="mt-4 space-y-3">
+    {
+      faqs.map((faq) => (
+        <div class="rounded-xl border border-gray-100 overflow-hidden">
+          <h3 class="bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-900">{faq.q}</h3>
+          <p class="px-4 py-3 text-sm leading-relaxed text-gray-700">{faq.a}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>

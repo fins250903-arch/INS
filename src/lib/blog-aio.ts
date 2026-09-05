@@ -6,7 +6,10 @@ import {
   buildAnswerFirstMarkdown,
   upsertAnswerFirstBlock,
   hasAnswerFirstBlock,
-  resolveLpHeadingHref
+  resolveLpHeadingHref,
+  buildTopicFaqs,
+  rewriteInternalBlogHrefs,
+  rewriteLegacyUrls
 } from './blog-aio-text';
 
 export type AioRelatedLink = {
@@ -20,7 +23,10 @@ export {
   buildAnswerFirstMarkdown,
   upsertAnswerFirstBlock,
   hasAnswerFirstBlock,
-  resolveLpHeadingHref
+  resolveLpHeadingHref,
+  buildTopicFaqs,
+  rewriteLegacyUrls,
+  rewriteInternalBlogHrefs
 };
 
 function uniqueByHref<T extends { href: string }>(items: T[]): T[] {

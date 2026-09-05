@@ -42,6 +42,12 @@ function topicTemplate(id: BlogTopicId, extra: { description: string; categories
 ${bullets}
 
 [対応エリアの${topic.lpHeadings[0].label}](/osaka/#${topic.lpHeadings[0].id})もあわせて確認できます。
+
+### 今すぐ対応エリアで依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [料金表](/osaka/#heading-pricing)
 <!-- /aio-answer-first -->
 
 ## 現場でよくある状況
@@ -92,6 +98,12 @@ export const ARTICLE_TEMPLATES: ArticleTemplate[] = TEMPLATE_ORDER.map((id) => {
 - 要点3
 
 [料金表](/osaka/#heading-pricing) / [応急処置](/osaka/#heading-emergency-first-aid) / [保険の目安](/osaka/#heading-insurance-matrix)
+
+### 今すぐ対応エリアで依頼する
+
+- [電話 070-8428-0866](tel:070-8428-0866)（365日24時間・見積無料・立会不要）
+- [メールで問い合わせ](/contact/)
+- [料金表](/osaka/#heading-pricing)
 <!-- /aio-answer-first -->
 
 ## 詳細
