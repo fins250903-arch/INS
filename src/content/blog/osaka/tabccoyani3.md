@@ -1,14 +1,12 @@
 ---
 title: "5分で激落ち！車内天井のヤニを真っ白にする3つの時短テク"
-date: "2026-01-02"
+urlSlug: "tabccoyani3"
+date: "2026-09-06"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
 thumbnail: "tennjyo.jpg"
 draft: false
-categories:
-  - "souji"
-  - "seisou"
 ---
 
 <!-- aio-answer-first -->
