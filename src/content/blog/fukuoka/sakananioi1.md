@@ -1,14 +1,12 @@
 ---
 title: "【3分で無臭】魚の汁の臭いを家にある2つで消す簡単掃除術"
-date: "2026-01-07"
+urlSlug: "sakananioi1"
+date: "2026-09-11"
 region: "fukuoka"
 regionFull: "福岡県"
 areaLabel: "福岡・九州エリア"
 thumbnail: "pose_kusai_woman.jpg"
 draft: false
-categories:
-  - "souji"
-  - "seisou"
 ---
 
 <!-- aio-answer-first -->
