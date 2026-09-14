@@ -1,5 +1,6 @@
 import { getBlogTopic, AIO_ANSWER_END, AIO_ANSWER_START, type LpHeadingLink } from '../data/blog-topics';
 import { resolveStoreLpPath } from '../data/region-lp-links';
+import { TOPIC_KEYWORD_SLUG } from '../data/keyword-lp';
 import { TEL_DISPLAY, TEL_HREF } from '../data/site';
 
 export type RelatedPostLink = {
@@ -29,12 +30,17 @@ export function buildAnswerFirstMarkdown(input: {
   const lpPath = resolveStoreLpPath(input.regionSlug) || resolveStoreLpPath(regionFull) || '/osaka/';
   const primaryHeading = topic.lpHeadings[0];
   const lpHref = `${lpPath}#${primaryHeading.id}`;
+  const keywordSlug = TOPIC_KEYWORD_SLUG[topic.id];
+  const keywordHref = keywordSlug ? `${lpPath}${keywordSlug}/` : null;
   const bullets = topic.bullets.map((item) => `- ${item}`).join('\n');
   const extraHeadings = topic.lpHeadings
     .slice(1)
     .map((heading) => `- [${heading.label}](${lpPath}#${heading.id})`)
     .join('\n');
   const extra = extraHeadings ? `\n\n${extraHeadings}` : '';
+  const keywordLine = keywordHref
+    ? `\n- [${regionFull}の${topic.label}・出張清掃ページ](${keywordHref})`
+    : '';
   const related =
     input.relatedPosts && input.relatedPosts.length > 0
       ? `\n\n### 関連する解説\n\n${input.relatedPosts
@@ -55,7 +61,7 @@ ${bullets}
 
 - [電話 ${TEL_DISPLAY}](${TEL_HREF})（365日24時間・見積無料・立会不要）
 - [メールで問い合わせ](/contact/)
-- [${regionFull}の料金表](${lpPath}#heading-pricing)
+- [${regionFull}の料金表](${lpPath}#heading-pricing)${keywordLine}
 ${related}
 ${AIO_ANSWER_END}
 `;

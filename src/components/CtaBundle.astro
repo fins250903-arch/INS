@@ -2,17 +2,36 @@
 // CtaBundle.astro
 interface Props {
   className?: string;
+  attention?: string;
+  benefitBadge?: string;
+  benefitHighlight?: string;
+  buttonMain?: string;
 }
-const { className = '' } = Astro.props;
+const {
+  className = '',
+  attention = '＼ 今だけ限定！迷っている方へ ／',
+  benefitBadge = '限定特典',
+  benefitHighlight,
+  buttonMain = '今すぐ相談！'
+} = Astro.props;
 ---
 <div class={`cta-bundle-box ${className}`}>
   <div class="cta-attention">
-    <span>＼ 今だけ限定！迷っている方へ ／</span>
+    <span>{attention}</span>
   </div>
   <div class="cta-benefit">
-    <span class="cta-benefit-badge">限定特典</span>
+    <span class="cta-benefit-badge">{benefitBadge}</span>
     <p class="cta-benefit-text">
-      抗菌コート 今月末まで <span class="cta-highlight">無料</span> <span class="cta-subtext">（通常￥2,000）</span>
+      {benefitHighlight ? (
+        <>
+          {benefitHighlight}
+          <span class="cta-subtext">（365日24時間・見積無料）</span>
+        </>
+      ) : (
+        <>
+          抗菌コート 今月末まで <span class="cta-highlight">無料</span> <span class="cta-subtext">（通常￥2,000）</span>
+        </>
+      )}
     </p>
   </div>
   <div class="cta-action-area">
@@ -22,7 +41,7 @@ const { className = '' } = Astro.props;
         <svg class="cta-phone-icon" viewBox="0 0 24 24" fill="currentColor">
           <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
         </svg>
-        今すぐ相談！
+        {buttonMain}
       </span>
       <span class="cta-btn-tel">TEL: 070-8428-0866</span>
     </a>

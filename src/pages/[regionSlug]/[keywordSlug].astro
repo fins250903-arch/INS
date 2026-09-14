@@ -6,7 +6,11 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FloatingCTA from '../../components/FloatingCTA.astro';
 import { regionLpLinks } from '../../data/region-lp-links';
-import { keywordLps } from '../../data/keyword-lp';
+import { fillKeywordCopy, keywordLps, resolveKeywordFv } from '../../data/keyword-lp';
+import {
+  emergencyIntro,
+  emergencyVomitSteps
+} from '../../data/lp-aio-content';
 import regionLpsMain from '../../data/region-lp.json';
 import regionLpsExtra from '../../data/region-lp-extra.json';
 import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../../data/lp-pricing';
@@ -96,12 +100,24 @@ const ownerPhoto = (() => {
 })();
 
 // 置換処理: {{region}} や {{regionFull}} を動的バインド
-const fvCopyText = keyword.fvCopy.replace(/{{region}}/g, regionName).replace(/{{regionFull}}/g, regionFull);
-const pageTitle = `【${regionName}】${keyword.keyword}・頑固な汚れ・臭い対策ならプロにお任せ｜INS車内清掃`;
-const pageDescription = keyword.description.replace(/{{region}}/g, regionName).replace(/{{regionFull}}/g, regionFull);
+const fvCopyText = fillKeywordCopy(keyword.fvCopy, regionName, regionFull);
+const fv = resolveKeywordFv(keyword);
+const pageTitle = fillKeywordCopy(
+  keyword.pageTitle ?? `【{{region}}】${keyword.keyword}・頑固な汚れ・臭い対策ならプロにお任せ｜INS車内清掃`,
+  regionName,
+  regionFull
+);
+const pageDescription = fillKeywordCopy(keyword.description, regionName, regionFull);
 const canonical = `/${regionSlug}/${keyword.slug}/`;
+const isVomitKeyword = keyword.slug === 'shanai-outo';
 
-const faqs = buildRegionFaqs(regionName, regionFull, regionSlug);
+const faqs = [
+  ...(keyword.faqs ?? []).map((faq) => ({
+    q: fillKeywordCopy(faq.q, regionName, regionFull),
+    a: fillKeywordCopy(faq.a, regionName, regionFull)
+  })),
+  ...buildRegionFaqs(regionName, regionFull, regionSlug)
+];
 const curatedCaseStudies = getCaseStudiesForSlug(regionSlug);
 const lpBlog = await prepareRegionLpContent({
   regionSlug,
@@ -212,26 +228,26 @@ const flowSteps = [
               {fvCopyText}
             </h1>
             <p class="mt-5 text-sm font-bold tracking-wide text-gray-200 sm:text-base flex flex-wrap gap-4">
-              <span class="inline-block border-b-2 border-emerald-400 pb-0.5">即日訪問相談</span>
-              <span class="inline-block border-b-2 border-emerald-400 pb-0.5">地元密着の信頼</span>
-              <span class="inline-block border-b-2 border-emerald-400 pb-0.5">実績多数</span>
+              {fv.fvSub.map((chip) => (
+                <span class="inline-block border-b-2 border-emerald-400 pb-0.5">{chip}</span>
+              ))}
             </p>
             <div class="mt-8 flex flex-wrap items-center gap-4 rounded-xl bg-slate-900/80 border border-slate-800 p-5 backdrop-blur-md max-w-2xl">
               <span class="inline-flex items-center rounded-full border border-amber-300 bg-amber-400/90 px-3.5 py-1 text-xs font-black text-slate-950 shadow">
                 お客様満足度 92%
               </span>
               <p class="flex-1 text-xs font-semibold leading-relaxed text-gray-300 sm:text-sm whitespace-pre-line">
-                {`365日24時間受付中・迅速訪問・立会不要！\n頑固なシミ、お漏らし、灯油こぼし、ペットの抜け毛やニオイをプロが徹底洗浄・徹底消臭。`}
+                {fv.fvLead}
               </p>
             </div>
             
             <!-- FV内CTAボタン -->
             <div class="mt-8 flex flex-col sm:flex-row gap-4 max-w-xl">
               <a href="tel:070-8428-0866" class="flex items-center justify-center gap-2 font-bold text-base px-6 py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 bg-gradient-to-r from-amber-500 to-orange-600 text-white">
-                <span class="text-lg">📞</span>電話で今すぐ相談 (24時間)
+                <span class="text-lg">📞</span>{fv.ctaPhone}
               </a>
               <a href="https://lin.ee/Xs8Orp2" target="_blank" class="flex items-center justify-center gap-2 font-bold text-base px-6 py-4 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 bg-gradient-to-r from-[#06C755] to-[#05b04b] text-white">
-                <span class="text-lg">💬</span>LINEで無料見積もり
+                <span class="text-lg">💬</span>{fv.ctaLine}
               </a>
             </div>
           </div>
@@ -246,6 +262,23 @@ const flowSteps = [
         </p>
       </div>
     </section>
+
+    {isVomitKeyword && (
+      <section class="py-10 bg-red-50 border-b border-red-100" aria-labelledby="heading-keyword-emergency-vomit">
+        <div class="max-w-6xl mx-auto px-6">
+          <h2 id="heading-keyword-emergency-vomit" class="text-xl sm:text-2xl font-bold text-gray-900">
+            【緊急】{regionName}で車内嘔吐が起きた直後にやること
+          </h2>
+          <p class="mt-3 text-sm sm:text-base text-gray-800 leading-relaxed font-semibold">{emergencyIntro}</p>
+          <ol class="mt-4 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
+            {emergencyVomitSteps.map((step) => <li>{step}</li>)}
+          </ol>
+          <p class="mt-4 text-sm text-gray-700">
+            保健所の床用マニュアル（次亜塩素酸ナトリウムの大量散布）は車のウレタンシートには使いません。繊維を傷め、臭いを奥へ押し込む原因になります。
+          </p>
+        </div>
+      </section>
+    )}
 
     <!-- 2. 悩み訴求セクション (★最重要・FVの直後) -->
     <section class="py-16 sm:py-20 bg-slate-950 text-white">
