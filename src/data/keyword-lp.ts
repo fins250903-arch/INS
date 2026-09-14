@@ -1,12 +1,96 @@
+export type KeywordFaq = { q: string; a: string };
+
 export interface KeywordLp {
   slug: string;
   keyword: string;
   fvCopy: string; // {{region}} プレースホルダーを含む
   troubles: string[];
   description: string; // {{regionFull}} プレースホルダーを含む
+  /** SERP title. {{region}} / {{regionFull}} */
+  pageTitle?: string;
+  fvSub?: [string, string, string];
+  fvLead?: string;
+  ctaPhone?: string;
+  ctaLine?: string;
+  faqs?: KeywordFaq[];
 }
 
+export const DEFAULT_FV_SUB: [string, string, string] = [
+  '即日訪問相談',
+  '地元密着の信頼',
+  '実績多数'
+];
+
+export const DEFAULT_FV_LEAD =
+  '365日24時間受付中・迅速訪問・立会不要！\n頑固なシミ、お漏らし、灯油こぼし、ペットの抜け毛やニオイをプロが徹底洗浄・徹底消臭。';
+
+export const DEFAULT_CTA_PHONE = '電話で今すぐ相談 (24時間)';
+export const DEFAULT_CTA_LINE = 'LINEで無料見積もり';
+
+export function fillKeywordCopy(text: string, regionName: string, regionFull: string): string {
+  return text.replace(/{{region}}/g, regionName).replace(/{{regionFull}}/g, regionFull);
+}
+
+export function resolveKeywordFv(keyword: KeywordLp): {
+  fvSub: [string, string, string];
+  fvLead: string;
+  ctaPhone: string;
+  ctaLine: string;
+} {
+  return {
+    fvSub: keyword.fvSub ?? DEFAULT_FV_SUB,
+    fvLead: keyword.fvLead ?? DEFAULT_FV_LEAD,
+    ctaPhone: keyword.ctaPhone ?? DEFAULT_CTA_PHONE,
+    ctaLine: keyword.ctaLine ?? DEFAULT_CTA_LINE
+  };
+}
+
+/** Blog AIO topic id → dedicated keyword LP slug (query-matched FV) */
+export const TOPIC_KEYWORD_SLUG: Record<string, string> = {
+  vomit: 'shanai-outo',
+  'vomit-dont': 'shanai-outo',
+  urine: 'omorashi',
+  kerosene: 'touyu-kobosi',
+  pet: 'pet-nioi',
+  feces: 'unko',
+  tobacco: 'tabako-yani',
+  smell: 'shanai-nioi'
+};
+
 export const keywordLps: KeywordLp[] = [
+  {
+    slug: 'shanai-outo',
+    keyword: '車内で嘔吐 清掃',
+    fvCopy: '【{{region}}】車内で嘔吐・ゲロ掃除｜今は吸うだけ。即日出張洗浄',
+    pageTitle: '【{{region}}】車内で嘔吐した｜ゲロ掃除・即日出張洗浄｜INS',
+    fvSub: ['こすらず吸い取る', '消臭スプレー禁止', '4日以内に温水吸引'],
+    fvLead:
+      '365日24時間・立会不要。市販スプレーはウレタンに臭いを固定します。固形分を吸ったあと、4日以内に駐車場へ出張洗浄。部分洗浄18,000円〜（税込）。',
+    ctaPhone: '嘔吐の緊急相談（電話・24時間）',
+    ctaLine: 'シート写真で嘔吐の概算をLINE',
+    troubles: [
+      '子どもや同乗者が乗り物酔いでシートに嘔吐し、パニックになっている',
+      '自分で拭いたが胃酸の酸っぱい臭いが取れず、ドアを開けると吐き気がする',
+      '市販の消臭スプレーをかけたら余計に臭くなった気がする',
+      '感染症やシミの定着が怖く、今夜中にプロに来てほしい'
+    ],
+    description:
+      '{{regionFull}}で車内嘔吐・ゲロ掃除ならINSへ。こすらず固形分を除去したあと、温水吸引でシート内部まで洗浄・消臭。駐車場完結・立会不要・365日24時間受付。消臭スプレー禁止・4日以内が最短です。',
+    faqs: [
+      {
+        q: '車内で嘔吐した直後、自分でやっていいこと・ダメなことは？',
+        a: '結論：固形分をこすらず吸い取り、市販の消臭スプレー・塩素系漂白剤・熱湯は使わないでください。保健所の床用プロトコル（次亜塩素酸ナトリウムの大量散布）はウレタンシートを傷め、臭いを奥へ押し込みます。4日以内に温水吸引（リンサー）でシート内部まで洗浄するのが最短です。'
+      },
+      {
+        q: '車内のゲロ臭は自分で取れますか？業者料金の目安は？',
+        a: '表面の軽い臭いは換気と吸い取りで一時的に和らぎますが、胃酸がウレタンに入ると翌日以降に戻ります。当店の部分洗浄は1席18,000円〜、普通車セット＋嘔吐加算の目安は32,000円（税込）です。365日24時間、駐車場完結・立会不要で出張します。'
+      },
+      {
+        q: '子どもの車内嘔吐に保険は使えますか？',
+        a: '他人の子どもが自分の車で嘔吐した場合は、相手の個人賠償責任保険が使えることがあります。家族が自分の車を汚した場合は車両保険（一般型）や車内清掃費用特約の対象になることがあります。手順は写真撮影→保険会社確認→見積→施工→領収書です。自己判断で先に洗うと適用に影響する場合があります。'
+      }
+    ]
+  },
   {
     slug: 'seat-senjo',
     keyword: '車シート 洗浄',
@@ -23,6 +107,11 @@ export const keywordLps: KeywordLp[] = [
     slug: 'omorashi',
     keyword: '車 おもらし',
     fvCopy: '【{{region}}】車内のおもらしトラブル即座に解決！プロの消臭＆強力除菌洗浄',
+    fvSub: ['おしっこは広げない', '塩素系は使わない', '即日除菌洗浄'],
+    fvLead:
+      '365日24時間・立会不要。尿はウレタン奥でアンモニア臭になります。こすらず吸い取り、塩素系漂白剤は使わず、酵素洗浄＋リンサー吸引で発生源から処理します。',
+    ctaPhone: 'おもらしの緊急相談（電話）',
+    ctaLine: '写真でおもらしの概算をLINE',
     troubles: [
       '子どもやペットがドライブ中にシートでおもらしをしてしまい、パニックになっている',
       'シートのウレタン内部までおしっこが染み込み、ツンとするアンモニア臭がどうしても取れない',
@@ -119,6 +208,11 @@ export const keywordLps: KeywordLp[] = [
     slug: 'touyu-kobosi',
     keyword: '車内 灯油 こぼし',
     fvCopy: '【{{region}}】車内にこぼした灯油の危険な悪臭・ベタつく油分をプロの技術で特殊分解洗浄！',
+    fvSub: ['火気厳禁で換気', 'こすらず吸い取る', '1席30,000円〜'],
+    fvLead:
+      '365日24時間。灯油は引火と樹脂劣化のリスクがあります。新聞紙で吸い取り、中性洗剤で表面を拭き、残臭は灯油専用洗浄（1席30,000円・税込）。保険の見積書発行に対応します。',
+    ctaPhone: '灯油こぼしの緊急相談（電話）',
+    ctaLine: '写真で灯油洗浄の概算をLINE',
     troubles: [
       'ガソリンスタンドから灯油缶を運ぶ途中に倒してしまい、トランクやシートに灯油がこぼれた',
       '車内に灯油特有の強烈な化学臭が立ち込め、頭痛やめまい、吐き気がしてまともに運転できない',

@@ -24,7 +24,8 @@ export const regionLpLinks: RegionLpLink[] = [
   { slug: 'aiti', label: '愛知' },
   { slug: 'siga', label: '滋賀' },
   { slug: 'fukui', label: '福井' },
-  { slug: 'sizuoka', label: '静岡' }
+  { slug: 'sizuoka', label: '静岡' },
+  { slug: 'gifu', label: '岐阜' }
 ];
 
 /** Blog chiiki slug aliases that differ from region LP slugs */
