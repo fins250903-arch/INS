@@ -233,13 +233,13 @@ const formatDate = (date: Date) => {
 };
 ---
 
-<section class="relative flex min-h-[min(40rem,90svh)] flex-col justify-center overflow-hidden bg-black text-white">
+<section class="relative flex min-h-[min(36rem,88svh)] flex-col justify-center overflow-hidden bg-black text-white">
   <div class="absolute inset-0">
     <Image src={bgHero} alt="背景画像" class="h-full w-full object-cover" />
     <div class="absolute inset-0 bg-black/50"></div>
   </div>
-  <div class="relative mx-auto w-full max-w-6xl px-6 py-16 sm:py-20 lg:py-24">
-    <div class="flex flex-col gap-8">
+  <div class="relative mx-auto w-full max-w-6xl px-6 py-10 sm:py-12 lg:py-14">
+    <div class="flex flex-col gap-5">
       <div>
         <h1 class="fv-title text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
           {regionName}｜車内の嘔吐・ゲロ掃除<br />出張 車内清掃（即日・立会不要）
@@ -249,7 +249,7 @@ const formatDate = (date: Date) => {
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">嘔吐・ゲロ対応</span>
           <span class="inline-block border-b-2 border-primary pb-0.5">立会不要</span>
         </p>
-        <div class="mt-6 flex flex-wrap items-center gap-6 rounded-xl bg-black/40 px-5 py-4 backdrop-blur-sm">
+        <div class="mt-4 flex flex-wrap items-center gap-6 rounded-xl bg-black/40 px-5 py-4 backdrop-blur-sm">
           <div>
             <div class="fv-stamp" title="自社アンケート調査（2025年）">
               <span class="fv-stamp-label">顧客満足</span>
@@ -263,13 +263,14 @@ const formatDate = (date: Date) => {
             <span class="text-amber-300 font-bold">灯油こぼし</span>も <span class="text-amber-300 font-bold underline decoration-amber-300">ニオイ徹底洗浄</span>
           </p>
         </div>
-        <div class="mt-6 flex justify-start w-full">
+        <div class="mt-4 flex justify-start w-full">
           <CtaBundle
             className="!mx-0 !my-0 w-full max-w-[480px]"
             attention="＼ 車内嘔吐は放置で臭いが固定化します ／"
             benefitBadge="緊急対応"
             benefitHighlight="嘔吐・ゲロの緊急相談"
             buttonMain="嘔吐・ゲロの緊急相談"
+            compact={true}
           />
         </div>
       </div>
@@ -1169,7 +1170,7 @@ DIYは軽度向きで深部汚れは限界`}
     }
     .fv-sub {
       font-size: 1.05rem !important; /* 約120%拡大 */
-      margin-top: 1.25rem !important;
+      margin-top: 0.85rem !important;
     }
     .fv-stamp {
       width: 76px;

@@ -6,16 +6,18 @@ interface Props {
   benefitBadge?: string;
   benefitHighlight?: string;
   buttonMain?: string;
+  compact?: boolean;
 }
 const {
   className = '',
   attention = '＼ 今だけ限定！迷っている方へ ／',
   benefitBadge = '限定特典',
   benefitHighlight,
-  buttonMain = '今すぐ相談！'
+  buttonMain = '今すぐ相談！',
+  compact = false
 } = Astro.props;
 ---
-<div class={`cta-bundle-box ${className}`}>
+<div class={`cta-bundle-box ${compact ? 'cta-bundle-compact' : ''} ${className}`}>
   <div class="cta-attention">
     <span>{attention}</span>
   </div>
@@ -227,6 +229,30 @@ const {
   @keyframes cta-pulse-glow {
     0%, 100% { transform: scale(1); filter: drop-shadow(0 0 1px rgba(221, 6, 6, 0.2)); }
     50% { transform: scale(1.04); filter: drop-shadow(0 0 6px rgba(221, 6, 6, 0.5)); }
+  }
+
+  .cta-bundle-compact {
+    padding: 1rem 1.1rem;
+    margin: 0;
+  }
+  .cta-bundle-compact .cta-attention {
+    font-size: 0.95rem;
+    margin-bottom: 0.45rem;
+  }
+  .cta-bundle-compact .cta-benefit {
+    margin-bottom: 0.7rem;
+  }
+  .cta-bundle-compact .cta-btn {
+    padding: 0.65rem 1rem;
+  }
+  .cta-bundle-compact .cta-btn-main {
+    font-size: 1.15rem;
+  }
+  .cta-bundle-compact .cta-btn-tel {
+    font-size: 1.1rem;
+  }
+  .cta-bundle-compact .cta-micro-copy {
+    margin-top: 0.4rem;
   }
 
   @media (max-width: 767px) {
