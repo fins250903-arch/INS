@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { AIO_ANSWER_END, AIO_ANSWER_START } from '../src/data/blog-topics.ts';
 import { BLOG_REGION_SLUGS } from '../src/data/blog-regions.ts';
+import { resolveStoreLpPath } from '../src/data/region-lp-links.ts';
 
 const BLOG_ROOT = path.join(process.cwd(), 'src/content/blog');
 const LEGACY =
@@ -25,14 +26,18 @@ function listMarkdownFiles(dir: string, base = dir): string[] {
   return files;
 }
 
-function parseFrontmatterRegionAndSlug(rel: string, raw: string): { region: string; slug: string } {
+function parseFrontmatterRegionAndSlug(
+  rel: string,
+  raw: string
+): { region: string; slug: string; regionFull: string } {
   const folderRegion = rel.split('/')[0];
   const fileSlug = path.basename(rel, '.md');
   const quoted = raw.match(/^region:\s*["']([a-z]+)["']/m)?.[1];
   const bare = raw.match(/^region:\s*([a-z]+)\s*$/m)?.[1];
   const value = quoted || bare || folderRegion;
   const region = (BLOG_REGION_SLUGS as string[]).includes(value) ? value : folderRegion;
-  return { region, slug: fileSlug };
+  const regionFull = raw.match(/^regionFull:\s*["']?([^"'\n]+)["']?\s*$/m)?.[1]?.trim() || '';
+  return { region, slug: fileSlug, regionFull };
 }
 
 function relatedTargetsExist(raw: string, canonical: Set<string>): { ok: boolean; href?: string } {
@@ -72,7 +77,9 @@ for (const rel of files) {
   const body = bodyStart >= 0 ? raw.slice(bodyStart) : raw;
   const head = body.split('\n').slice(0, 50).join('\n');
   const folderRegion = rel.split('/')[0];
-  const { region } = parseFrontmatterRegionAndSlug(rel, raw);
+  const { region, regionFull } = parseFrontmatterRegionAndSlug(rel, raw);
+  // 記事の対象都道府県が host フォルダと違う場合は、その都道府県 LP へのリンクも有効とみなす
+  const prefectureLp = resolveStoreLpPath(regionFull);
 
   if (raw.includes(AIO_ANSWER_START) && raw.includes(AIO_ANSWER_END)) stats.aio += 1;
   else findings.push({ file: rel, check: 'missing-aio-block' });
@@ -86,7 +93,11 @@ for (const rel of files) {
   if (raw.includes('/contact/')) stats.contact += 1;
   else findings.push({ file: rel, check: 'missing-contact' });
 
-  if (raw.includes(`/${region}/#heading-`) || raw.includes(`/${folderRegion}/#heading-`)) {
+  if (
+    raw.includes(`/${region}/#heading-`) ||
+    raw.includes(`/${folderRegion}/#heading-`) ||
+    (prefectureLp && raw.includes(`${prefectureLp}#heading-`))
+  ) {
     stats.lpHeading += 1;
   } else {
     findings.push({ file: rel, check: 'missing-lp-heading' });
