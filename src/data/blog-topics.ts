@@ -127,7 +127,7 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
       '他人の子どもが嘔吐したケースは個人賠償の相談が多い'
     ],
     lpHeadings: [H('heading-insurance-matrix'), H('heading-pricing'), H('heading-faq')],
-    relatedSlugs: ['outo3-2', 'outo3', 'sienta-baisyou-0en', 'un', 'outo1'],
+    relatedSlugs: ['outo3-2', 'outo3', 'funabasi-baisyou', 'sienta-baisyou-0en', 'un', 'outo1'],
     keywords: ['個人賠償責任保険', '車両保険', '車内清掃費用']
   },
   smell: {
@@ -483,6 +483,7 @@ export const SLUG_TO_TOPIC: Record<string, BlogTopicId> = {
   era: 'floor',
   fss: 'smell',
   fukuokalancru: 'general',
+  'funabasi-baisyou': 'insurance',
   funabasidelica: 'general',
   gorudendog1: 'pet',
   haria5sen: 'smell',
