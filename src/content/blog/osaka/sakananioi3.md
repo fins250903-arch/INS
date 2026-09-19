@@ -5,6 +5,7 @@ date: "2026-09-17"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
+thumbnail: "/blog-images/times_sienta_4779-scaled.webp"
 draft: false
 ---
 
@@ -38,6 +39,10 @@ draft: false
 <!-- /aio-answer-first -->
 
 仕事帰りにスーパーで買った夕飯の買い物。愛車のシエンタに乗せて帰宅したら、魚のトレーから汁が漏れていた。そんな経験、僕にもあります。
+
+
+![画像](/blog-images/times_sienta_4779-scaled.webp)
+
 
 あの独特の生臭さは、少しでも残ると本当に厄介ですよね。せっかく3年大事に乗ってきた車に臭いが染み付くのは、パパとしても結構ショックな出来事です。
 
