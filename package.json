@@ -8,10 +8,15 @@
   "scripts": {
     "dev": "astro dev",
     "dev:lan": "astro dev --host 0.0.0.0",
-    "build": "npm run blog:fix-media && npm run wp:resolve-images && astro build",
-    "preview": "astro preview",
-    "preview:lan": "astro preview --host 0.0.0.0",
+    "build": "npm run cf:redirects && npm run blog:fix-media && npm run wp:resolve-images && astro build",
+    "preview": "wrangler dev --config dist/server/wrangler.json",
+    "preview:lan": "wrangler dev --config dist/server/wrangler.json --ip 0.0.0.0",
     "astro": "astro",
+    "cf:redirects": "node scripts/generate-cloudflare-redirects.mjs",
+    "cf:redirects:check": "node scripts/generate-cloudflare-redirects.mjs --check",
+    "cf:redirects:verify": "tsx scripts/verify-redirects.ts",
+    "deploy": "npm run build && wrangler deploy",
+    "deploy:legacy-redirects": "wrangler deploy --config workers/legacy-redirects/wrangler.jsonc",
     "wp:import": "tsx scripts/parse-wordpress-xml.ts",
     "wp:cache-images": "node scripts/cache-post-images.cjs",
     "wp:resolve-images": "node scripts/resolve-local-images.cjs",
@@ -30,8 +35,8 @@
     "sachi:sync": "npm run gsc:sync"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^13.7.0",
     "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/vercel": "^10.0.7",
     "@tailwindcss/postcss": "^4.2.4",
     "astro": "^6.0.0",
     "dotenv": "^17.4.2",
@@ -41,6 +46,7 @@
   },
   "devDependencies": {
     "fast-xml-parser": "^5.8.0",
-    "tsx": "^4.22.3"
+    "tsx": "^4.22.3",
+    "wrangler": "^4.136.2"
   }
 }

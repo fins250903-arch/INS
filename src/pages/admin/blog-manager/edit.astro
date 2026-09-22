@@ -9,7 +9,8 @@ import {
   isAdminAuthenticated,
   setAdminAuthCookie
 } from '../../../lib/admin-auth';
-import { getMdPost, getAllMdPosts, type BlogMdPost } from '../../../lib/blog-md-store';
+import type { BlogMdPost } from '../../../lib/blog-md-store';
+import { getAllMdPosts, getMdPost } from '../../../lib/blog-md-collection';
 import { canAutoPublish } from '../../../lib/blog-publish';
 import { ARTICLE_TEMPLATES } from '../../../data/blog-article-templates';
 import { resolveStoreLpPath } from '../../../data/region-lp-links';
@@ -34,7 +35,7 @@ const autoPublishEnabled = canAutoPublish();
 
 let post: BlogMdPost | null = null;
 if (isAuthenticated && slug) {
-  post = getMdPost(region, slug);
+  post = await getMdPost(region, slug);
 }
 
 const defaultPost: BlogMdPost = {
@@ -56,7 +57,7 @@ const defaultPost: BlogMdPost = {
 const editPost = post || defaultPost;
 const categoriesStr = editPost.categories.join(', ');
 const existingCategories = isAuthenticated
-  ? [...new Set(getAllMdPosts().flatMap((p) => p.categories))]
+  ? [...new Set((await getAllMdPosts()).flatMap((p) => p.categories))]
   : [];
 const lpPathByPrefecture = Object.fromEntries(
   JAPAN_PREFECTURES.map((pref) => [pref, resolveStoreLpPath(pref) || '/osaka/'])

@@ -26,5 +26,9 @@ secrets/
 
 # jetbrains setting folder
 .idea/
-.vercel
 .env*
+
+# Cloudflare Workers local state / secrets
+.wrangler/
+.dev.vars
+worker-configuration.d.ts

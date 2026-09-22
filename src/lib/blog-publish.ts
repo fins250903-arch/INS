@@ -1,9 +1,4 @@
-import {
-  buildPostMarkdown,
-  saveMdPost,
-  uploadBlogImage,
-  type BlogMdPost
-} from './blog-md-store';
+import { buildPostMarkdown, type BlogMdPost } from './blog-md-store';
 import {
   deleteRepoFile,
   isGitHubPublishConfigured,
@@ -19,6 +14,8 @@ export type PublishResult = {
   published: boolean;
 };
 
+const postPath = (region: string, slug: string) => `src/content/blog/${region}/${slug}.md`;
+
 export function canAutoPublish(): boolean {
   return isGitHubPublishConfigured();
 }
@@ -28,15 +25,17 @@ export async function publishBlogPost(
   previousSlug?: string
 ): Promise<PublishResult> {
   const slug = post.urlSlug || post.slug;
-  const filePath = `src/content/blog/${post.region}/${slug}.md`;
+  const filePath = postPath(post.region, slug);
   const message = `Update ブログ記事 "${post.region}/${slug}"`;
 
   if (isGitHubPublishConfigured()) {
     const { commitSha } = await publishTextFile(filePath, buildPostMarkdown(post), message);
 
     if (previousSlug && previousSlug !== slug) {
-      const oldPath = `src/content/blog/${post.region}/${previousSlug}.md`;
-      await deleteRepoFile(oldPath, `Remove renamed blog post "${post.region}/${previousSlug}"`);
+      await deleteRepoFile(
+        postPath(post.region, previousSlug),
+        `Remove renamed blog post "${post.region}/${previousSlug}"`
+      );
     }
 
     return {
@@ -48,6 +47,7 @@ export async function publishBlogPost(
     };
   }
 
+  const { saveMdPost } = await import('./blog-md-fs');
   const success = saveMdPost(post, previousSlug);
   if (!success) {
     throw new Error('Failed to save post locally');
@@ -59,6 +59,20 @@ export async function publishBlogPost(
     region: post.region,
     published: !post.draft
   };
+}
+
+export async function deleteBlogPost(
+  region: string,
+  slug: string
+): Promise<{ mode: 'github' | 'local' }> {
+  if (isGitHubPublishConfigured()) {
+    await deleteRepoFile(postPath(region, slug), `Delete ブログ記事 "${region}/${slug}"`);
+    return { mode: 'github' };
+  }
+
+  const { deleteMdPost } = await import('./blog-md-fs');
+  deleteMdPost(region, slug);
+  return { mode: 'local' };
 }
 
 export async function publishBlogImage(
@@ -78,6 +92,6 @@ export async function publishBlogImage(
     return { path: publicPath, mode: 'github', commitSha };
   }
 
-  const path = uploadBlogImage(fileName, buffer);
-  return { path, mode: 'local' };
+  const { uploadBlogImage } = await import('./blog-md-fs');
+  return { path: uploadBlogImage(fileName, buffer), mode: 'local' };
 }

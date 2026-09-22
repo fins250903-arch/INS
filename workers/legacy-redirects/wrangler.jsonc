@@ -1,0 +1,17 @@
+{
+  // Redirect-only Worker for the non-canonical hostnames of insbs.net.
+  // Deploy with: npm run deploy:legacy-redirects
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "ins-legacy-redirects",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-04-15",
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    { "pattern": "www.insbs.net", "custom_domain": true },
+    { "pattern": "osak.insbs.net", "custom_domain": true },
+    { "pattern": "hyg.insbs.net", "custom_domain": true },
+    { "pattern": "siga.insbs.net", "custom_domain": true }
+  ]
+}

@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig, envField } from 'astro/config';
 
-import vercel from '@astrojs/vercel';
+import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
 
@@ -39,6 +39,11 @@ export default defineConfig({
         access: 'public',
         optional: true,
         default: 'main'
+      }),
+      ADMIN_PASSWORD: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
       })
     }
   },
@@ -54,5 +59,10 @@ export default defineConfig({
     })
   ],
 
-  adapter: vercel()
+  // `compile` optimizes every `<Image />` with sharp during the build, so prerendered pages ship the
+  // same pre-generated WebP assets as before. The few SSR routes fall back to the original file.
+  //
+  // Prerendering runs in Node because pages bake in the current date (`SITE_CONTENT_UPDATED`,
+  // JSON-LD `dateModified`), and `workerd` freezes its clock at the epoch until the first I/O.
+  adapter: cloudflare({ imageService: 'compile', prerenderEnvironment: 'node' })
 });
