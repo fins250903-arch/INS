@@ -6,6 +6,8 @@
   "compatibility_date": "2026-04-15",
   // `nodejs_compat` is required by `Buffer` usage in the GitHub publisher and by Astro internals.
   "compatibility_flags": ["nodejs_compat"],
+  // Astro's build replaces this entry with `dist/server/entry.mjs` through the deploy config it
+  // writes to `.wrangler/deploy/config.json`, so every wrangler command must run after `astro build`.
   "main": "@astrojs/cloudflare/entrypoints/server",
   "assets": {
     "binding": "ASSETS",

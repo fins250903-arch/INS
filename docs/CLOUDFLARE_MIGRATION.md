@@ -97,6 +97,47 @@ npx wrangler secret put DECAP_GITHUB_CLIENT_SECRET
 
 ---
 
+## 3.5 Workers Builds（Git 連携での継続デプロイ）
+
+Cloudflare ダッシュボードの **Workers & Pages → ins → Settings → Build** でリポジトリを接続すると、
+push ごとに Cloudflare 側でビルドとデプロイが走ります（GitHub Actions を使わない場合はこちら）。
+非本番ブランチと PR には Worker Previews のプレビュー URL が自動発行されます。
+
+| 設定項目 | 値 |
+| :--- | :--- |
+| Git repository | `fins250903-arch/INS` |
+| Production branch | `main` |
+| Root directory | `/`（空欄） |
+| Build command | 空欄 |
+| Deploy command | `npm run deploy` |
+| Non-production branch deploy command | `npm run deploy:preview` |
+
+`npm run deploy` と `npm run deploy:preview` は内部で `npm run build`（= `astro build`）を実行してから
+`wrangler deploy` / `wrangler versions upload` を呼ぶため、Build command は空欄にします。
+Build command に `npm run build` を入れると同じビルドが 2 回走ります。
+
+Cloudflare のデフォルト（`npx wrangler deploy`）をそのまま使う構成にする場合は、次の組み合わせにします。
+**どちらか一方だけ**にしてください。
+
+| Build command | Deploy command | Non-production branch deploy command |
+| :--- | :--- | :--- |
+| `npm run build` | `npx wrangler deploy` | `npx wrangler versions upload` |
+
+いずれの構成でも **ビルドがデプロイより先に実行されること**が条件です。`astro build` が
+`dist/server/entry.mjs` と `.wrangler/deploy/config.json`（`wrangler.jsonc` からのリダイレクト設定）を
+生成し、`wrangler deploy` はそれを読んで実際の Worker 本体と静的アセット（`dist/client`）を決めます。
+
+- Node.js は直下の `.node-version`（`22`）で固定しています。Workers Builds のデフォルトは Node 24、
+  `package.json` の `engines` は `>=22.12.0` です。
+- `ins-legacy-redirects` は別 Worker です。Workers Builds で扱うなら **2 つ目のプロジェクト**として同じ
+  リポジトリを接続し、Deploy command に `npm run deploy:legacy-redirects`（非本番は
+  `npm run deploy:legacy-redirects:preview`）を設定します。
+- GitHub Actions のワークフロー（`.github/workflows/deploy-cloudflare.yml`）は `CLOUDFLARE_API_TOKEN` が
+  未登録ならデプロイ手順をスキップし、検証とビルドだけを行います。Workers Builds と二重にデプロイしたく
+  ない場合は、手順 2 のシークレットを登録しないでください。
+
+---
+
 ## 4. 切り替え前の検証（DNS を変えずに確認）
 
 `*.workers.dev` か、Cloudflare 上の一時ホスト名で以下を確認します。
@@ -166,6 +207,48 @@ node scripts/verify-deployment.mjs https://insbs.net
 - [ ] MX / SPF / DKIM / DMARC / GSC TXT が Cloudflare DNS に存在する
 - [ ] 管理画面からの記事保存（GitHub コミット）が成功する
 - [ ] GitHub Actions の `Deploy to Cloudflare Workers` が成功している
+
+---
+
+## トラブルシューティング
+
+### `astro add cloudflare` が走ってデプロイが失敗する
+
+```
+🛠️  Configuring project for Astro with "astro add cloudflare"
+  ▲  Error installing dependencies.
+   The command `npm i @astrojs/cloudflare@^14.3.2 wrangler@^4.136.2` exited with code 1
+  Astro could not update your astro.config.js file safely.
+Failed: error occurred while running deploy command
+```
+
+`wrangler deploy` がリポジトリ内に Workers の設定ファイルを見つけられなかったときだけ走る
+「フレームワーク自動セットアップ」の失敗です。ビルド対象のコミットに `wrangler.jsonc` と
+`@astrojs/cloudflare` が入っていないことが原因で、自動セットアップ自体は本来不要です
+（設定はこのリポジトリに入っています）。
+
+確認する順序:
+
+1. Workers Builds の **Production branch** が Cloudflare 対応済みのブランチ（`main`）になっているか。
+   Vercel 構成のまま（`vercel.json` と `@astrojs/vercel` だけ）のコミットをビルドすると必ずこれになります。
+   → 移行 PR を `main` にマージしてから **Retry build** してください。
+2. **Root directory** が `/` になっているか。サブディレクトリを指していると `wrangler.jsonc` を見つけられません。
+3. Build command / Deploy command が手順 3.5 の表どおりか。
+
+`wrangler.jsonc` があれば自動セットアップは走りません。ビルドを忘れている場合は、代わりに
+`The entry-point file at "@astrojs/cloudflare/entrypoints/server" was not found.` という明示的な
+エラーになります（「先に `npm run build` を実行してください」という意味です）。
+
+### `There is a deploy configuration at ".wrangler/deploy/config.json" ... does not exist`
+
+`astro build` の出力（`dist/`）だけを消して `.wrangler/` を残した状態です。`npm run build` を再実行するか、
+`.wrangler/deploy/config.json` を削除してください。
+
+### プレビュー URL（`*.workers.dev`）が検索結果に出てしまう
+
+ページの canonical は常に `https://insbs.net` を指しますが、DNS 切り替えが完了して検証も終わったら
+`wrangler.jsonc` に `"workers_dev": false` を追加して本番 Worker の `*.workers.dev` を閉じるのが確実です
+（Worker Previews のプレビュー URL は別設定なので残ります）。
 
 ---
 
