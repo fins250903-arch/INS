@@ -182,7 +182,11 @@ async function launchChrome() {
       const exited = new Promise((resolvePromise) => child.once('exit', resolvePromise));
       child.kill('SIGTERM');
       await exited;
-      await rm(userDataDir, { recursive: true, force: true });
+      // Chrome's helper processes keep flushing the profile for a moment after the parent exits, so
+      // removing the directory is best effort — a leftover temp dir must not fail the audit.
+      await rm(userDataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }).catch(
+        () => {}
+      );
     }
   };
 }
@@ -272,10 +276,12 @@ async function auditPage(cdp, baseUrl, pathname, viewportName, screenshotDir) {
 
   const requestFailures = [];
   const pageErrors = [];
+  let documentStatus = null;
   const off = cdp.on((message) => {
     if (message.sessionId !== sessionId) return;
     if (message.method === 'Network.responseReceived') {
       const { response, type } = message.params;
+      if (type === 'Document' && documentStatus === null) documentStatus = response.status;
       if (response.status >= 400) requestFailures.push(`${response.status} ${type} ${response.url}`);
     } else if (message.method === 'Network.loadingFailed') {
       // Analytics and other third-party beacons are routinely blocked; only our own assets matter.
@@ -295,6 +301,17 @@ async function auditPage(cdp, baseUrl, pathname, viewportName, screenshotDir) {
     const loaded = cdp.once('Page.loadEventFired', sessionId, 45000);
     await cdp.send('Page.navigate', { url: `${baseUrl}${pathname}` }, sessionId);
     await loaded;
+
+    // Astro turns an in-page `Astro.redirect()` on a prerendered route into a meta-refresh stub. It
+    // has no layout of its own and navigates away mid-audit, so there is nothing to measure.
+    const refresh = await cdp.send(
+      'Runtime.evaluate',
+      { expression: `!!document.querySelector('meta[http-equiv="refresh" i]')`, returnByValue: true },
+      sessionId
+    );
+    if (refresh.result.value) {
+      return { path: pathname, viewport: viewportName, documentStatus, problems: [], metrics: null };
+    }
 
     const { result, exceptionDetails } = await cdp.send(
       'Runtime.evaluate',
@@ -342,11 +359,28 @@ async function auditPage(cdp, baseUrl, pathname, viewportName, screenshotDir) {
     for (const failure of requestFailures) problems.push(`request failed: ${failure}`);
     for (const error of pageErrors) problems.push(`page error: ${error}`);
 
-    return { path: pathname, viewport: viewportName, problems, metrics };
+    return { path: pathname, viewport: viewportName, documentStatus, problems, metrics };
   } finally {
     off();
     await cdp.send('Target.closeTarget', { targetId }).catch(() => {});
   }
+}
+
+/** A live host under load answers with these instead of the page; they say nothing about layout. */
+const THROTTLED = new Set([403, 429, 503]);
+
+async function auditWithRetry(cdp, baseUrl, pathname, viewport, screenshotDir, attempts = 5) {
+  let last;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      last = await auditPage(cdp, baseUrl, pathname, viewport, screenshotDir);
+      if (!THROTTLED.has(last.documentStatus)) return last;
+    } catch (error) {
+      last = { path: pathname, viewport, problems: [`audit error: ${error.message}`], metrics: null };
+    }
+    if (attempt < attempts) await new Promise((done) => setTimeout(done, 2000 * 2 ** (attempt - 1)));
+  }
+  return last;
 }
 
 async function collectPages(dir, pages = []) {
@@ -410,13 +444,9 @@ async function main() {
 
   let results;
   try {
-    results = await mapLimit(jobs, options.concurrency, async ({ pathname, viewport }) => {
-      try {
-        return await auditPage(browser.cdp, baseUrl, pathname, viewport, options.screenshots);
-      } catch (error) {
-        return { path: pathname, viewport, problems: [`audit error: ${error.message}`], metrics: null };
-      }
-    });
+    results = await mapLimit(jobs, options.concurrency, ({ pathname, viewport }) =>
+      auditWithRetry(browser.cdp, baseUrl, pathname, viewport, options.screenshots)
+    );
   } finally {
     await browser.close();
   }
@@ -441,7 +471,9 @@ async function main() {
   if (failures.length > 0) process.exit(1);
 }
 
+// Exit 1 means "rendered everything, found problems"; a fatal error uses a distinct code so a
+// caller fanning the audit out over many shards can tell the two apart.
 main().catch((error) => {
   console.error(error);
-  process.exit(1);
+  process.exit(3);
 });
