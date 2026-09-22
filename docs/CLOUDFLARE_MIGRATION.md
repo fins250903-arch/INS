@@ -76,7 +76,9 @@ npm run deploy                    # サイト本体（ins）
 npm run deploy:legacy-redirects   # www / osak / hyg / siga のリダイレクト専用（ins-legacy-redirects）
 ```
 
-- 初回デプロイ時、`Astro.session` 用の KV 名前空間（binding `SESSION`）が自動プロビジョニングされます。
+- Worker が必要とする Cloudflare リソースは静的アセット（`dist/client`）だけです。KV・D1・R2 の事前作成は不要です。
+  `Astro.session` はどこからも使っていないため `astro.config.mjs` で `sessionDrivers.null()` を指定しており、
+  セッション用 KV 名前空間を作らなくてもデプロイできます（使う場合は `astro.config.mjs` のコメント参照）。
 - `wrangler.jsonc` の `routes` に `custom_domain` を指定しているため、Cloudflare が
   `insbs.net` / `www` / `osak` / `hyg` / `siga` の DNS レコードをゾーンに自動作成します。
   **ネームサーバー切り替え前でもゾーン内にレコードが作られるだけなので、本番影響はありません。**
@@ -121,7 +123,11 @@ Cloudflare のデフォルト（`npx wrangler deploy`）をそのまま使う構
 
 | Build command | Deploy command | Non-production branch deploy command |
 | :--- | :--- | :--- |
-| `npm run build` | `npx wrangler deploy` | `npx wrangler versions upload` |
+| `npm run build` | `npx wrangler deploy --no-autoconfig` | `npx wrangler versions upload` |
+
+`--no-autoconfig` は下のトラブルシューティングにある `astro add cloudflare` の自動セットアップを無効にするフラグです
+（`npm run deploy` には既に入っています）。設定が揃っていれば自動セットアップは走りませんが、付けておくと
+設定を見失ったときに黙って修復を試みる代わりに明示的なエラーで止まります。
 
 いずれの構成でも **ビルドがデプロイより先に実行されること**が条件です。`astro build` が
 `dist/server/entry.mjs` と `.wrangler/deploy/config.json`（`wrangler.jsonc` からのリダイレクト設定）を
@@ -233,11 +239,33 @@ Failed: error occurred while running deploy command
    Vercel 構成のまま（`vercel.json` と `@astrojs/vercel` だけ）のコミットをビルドすると必ずこれになります。
    → 移行 PR を `main` にマージしてから **Retry build** してください。
 2. **Root directory** が `/` になっているか。サブディレクトリを指していると `wrangler.jsonc` を見つけられません。
-3. Build command / Deploy command が手順 3.5 の表どおりか。
+3. Build command / Deploy command が手順 3.5 の表どおりか。`--no-autoconfig` を付けると自動セットアップ自体を
+   無効化できます（`npm run deploy` には既に入っています）。
 
 `wrangler.jsonc` があれば自動セットアップは走りません。ビルドを忘れている場合は、代わりに
 `The entry-point file at "@astrojs/cloudflare/entrypoints/server" was not found.` という明示的な
 エラーになります（「先に `npm run build` を実行してください」という意味です）。
+
+### `SESSION bindings must have an "id" field`
+
+`@astrojs/cloudflare` は既定で `Astro.session` を Cloudflare KV に載せ、生成する wrangler 設定に
+`id` のない `SESSION` KV バインディングを追加します。`wrangler deploy` / `wrangler versions upload` は
+`id` のない KV バインディングを拒否するため（`--dry-run` では発覚しません。既存の値を継承する扱いになるためです）、
+ビルドは通るのにアップロードだけが失敗します。
+
+このリポジトリはセッションを使っていないので `astro.config.mjs` で `sessionDrivers.null()` を指定し、
+KV バインディング自体を作らないようにしてあります。セッションを使う場合は名前空間を作り、`id` を書いてください。
+
+```bash
+npx wrangler kv namespace create SESSION   # 出力された id を wrangler.jsonc の kv_namespaces に追記
+```
+
+```jsonc
+// wrangler.jsonc
+"kv_namespaces": [{ "binding": "SESSION", "id": "<作成された id>" }]
+```
+
+あわせて `astro.config.mjs` の `session` を `sessionDrivers.cloudflareKVBinding()` に戻します。
 
 ### `There is a deploy configuration at ".wrangler/deploy/config.json" ... does not exist`
 

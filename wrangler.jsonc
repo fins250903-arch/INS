@@ -19,8 +19,6 @@
   "observability": {
     "enabled": true
   },
-  // Session storage for `Astro.session`. The namespace is provisioned automatically on first deploy.
-  "kv_namespaces": [{ "binding": "SESSION" }],
   // Production hostnames. Cloudflare creates/updates the DNS records for custom domains on deploy,
   // so the zone `insbs.net` must already exist in the same Cloudflare account.
   "routes": [{ "pattern": "insbs.net", "custom_domain": true }],

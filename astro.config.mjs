@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, sessionDrivers } from 'astro/config';
 
 import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
@@ -8,6 +8,12 @@ import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://insbs.net',
+
+  // No page or endpoint uses `Astro.session`. Without an explicit driver the Cloudflare adapter adds a
+  // `SESSION` KV binding to the generated wrangler config, and `wrangler deploy` then rejects it with
+  // `SESSION bindings must have an "id" field` until a KV namespace exists. To use sessions, create one
+  // (`npx wrangler kv namespace create SESSION`) and swap this for `sessionDrivers.cloudflareKVBinding()`.
+  session: { driver: sessionDrivers.null() },
 
   markdown: {
     rehypePlugins: [rehypeBlogImages]

@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy site Worker
         if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN != ''
-        run: npx wrangler deploy
+        run: npx wrangler deploy --no-autoconfig
 
       - name: Deploy legacy redirect Worker
         if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN != ''
