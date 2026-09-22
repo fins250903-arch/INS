@@ -1,0 +1,65 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: Optional Pages CMS payload JSON
+        required: false
+        type: string
+
+concurrency:
+  group: deploy-cloudflare-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    # Exposed at job level so the deploy steps can be skipped when the repository has no Cloudflare
+    # credentials — the deployment then comes from Cloudflare Workers Builds instead.
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Move stray blog images to public/blog-images
+        run: node scripts/fix-blog-media-paths.mjs
+
+      - name: Validate blog paths and frontmatter
+        run: node scripts/validate-blog-content.mjs
+
+      - name: Verify redirect table
+        run: npm run cf:redirects:verify
+
+      - name: Fail if the committed public/_redirects is out of date
+        run: npm run cf:redirects:check
+
+      - name: Build production site
+        run: npm run build
+
+      - name: Deploy site Worker
+        if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN != ''
+        run: npx wrangler deploy --no-autoconfig
+
+      - name: Deploy legacy redirect Worker
+        if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN != ''
+        run: npm run deploy:legacy-redirects
+
+      - name: Report skipped deployment
+        if: github.event_name != 'pull_request' && env.CLOUDFLARE_API_TOKEN == ''
+        run: echo "CLOUDFLARE_API_TOKEN is not set — build validated only. Deployment is handled by Cloudflare Workers Builds." >> "$GITHUB_STEP_SUMMARY"

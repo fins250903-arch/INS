@@ -1,13 +1,19 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, sessionDrivers } from 'astro/config';
 
-import vercel from '@astrojs/vercel';
+import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://insbs.net',
+
+  // No page or endpoint uses `Astro.session`. Without an explicit driver the Cloudflare adapter adds a
+  // `SESSION` KV binding to the generated wrangler config, and `wrangler deploy` then rejects it with
+  // `SESSION bindings must have an "id" field` until a KV namespace exists. To use sessions, create one
+  // (`npx wrangler kv namespace create SESSION`) and swap this for `sessionDrivers.cloudflareKVBinding()`.
+  session: { driver: sessionDrivers.null() },
 
   markdown: {
     rehypePlugins: [rehypeBlogImages]
@@ -39,6 +45,11 @@ export default defineConfig({
         access: 'public',
         optional: true,
         default: 'main'
+      }),
+      ADMIN_PASSWORD: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
       })
     }
   },
@@ -54,5 +65,10 @@ export default defineConfig({
     })
   ],
 
-  adapter: vercel()
+  // `compile` optimizes every `<Image />` with sharp during the build, so prerendered pages ship the
+  // same pre-generated WebP assets as before. The few SSR routes fall back to the original file.
+  //
+  // Prerendering runs in Node because pages bake in the current date (`SITE_CONTENT_UPDATED`,
+  // JSON-LD `dateModified`), and `workerd` freezes its clock at the epoch until the first I/O.
+  adapter: cloudflare({ imageService: 'compile', prerenderEnvironment: 'node' })
 });

@@ -1,9 +1,12 @@
 import type { AstroCookies } from 'astro';
+import { getSecret } from 'astro:env/server';
 
 const ADMIN_COOKIE = 'admin_auth';
 
 export function getAdminPassword(): string {
-  return import.meta.env.ADMIN_PASSWORD || 'admin123';
+  // `getSecret` reads the Worker binding at request time; `import.meta.env` is inlined at build time
+  // and therefore empty on Cloudflare.
+  return getSecret('ADMIN_PASSWORD') || 'admin123';
 }
 
 export function isAdminAuthenticated(cookies: AstroCookies): boolean {

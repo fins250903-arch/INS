@@ -13,7 +13,7 @@ export function createDecapAuthRoute(callbackPath: string): APIRoute {
       const config = getDecapOAuthConfig(request, callbackPath);
       if (!config) {
         return new Response(
-          'Decap OAuth is not configured. Set DECAP_GITHUB_CLIENT_ID and DECAP_GITHUB_CLIENT_SECRET on Vercel.',
+          'Decap OAuth is not configured. Set DECAP_GITHUB_CLIENT_ID and DECAP_GITHUB_CLIENT_SECRET as Cloudflare Worker secrets.',
           { status: 503, headers: { 'content-type': 'text/plain; charset=utf-8' } }
         );
       }

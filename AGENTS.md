@@ -2,9 +2,9 @@
 
 ## Cursor Cloud specific instructions
 
-This repository is a single **Astro 6 (SSR, Vercel adapter)** marketing/SEO website + blog for a Japanese
-car-interior cleaning business. Everything (public marketing pages, blog, and the self-hosted admin CMS)
-is served by one dev server. There is no database, Docker, or separate backend.
+This repository is a single **Astro 6 (SSR, Cloudflare Workers adapter)** marketing/SEO website + blog for a
+Japanese car-interior cleaning business. Everything (public marketing pages, blog, and the self-hosted admin
+CMS) is served by one dev server. There is no database, Docker, or separate backend.
 
 ### Running the app (development)
 - Requires Node.js `>=22.12.0` (see `engines` in `package.json`); npm is the package manager (`package-lock.json`).
@@ -13,8 +13,9 @@ is served by one dev server. There is no database, Docker, or separate backend.
 - All environment variables (`.env.example`) are optional and have graceful fallbacks: without `BLOG_PUBLISH_GITHUB_TOKEN` the admin manager saves posts to local content files instead of publishing to GitHub; Decap CMS (`/admin/`) login and the GSC CLI (`npm run gsc`) need their respective credentials but are not needed to run/test the site.
 
 ### Lint / test / build (see `package.json` scripts)
-- There is **no lint or test framework** configured. "Validation" is `npm run blog:validate` (checks blog paths/frontmatter). It prints warnings about stray images but still exits 0.
-- Production build: `npm run build` (then `npm run preview` to serve `./dist/`). Matches the CI in `.github/workflows/sync-blog-to-production.yml`, which runs `npm ci` → `fix-blog-media-paths.mjs` → `validate-blog-content.mjs` → `npm run build` on Node 22.
+- There is **no lint or test framework** configured. "Validation" is `npm run blog:validate` (checks blog paths/frontmatter). It prints warnings about stray images but still exits 0. `npm run cf:redirects:check` fails when `public/_redirects` is stale, and `npm run cf:redirects:verify` replays the redirect expectations captured before the Cloudflare migration.
+- Production build: `npm run build`, then `npm run preview` to serve the build on `http://localhost:8787` through `wrangler dev` (the real `workerd` runtime). Matches the CI in `.github/workflows/deploy-cloudflare.yml`, which runs `npm ci` → `fix-blog-media-paths.mjs` → `validate-blog-content.mjs` → redirect checks → `npm run build` on the Node version in `.node-version`.
+- Deployment: `npm run deploy` (site Worker `ins`) and `npm run deploy:legacy-redirects` (`ins-legacy-redirects`, the www/osak/hyg/siga hostnames). `wrangler` commands only work **after** a build, because `astro build` writes both `dist/server/entry.mjs` and `.wrangler/deploy/config.json`. See `docs/CLOUDFLARE_MIGRATION.md` for the Cloudflare/DNS setup and Workers Builds settings.
 
 ### Gotchas
 - `npm run build` runs preprocessing scripts (`blog:fix-media`, `wp:resolve-images`) that **move stray images** and rewrite media paths, so the working tree becomes dirty after a build. This is expected; run `git checkout -- . && git clean -fd src/content public/blog-images` to restore if the changes were unintended.

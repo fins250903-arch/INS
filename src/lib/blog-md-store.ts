@@ -1,7 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-import { BLOG_REGION_SLUGS } from '../data/blog-regions';
-
+/**
+ * Runtime-agnostic helpers for the markdown blog posts in src/content/blog.
+ *
+ * This module must stay free of Node built-ins so it can be bundled for the Cloudflare Workers
+ * runtime. Reads go through blog-md-collection.ts, writes through blog-publish.ts.
+ */
 export type BlogRegionSlug = 'fukuoka' | 'osaka' | 'hyougo' | 'siga' | 'aiti' | 'saitama';
 
 export interface BlogMdPost {
@@ -32,10 +34,7 @@ export interface BlogMdPost {
   canonicalUrl?: string;
 }
 
-const BLOG_DIR = path.join(process.cwd(), 'src', 'content', 'blog');
-const IMAGES_DIR = path.join(process.cwd(), 'public', 'blog-images');
-
-function parseFrontmatter(raw: string): { data: Record<string, unknown>; body: string } {
+export function parseFrontmatter(raw: string): { data: Record<string, unknown>; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) {
     return { data: {}, body: raw.trim() };
@@ -184,7 +183,7 @@ function serializeFrontmatter(data: BlogMdPost): string {
   return lines.join('\n');
 }
 
-function toBlogMdPost(
+export function toBlogMdPost(
   region: BlogRegionSlug,
   slug: string,
   filePath: string,
@@ -210,81 +209,6 @@ function toBlogMdPost(
     ogp: data.ogp as BlogMdPost['ogp'],
     canonicalUrl: data.canonicalUrl ? String(data.canonicalUrl) : undefined
   };
-}
-
-export function getAllMdPosts(): BlogMdPost[] {
-  const posts: BlogMdPost[] = [];
-
-  for (const region of BLOG_REGION_SLUGS) {
-    const regionDir = path.join(BLOG_DIR, region);
-    if (!fs.existsSync(regionDir)) continue;
-
-    for (const fileName of fs.readdirSync(regionDir)) {
-      if (!fileName.endsWith('.md')) continue;
-      const slug = fileName.replace(/\.md$/, '');
-      if (!slug || slug === '.') continue;
-
-      const filePath = path.join(regionDir, fileName);
-      const raw = fs.readFileSync(filePath, 'utf-8');
-      const { data, body } = parseFrontmatter(raw);
-      posts.push(toBlogMdPost(region as BlogRegionSlug, slug, filePath, data, body));
-    }
-  }
-
-  return posts;
-}
-
-export function getMdPost(region: string, slug: string): BlogMdPost | null {
-  const filePath = path.join(BLOG_DIR, region, `${slug}.md`);
-  if (!fs.existsSync(filePath)) return null;
-
-  const raw = fs.readFileSync(filePath, 'utf-8');
-  const { data, body } = parseFrontmatter(raw);
-  return toBlogMdPost(region as BlogRegionSlug, slug, filePath, data, body);
-}
-
-export function saveMdPost(post: BlogMdPost, previousSlug?: string): boolean {
-  try {
-    const slug = post.urlSlug || post.slug;
-    const regionDir = path.join(BLOG_DIR, post.region);
-    fs.mkdirSync(regionDir, { recursive: true });
-
-    const newPath = path.join(regionDir, `${slug}.md`);
-    fs.writeFileSync(newPath, buildPostMarkdown(post), 'utf-8');
-
-    if (previousSlug && previousSlug !== slug) {
-      const oldPath = path.join(regionDir, `${previousSlug}.md`);
-      if (fs.existsSync(oldPath) && oldPath !== newPath) {
-        fs.unlinkSync(oldPath);
-      }
-    }
-
-    return true;
-  } catch (error) {
-    console.error('Error saving post:', error);
-    return false;
-  }
-}
-
-export function deleteMdPost(region: string, slug: string): boolean {
-  try {
-    const filePath = path.join(BLOG_DIR, region, `${slug}.md`);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-    return true;
-  } catch (error) {
-    console.error('Error deleting post:', error);
-    return false;
-  }
-}
-
-export function uploadBlogImage(fileName: string, buffer: Buffer): string {
-  fs.mkdirSync(IMAGES_DIR, { recursive: true });
-  const safeName = fileName.replace(/[^a-zA-Z0-9._-]/g, '-');
-  const destPath = path.join(IMAGES_DIR, safeName);
-  fs.writeFileSync(destPath, buffer);
-  return `/blog-images/${safeName}`;
 }
 
 export function sortMdPosts(

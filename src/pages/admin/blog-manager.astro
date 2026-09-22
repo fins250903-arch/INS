@@ -9,12 +9,9 @@ import {
   isAdminAuthenticated,
   setAdminAuthCookie
 } from '../../lib/admin-auth';
-import {
-  deleteMdPost,
-  getAllMdPosts,
-  resolvePostThumbnail,
-  sortMdPosts
-} from '../../lib/blog-md-store';
+import { resolvePostThumbnail, sortMdPosts } from '../../lib/blog-md-store';
+import { getAllMdPosts } from '../../lib/blog-md-collection';
+import { deleteBlogPost } from '../../lib/blog-publish';
 import { formatBlogDate } from '../../lib/blog-content';
 
 const isAuthenticated = isAdminAuthenticated(Astro.cookies);
@@ -42,7 +39,7 @@ if (Astro.request.method === 'POST') {
     const region = formData.get('region')?.toString() || '';
     const slug = formData.get('slug')?.toString() || '';
     if (region && slug) {
-      deleteMdPost(region, slug);
+      await deleteBlogPost(region, slug);
       return Astro.redirect('/admin/blog-manager/');
     }
   }
@@ -53,7 +50,7 @@ const sortOrder = (Astro.url.searchParams.get('sort') === 'asc' ? 'asc' : 'desc'
   | 'desc';
 const regionFilter = Astro.url.searchParams.get('region') || '';
 
-const allPosts = isAuthenticated ? getAllMdPosts() : [];
+const allPosts = isAuthenticated ? await getAllMdPosts() : [];
 const filteredPosts = regionFilter
   ? allPosts.filter((post) => post.region === regionFilter)
   : allPosts;

@@ -1,0 +1,1232 @@
+{
+  "$comment": [
+    "Single source of truth for legacy URL redirects, migrated 1:1 from the former vercel.json.",
+    "Sources use Cloudflare _redirects syntax: `*` matches any number of segments (exposed as :splat),",
+    "`:name` matches exactly one segment and never matches a trailing slash.",
+    "Rules are evaluated top to bottom; the first match wins. Keep them in the order vercel.json",
+    "used so the legacy-redirects Worker reproduces the old behaviour exactly.",
+    "Entries without `host` apply to insbs.net and are compiled into public/_redirects by",
+    "scripts/generate-cloudflare-redirects.ts, which moves exact-path rules ahead of pattern rules to",
+    "fit Cloudflare's 100-pattern-rule budget and fails if that reordering would change any answer.",
+    "Entries with `host` are evaluated by the legacy-redirects Worker in workers/legacy-redirects and",
+    "always resolve against https://insbs.net."
+  ],
+  "rules": [
+    {
+      "from": "/blog/osaka/shanai-seiso-ranking",
+      "to": "/blog/osaka/ranking-osaka-carclean/",
+      "status": 308
+    },
+    {
+      "from": "/blog/osaka/shanai-seiso-ranking/",
+      "to": "/blog/osaka/ranking-osaka-carclean/",
+      "status": 308
+    },
+    {
+      "from": "/blog/aiti/shanai-seiso-ranking",
+      "to": "/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/blog/aiti/shanai-seiso-ranking/",
+      "to": "/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/hirosima",
+      "to": "/",
+      "status": 308
+    },
+    {
+      "from": "/hirosima/",
+      "to": "/",
+      "status": 308
+    },
+    {
+      "from": "/hirosima/*",
+      "to": "/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/blog/*",
+      "to": "/blog/:splat",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "from": "/wp1/blog",
+      "to": "/blog/chiiki/osaka/",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "from": "/wp1/blog/",
+      "to": "/blog/chiiki/osaka/",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "from": "/wp1/*",
+      "to": "/osaka/:splat",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "from": "/wp1",
+      "to": "/osaka/",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "from": "/wp1/",
+      "to": "/osaka/",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "host": "osak.insbs.net",
+      "from": "/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "host": "osak.insbs.net",
+      "from": "/osaka",
+      "to": "/osaka/",
+      "status": 308
+    },
+    {
+      "host": "osak.insbs.net",
+      "from": "/osaka/*",
+      "to": "/osaka/:splat",
+      "status": 308
+    },
+    {
+      "from": "/*",
+      "to": "/osaka/:splat",
+      "status": 308,
+      "host": "osak.insbs.net"
+    },
+    {
+      "from": "/wp1/blog/*",
+      "to": "/blog/:splat",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "from": "/wp1/blog",
+      "to": "/blog/chiiki/hyougo/",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "from": "/wp1/blog/",
+      "to": "/blog/chiiki/hyougo/",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "from": "/wp1/*",
+      "to": "/hyougo/:splat",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "from": "/wp1",
+      "to": "/hyougo/",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "from": "/wp1/",
+      "to": "/hyougo/",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "host": "hyg.insbs.net",
+      "from": "/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "host": "hyg.insbs.net",
+      "from": "/hyougo",
+      "to": "/hyougo/",
+      "status": 308
+    },
+    {
+      "host": "hyg.insbs.net",
+      "from": "/hyougo/*",
+      "to": "/hyougo/:splat",
+      "status": 308
+    },
+    {
+      "from": "/*",
+      "to": "/hyougo/:splat",
+      "status": 308,
+      "host": "hyg.insbs.net"
+    },
+    {
+      "from": "/wp1/blog/*",
+      "to": "/blog/:splat",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "from": "/wp1/blog",
+      "to": "/blog/chiiki/siga/",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "from": "/wp1/blog/",
+      "to": "/blog/chiiki/siga/",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "from": "/wp1/*",
+      "to": "/siga/:splat",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "from": "/wp1",
+      "to": "/siga/",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "from": "/wp1/",
+      "to": "/siga/",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "host": "siga.insbs.net",
+      "from": "/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "host": "siga.insbs.net",
+      "from": "/siga",
+      "to": "/siga/",
+      "status": 308
+    },
+    {
+      "host": "siga.insbs.net",
+      "from": "/siga/*",
+      "to": "/siga/:splat",
+      "status": 308
+    },
+    {
+      "from": "/*",
+      "to": "/siga/:splat",
+      "status": 308,
+      "host": "siga.insbs.net"
+    },
+    {
+      "from": "/wp1/mie/blog",
+      "to": "/blog/chiiki/mie/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/mie/blog/",
+      "to": "/blog/chiiki/mie/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/mie/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kyouto/blog",
+      "to": "/blog/chiiki/kyouto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kyouto/blog/",
+      "to": "/blog/chiiki/kyouto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kyouto/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/wakayama/blog",
+      "to": "/blog/chiiki/wakayama/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/wakayama/blog/",
+      "to": "/blog/chiiki/wakayama/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/wakayama/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/nara/blog",
+      "to": "/blog/chiiki/nara/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/nara/blog/",
+      "to": "/blog/chiiki/nara/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/nara/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/gunnma/blog",
+      "to": "/blog/chiiki/gunnma/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/gunnma/blog/",
+      "to": "/blog/chiiki/gunnma/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/gunnma/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/ibaraki/blog",
+      "to": "/blog/chiiki/ibaraki/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/ibaraki/blog/",
+      "to": "/blog/chiiki/ibaraki/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/ibaraki/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/miyagi/blog",
+      "to": "/blog/chiiki/miyagi/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/miyagi/blog/",
+      "to": "/blog/chiiki/miyagi/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/miyagi/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hirosima/blog",
+      "to": "/blog/chiiki/hirosima/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hirosima/blog/",
+      "to": "/blog/chiiki/hirosima/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hirosima/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kumamoto/blog",
+      "to": "/blog/chiiki/kumamoto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kumamoto/blog/",
+      "to": "/blog/chiiki/kumamoto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kumamoto/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/saga/blog",
+      "to": "/blog/chiiki/saga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/saga/blog/",
+      "to": "/blog/chiiki/saga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/saga/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/aiti/blog",
+      "to": "/blog/chiiki/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/aiti/blog/",
+      "to": "/blog/chiiki/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/aiti/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/fukui/blog",
+      "to": "/blog/chiiki/fukui/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/fukui/blog/",
+      "to": "/blog/chiiki/fukui/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/fukui/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/sizuoka/blog",
+      "to": "/blog/chiiki/sizuoka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/sizuoka/blog/",
+      "to": "/blog/chiiki/sizuoka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/sizuoka/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/osaka/blog",
+      "to": "/blog/chiiki/osaka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/osaka/blog/",
+      "to": "/blog/chiiki/osaka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/osaka/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hyougo/blog",
+      "to": "/blog/chiiki/hyougo/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hyougo/blog/",
+      "to": "/blog/chiiki/hyougo/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hyougo/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/siga/blog",
+      "to": "/blog/chiiki/siga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/siga/blog/",
+      "to": "/blog/chiiki/siga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/siga/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/osaka",
+      "to": "/osaka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/osaka/",
+      "to": "/osaka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/osaka/*",
+      "to": "/osaka/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hyougo",
+      "to": "/hyougo/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hyougo/",
+      "to": "/hyougo/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hyougo/*",
+      "to": "/hyougo/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/siga",
+      "to": "/siga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/siga/",
+      "to": "/siga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/siga/*",
+      "to": "/siga/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tiba/blog",
+      "to": "/blog/chiiki/tiba/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tiba/blog/",
+      "to": "/blog/chiiki/tiba/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tiba/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/saitama/blog",
+      "to": "/blog/chiiki/saitama/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/saitama/blog/",
+      "to": "/blog/chiiki/saitama/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/saitama/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tokyou/blog",
+      "to": "/blog/chiiki/tokyou/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tokyou/blog/",
+      "to": "/blog/chiiki/tokyou/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tokyou/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/okinawa/blog",
+      "to": "/blog/chiiki/okinawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/okinawa/blog/",
+      "to": "/blog/chiiki/okinawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/okinawa/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/kanagawa/blog",
+      "to": "/blog/chiiki/kanagawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/kanagawa/blog/",
+      "to": "/blog/chiiki/kanagawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/kanagawa/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/mie",
+      "to": "/mie/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/mie/",
+      "to": "/mie/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/mie/*",
+      "to": "/mie/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kyouto",
+      "to": "/kyouto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kyouto/",
+      "to": "/kyouto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kyouto/*",
+      "to": "/kyouto/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/wakayama",
+      "to": "/wakayama/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/wakayama/",
+      "to": "/wakayama/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/wakayama/*",
+      "to": "/wakayama/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/nara",
+      "to": "/nara/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/nara/",
+      "to": "/nara/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/nara/*",
+      "to": "/nara/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/gunnma",
+      "to": "/gunnma/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/gunnma/",
+      "to": "/gunnma/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/gunnma/*",
+      "to": "/gunnma/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/ibaraki",
+      "to": "/ibaraki/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/ibaraki/",
+      "to": "/ibaraki/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/ibaraki/*",
+      "to": "/ibaraki/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/miyagi",
+      "to": "/miyagi/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/miyagi/",
+      "to": "/miyagi/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/miyagi/*",
+      "to": "/miyagi/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hirosima",
+      "to": "/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hirosima/",
+      "to": "/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/hirosima/*",
+      "to": "/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kumamoto",
+      "to": "/kumamoto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kumamoto/",
+      "to": "/kumamoto/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/kumamoto/*",
+      "to": "/kumamoto/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/saga",
+      "to": "/saga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/saga/",
+      "to": "/saga/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/saga/*",
+      "to": "/saga/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/aiti",
+      "to": "/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/aiti/",
+      "to": "/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/aiti/*",
+      "to": "/aiti/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/fukui",
+      "to": "/fukui/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/fukui/",
+      "to": "/fukui/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/fukui/*",
+      "to": "/fukui/:splat",
+      "status": 308
+    },
+    {
+      "from": "/wp1/sizuoka",
+      "to": "/sizuoka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/sizuoka/",
+      "to": "/sizuoka/",
+      "status": 308
+    },
+    {
+      "from": "/wp1/sizuoka/*",
+      "to": "/sizuoka/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tiba",
+      "to": "/tiba/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tiba/",
+      "to": "/tiba/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tiba/*",
+      "to": "/tiba/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/saitama",
+      "to": "/saitama/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/saitama/",
+      "to": "/saitama/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/saitama/*",
+      "to": "/saitama/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tokyou",
+      "to": "/tokyou/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tokyou/",
+      "to": "/tokyou/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/tokyou/*",
+      "to": "/tokyou/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/okinawa",
+      "to": "/okinawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/okinawa/",
+      "to": "/okinawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/okinawa/*",
+      "to": "/okinawa/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/kanagawa",
+      "to": "/kanagawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/kanagawa/",
+      "to": "/kanagawa/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/kanagawa/*",
+      "to": "/kanagawa/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2/blog",
+      "to": "/blog/chiiki/fukuoka/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/blog/",
+      "to": "/blog/chiiki/fukuoka/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/blog/*",
+      "to": "/blog/:splat",
+      "status": 308
+    },
+    {
+      "from": "/ok2",
+      "to": "/fukuoka/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/",
+      "to": "/fukuoka/",
+      "status": 308
+    },
+    {
+      "from": "/ok2/*",
+      "to": "/fukuoka/:splat",
+      "status": 308
+    },
+    {
+      "from": "/blog/mie",
+      "to": "/blog/chiiki/mie/",
+      "status": 308
+    },
+    {
+      "from": "/blog/mie/",
+      "to": "/blog/chiiki/mie/",
+      "status": 308
+    },
+    {
+      "from": "/blog/mie/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/kyouto",
+      "to": "/blog/chiiki/kyouto/",
+      "status": 308
+    },
+    {
+      "from": "/blog/kyouto/",
+      "to": "/blog/chiiki/kyouto/",
+      "status": 308
+    },
+    {
+      "from": "/blog/kyouto/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/wakayama",
+      "to": "/blog/chiiki/wakayama/",
+      "status": 308
+    },
+    {
+      "from": "/blog/wakayama/",
+      "to": "/blog/chiiki/wakayama/",
+      "status": 308
+    },
+    {
+      "from": "/blog/wakayama/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/nara",
+      "to": "/blog/chiiki/nara/",
+      "status": 308
+    },
+    {
+      "from": "/blog/nara/",
+      "to": "/blog/chiiki/nara/",
+      "status": 308
+    },
+    {
+      "from": "/blog/nara/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/gunnma",
+      "to": "/blog/chiiki/gunnma/",
+      "status": 308
+    },
+    {
+      "from": "/blog/gunnma/",
+      "to": "/blog/chiiki/gunnma/",
+      "status": 308
+    },
+    {
+      "from": "/blog/gunnma/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/ibaraki",
+      "to": "/blog/chiiki/ibaraki/",
+      "status": 308
+    },
+    {
+      "from": "/blog/ibaraki/",
+      "to": "/blog/chiiki/ibaraki/",
+      "status": 308
+    },
+    {
+      "from": "/blog/ibaraki/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/miyagi",
+      "to": "/blog/chiiki/miyagi/",
+      "status": 308
+    },
+    {
+      "from": "/blog/miyagi/",
+      "to": "/blog/chiiki/miyagi/",
+      "status": 308
+    },
+    {
+      "from": "/blog/miyagi/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/hirosima",
+      "to": "/blog/chiiki/hirosima/",
+      "status": 308
+    },
+    {
+      "from": "/blog/hirosima/",
+      "to": "/blog/chiiki/hirosima/",
+      "status": 308
+    },
+    {
+      "from": "/blog/hirosima/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/kumamoto",
+      "to": "/blog/chiiki/kumamoto/",
+      "status": 308
+    },
+    {
+      "from": "/blog/kumamoto/",
+      "to": "/blog/chiiki/kumamoto/",
+      "status": 308
+    },
+    {
+      "from": "/blog/kumamoto/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/saga",
+      "to": "/blog/chiiki/saga/",
+      "status": 308
+    },
+    {
+      "from": "/blog/saga/",
+      "to": "/blog/chiiki/saga/",
+      "status": 308
+    },
+    {
+      "from": "/blog/saga/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/aiti",
+      "to": "/blog/chiiki/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/blog/aiti/",
+      "to": "/blog/chiiki/aiti/",
+      "status": 308
+    },
+    {
+      "from": "/blog/aiti/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/fukui",
+      "to": "/blog/chiiki/fukui/",
+      "status": 308
+    },
+    {
+      "from": "/blog/fukui/",
+      "to": "/blog/chiiki/fukui/",
+      "status": 308
+    },
+    {
+      "from": "/blog/fukui/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/sizuoka",
+      "to": "/blog/chiiki/sizuoka/",
+      "status": 308
+    },
+    {
+      "from": "/blog/sizuoka/",
+      "to": "/blog/chiiki/sizuoka/",
+      "status": 308
+    },
+    {
+      "from": "/blog/sizuoka/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/tiba",
+      "to": "/blog/chiiki/tiba/",
+      "status": 308
+    },
+    {
+      "from": "/blog/tiba/",
+      "to": "/blog/chiiki/tiba/",
+      "status": 308
+    },
+    {
+      "from": "/blog/tiba/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/saitama",
+      "to": "/blog/chiiki/saitama/",
+      "status": 308
+    },
+    {
+      "from": "/blog/saitama/",
+      "to": "/blog/chiiki/saitama/",
+      "status": 308
+    },
+    {
+      "from": "/blog/saitama/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/tokyou",
+      "to": "/blog/chiiki/tokyou/",
+      "status": 308
+    },
+    {
+      "from": "/blog/tokyou/",
+      "to": "/blog/chiiki/tokyou/",
+      "status": 308
+    },
+    {
+      "from": "/blog/tokyou/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/okinawa",
+      "to": "/blog/chiiki/okinawa/",
+      "status": 308
+    },
+    {
+      "from": "/blog/okinawa/",
+      "to": "/blog/chiiki/okinawa/",
+      "status": 308
+    },
+    {
+      "from": "/blog/okinawa/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/kanagawa",
+      "to": "/blog/chiiki/kanagawa/",
+      "status": 308
+    },
+    {
+      "from": "/blog/kanagawa/",
+      "to": "/blog/chiiki/kanagawa/",
+      "status": 308
+    },
+    {
+      "from": "/blog/kanagawa/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/osaka",
+      "to": "/blog/chiiki/osaka/",
+      "status": 308
+    },
+    {
+      "from": "/blog/osaka/",
+      "to": "/blog/chiiki/osaka/",
+      "status": 308
+    },
+    {
+      "from": "/blog/osaka/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/hyougo",
+      "to": "/blog/chiiki/hyougo/",
+      "status": 308
+    },
+    {
+      "from": "/blog/hyougo/",
+      "to": "/blog/chiiki/hyougo/",
+      "status": 308
+    },
+    {
+      "from": "/blog/hyougo/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/siga",
+      "to": "/blog/chiiki/siga/",
+      "status": 308
+    },
+    {
+      "from": "/blog/siga/",
+      "to": "/blog/chiiki/siga/",
+      "status": 308
+    },
+    {
+      "from": "/blog/siga/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/blog/fukuoka",
+      "to": "/blog/chiiki/fukuoka/",
+      "status": 308
+    },
+    {
+      "from": "/blog/fukuoka/",
+      "to": "/blog/chiiki/fukuoka/",
+      "status": 308
+    },
+    {
+      "from": "/blog/fukuoka/:slug",
+      "to": "/blog/:slug",
+      "status": 308
+    },
+    {
+      "from": "/",
+      "to": "/osaka/",
+      "status": 308
+    },
+    {
+      "host": "www.insbs.net",
+      "from": "/*",
+      "to": "/:splat",
+      "status": 308
+    }
+  ]
+}
