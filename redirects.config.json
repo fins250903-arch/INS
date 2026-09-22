@@ -3,10 +3,13 @@
     "Single source of truth for legacy URL redirects, migrated 1:1 from the former vercel.json.",
     "Sources use Cloudflare _redirects syntax: `*` matches any number of segments (exposed as :splat),",
     "`:name` matches exactly one segment and never matches a trailing slash.",
-    "Rules are evaluated top to bottom; the first match wins.",
+    "Rules are evaluated top to bottom; the first match wins. Keep them in the order vercel.json",
+    "used so the legacy-redirects Worker reproduces the old behaviour exactly.",
     "Entries without `host` apply to insbs.net and are compiled into public/_redirects by",
-    "scripts/generate-cloudflare-redirects.mjs. Entries with `host` are evaluated by the",
-    "legacy-redirects Worker in workers/legacy-redirects and always resolve against https://insbs.net."
+    "scripts/generate-cloudflare-redirects.ts, which moves exact-path rules ahead of pattern rules to",
+    "fit Cloudflare's 100-pattern-rule budget and fails if that reordering would change any answer.",
+    "Entries with `host` are evaluated by the legacy-redirects Worker in workers/legacy-redirects and",
+    "always resolve against https://insbs.net."
   ],
   "rules": [
     {

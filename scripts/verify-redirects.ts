@@ -53,6 +53,8 @@ const CASES: Expectation[] = [
   ['osak.insbs.net', '/wp1/blog', '/blog/chiiki/osaka/'],
   ['osak.insbs.net', '/wp1/blog/abc', '/blog/abc'],
   ['osak.insbs.net', '/wp1/wp-content/uploads/a.jpg', '/osaka/wp-content/uploads/a.jpg'],
+  // The subdomain's own `/wp1/*` rule outranks the apex `/wp1/<region>/blog` rules, as on Vercel.
+  ['osak.insbs.net', '/wp1/kumamoto/blog', '/osaka/kumamoto/blog'],
   ['osak.insbs.net', '/foo/bar', '/osaka/foo/bar'],
   ['osak.insbs.net', '/hirosima/x', '/'],
   // Paths that already exist on the apex must not be prefixed a second time.
