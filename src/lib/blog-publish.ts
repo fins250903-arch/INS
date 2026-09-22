@@ -16,6 +16,20 @@ export type PublishResult = {
 
 const postPath = (region: string, slug: string) => `src/content/blog/${region}/${slug}.md`;
 
+/**
+ * Writing straight to the working tree only works under `astro dev`, which runs in Node. The
+ * deployed Cloudflare Worker has no writable filesystem, so there publishing needs the GitHub token.
+ */
+export const canWriteToWorkingTree = import.meta.env.DEV;
+
+function requireWritableTarget(): void {
+  if (canWriteToWorkingTree) return;
+  throw new Error(
+    'ブログの保存先が設定されていません。Cloudflare Worker はリポジトリを直接書き換えられないため、' +
+      'シークレット BLOG_PUBLISH_GITHUB_TOKEN を設定してください。'
+  );
+}
+
 export function canAutoPublish(): boolean {
   return isGitHubPublishConfigured();
 }
@@ -47,6 +61,7 @@ export async function publishBlogPost(
     };
   }
 
+  requireWritableTarget();
   const { saveMdPost } = await import('./blog-md-fs');
   const success = saveMdPost(post, previousSlug);
   if (!success) {
@@ -70,6 +85,7 @@ export async function deleteBlogPost(
     return { mode: 'github' };
   }
 
+  requireWritableTarget();
   const { deleteMdPost } = await import('./blog-md-fs');
   deleteMdPost(region, slug);
   return { mode: 'local' };
@@ -92,6 +108,7 @@ export async function publishBlogImage(
     return { path: publicPath, mode: 'github', commitSha };
   }
 
+  requireWritableTarget();
   const { uploadBlogImage } = await import('./blog-md-fs');
   return { path: uploadBlogImage(fileName, buffer), mode: 'local' };
 }
