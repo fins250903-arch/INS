@@ -111,23 +111,15 @@ push ごとに Cloudflare 側でビルドとデプロイが走ります（GitHub
 | Production branch | `main` |
 | Root directory | `/`（空欄） |
 | Build command | 空欄 |
-| Deploy command | `npm run deploy` |
-| Non-production branch deploy command | `npm run deploy:preview` |
+| Deploy command | `npx wrangler deploy`（ダッシュボードのデフォルトのままで可） |
+| Non-production branch deploy command | `npx wrangler versions upload`（デフォルトのままで可） |
 
-`npm run deploy` と `npm run deploy:preview` は内部で `npm run build`（= `astro build`）を実行してから
-`wrangler deploy` / `wrangler versions upload` を呼ぶため、Build command は空欄にします。
+`wrangler.jsonc` の `build.command`（`scripts/cf-workers-build.mjs`）が `astro build` を実行してから
+生成物を wrangler が見つけられるパスへコピーします。そのため Build command は空欄で、
+Deploy command は Cloudflare のデフォルト（`npx wrangler deploy`）のままで通ります。
 Build command に `npm run build` を入れると同じビルドが 2 回走ります。
 
-Cloudflare のデフォルト（`npx wrangler deploy`）をそのまま使う構成にする場合は、次の組み合わせにします。
-**どちらか一方だけ**にしてください。
-
-| Build command | Deploy command | Non-production branch deploy command |
-| :--- | :--- | :--- |
-| `npm run build` | `npx wrangler deploy --no-autoconfig` | `npx wrangler versions upload` |
-
-`--no-autoconfig` は下のトラブルシューティングにある `astro add cloudflare` の自動セットアップを無効にするフラグです
-（`npm run deploy` には既に入っています）。設定が揃っていれば自動セットアップは走りませんが、付けておくと
-設定を見失ったときに黙って修復を試みる代わりに明示的なエラーで止まります。
+`npm run deploy` / `npm run deploy:preview` は同じ wrangler コマンドです（カスタムビルドが先に走ります）。
 
 いずれの構成でも **ビルドがデプロイより先に実行されること**が条件です。`astro build` が
 `dist/server/entry.mjs` と `.wrangler/deploy/config.json`（`wrangler.jsonc` からのリダイレクト設定）を
