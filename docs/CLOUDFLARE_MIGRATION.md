@@ -246,6 +246,28 @@ Failed: error occurred while running deploy command
 `The entry-point file at "@astrojs/cloudflare/entrypoints/server" was not found.` という明示的な
 エラーになります（「先に `npm run build` を実行してください」という意味です）。
 
+このリポジトリは **Astro 6** です。`npx astro add cloudflare`（Wrangler の自動セットアップが呼ぶコマンド）は
+現在 `@astrojs/cloudflare@^14` を入れようとしますが、adapter 14 の peer は `astro@^7.2.0` です。
+そのため `main`（Vercel 構成のまま、`wrangler.jsonc` なし）を Workers Builds がビルドすると、必ず次で止まります。
+
+```
+npm error Found: astro@6.x
+npm error Could not resolve dependency:
+npm error peer astro@"^7.2.0" from @astrojs/cloudflare@14.3.3
+The command `npm i @astrojs/cloudflare@^14.3.3 wrangler@^4.x` exited with code 1
+```
+
+`--legacy-peer-deps` で無理に入れても、Astro 7 用 adapter が Astro 6 のサイトを壊します。
+**対処は自動セットアップを成功させることではなく、Cloudflare 設定済みのコミットをビルドすることです。**
+
+- この移行 PR を `main` にマージしてから **Retry build** する
+- または Workers Builds の **Production branch** をこのブランチ
+  （`cursor/migrate-vercel-to-cloudflare-workers-f405`）に切り替える
+
+ダッシュボードの Deploy command は `npx wrangler deploy`（デフォルト）のままでも、
+`wrangler.jsonc` があるコミットなら自動セットアップは走りません。`npm run deploy` の方が
+`--no-autoconfig` 付きでより安全です。
+
 ### `SESSION bindings must have an "id" field`
 
 `@astrojs/cloudflare` は既定で `Astro.session` を Cloudflare KV に載せ、生成する wrangler 設定に
