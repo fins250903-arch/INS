@@ -22,11 +22,7 @@ export function parseUrlsFromSitemapXml(xml: string): string[] {
  * dist/ 以下の sitemap*.xml から URL 一覧を収集
  */
 export function collectUrlsFromLocalSitemaps(gsc: GscConfig): string[] {
-  const candidateDirs = [
-    resolve(ROOT, 'dist/client'),
-    resolve(ROOT, 'dist'),
-    resolve(ROOT, '.vercel/output/static')
-  ];
+  const candidateDirs = [resolve(ROOT, 'dist/client'), resolve(ROOT, 'dist')];
   const dir = candidateDirs.find((d) => existsSync(d));
   if (!dir) {
     throw new GscError(
