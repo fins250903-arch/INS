@@ -24,9 +24,13 @@
   "observability": {
     "enabled": true
   },
-  // Production hostnames. Cloudflare creates/updates the DNS records for custom domains on deploy,
-  // so the zone `insbs.net` must already exist in the same Cloudflare account.
-  "routes": [{ "pattern": "insbs.net", "custom_domain": true }],
+  // Serve on *.workers.dev first. Binding `insbs.net` as a custom_domain here makes
+  // `wrangler deploy` fail when the zone is not yet in this Cloudflare account (Workers Builds
+  // production). Add the hostname in the dashboard after the zone exists:
+  //   Workers → ins → Settings → Domains & Routes → Add insbs.net
+  // Then you can restore:
+  //   "routes": [{ "pattern": "insbs.net", "custom_domain": true }]
+  "workers_dev": true,
   "vars": {
     "DECAP_SITE_URL": "https://insbs.net",
     "BLOG_PUBLISH_GITHUB_REPO": "fins250903-arch/INS",
