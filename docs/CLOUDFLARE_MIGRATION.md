@@ -79,9 +79,12 @@ npm run deploy:legacy-redirects   # www / osak / hyg / siga のリダイレク�
 - Worker が必要とする Cloudflare リソースは静的アセット（`dist/client`）だけです。KV・D1・R2 の事前作成は不要です。
   `Astro.session` はどこからも使っていないため `astro.config.mjs` で `sessionDrivers.null()` を指定しており、
   セッション用 KV 名前空間を作らなくてもデプロイできます（使う場合は `astro.config.mjs` のコメント参照）。
-- `wrangler.jsonc` の `routes` に `custom_domain` を指定しているため、Cloudflare が
-  `insbs.net` / `www` / `osak` / `hyg` / `siga` の DNS レコードをゾーンに自動作成します。
-  **ネームサーバー切り替え前でもゾーン内にレコードが作られるだけなので、本番影響はありません。**
+- 初回の `wrangler deploy` は `*.workers.dev` に出します。`wrangler.jsonc` に
+  `custom_domain` を書いておくと、ゾーン `insbs.net` がまだ Cloudflare に無いアカウントでは
+  本番デプロイ（Workers Builds）が失敗します。ゾーンを追加したあと、ダッシュボードの
+  **Workers → ins → Settings → Domains & Routes** で `insbs.net` を追加してください。
+  `www` / `osak` / `hyg` / `siga` は `npm run deploy:legacy-redirects` のあと同じ画面、
+  または `workers/legacy-redirects/wrangler.jsonc` の `routes` で追加します。
 
 ### Worker のシークレット登録
 
