@@ -7,6 +7,11 @@ INS サイト（`insbs.net`）を Vercel から Cloudflare Workers へ移行す�
 
 ---
 
+DNS が Vercel のあいだ、`main` への push は **Vercel と Cloudflare Workers Builds の両方**でビルドされます。
+`astro.config.mjs` は `VERCEL=1` なら `@astrojs/vercel`、`WORKERS_CI=1`（または未設定のローカル）なら
+`@astrojs/cloudflare` を選びます。`vercel.json` は `redirects.config.json` から生成し、
+`osak.insbs.net/wp1/` などのホスト別リダイレクトを Vercel 側でも維持します。
+
 ## 0. 現状（移行前）の構成
 
 | 項目 | 移行前 | 移行後 |

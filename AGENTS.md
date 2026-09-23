@@ -2,7 +2,7 @@
 
 ## Cursor Cloud specific instructions
 
-This repository is a single **Astro 6 (SSR, Cloudflare Workers adapter)** marketing/SEO website + blog for a
+This repository is a single **Astro 6 (SSR)** marketing/SEO website + blog for a
 Japanese car-interior cleaning business. Everything (public marketing pages, blog, and the self-hosted admin
 CMS) is served by one dev server. There is no database, Docker, or separate backend.
 
@@ -14,8 +14,9 @@ CMS) is served by one dev server. There is no database, Docker, or separate back
 
 ### Lint / test / build (see `package.json` scripts)
 - There is **no lint or test framework** configured. "Validation" is `npm run blog:validate` (checks blog paths/frontmatter). It prints warnings about stray images but still exits 0. `npm run cf:redirects:check` fails when `public/_redirects` is stale, and `npm run cf:redirects:verify` replays the redirect expectations captured before the Cloudflare migration.
-- Production build: `npm run build`, then `npm run preview` to serve the build on `http://localhost:8787` through `wrangler dev` (the real `workerd` runtime). Matches the CI in `.github/workflows/deploy-cloudflare.yml`, which runs `npm ci` → `fix-blog-media-paths.mjs` → `validate-blog-content.mjs` → redirect checks → `npm run build` on the Node version in `.node-version`.
-- Deployment: `npm run deploy` (site Worker `ins`) and `npm run deploy:legacy-redirects` (`ins-legacy-redirects`, the www/osak/hyg/siga hostnames). A bare `npx wrangler deploy` also works: `wrangler.jsonc` → `build.command` runs `scripts/cf-workers-build.mjs` so Workers Builds does not need a separate Build command. See `docs/CLOUDFLARE_MIGRATION.md`.
+- Production build: `npm run build`, then `npm run preview` to serve the Cloudflare build on `http://localhost:8787` through `wrangler dev`. `ASTRO_ADAPTER=vercel npm run build` produces `.vercel/output` (used while DNS still points at Vercel). CI is `.github/workflows/deploy-cloudflare.yml` on the Node version in `.node-version`.
+- Live DNS is still Vercel (`insbs.net`, `osak` / `hyg` / `siga` / `www`). Vercel sets `VERCEL=1` and uses `@astrojs/vercel` plus `vercel.json` (generated from `redirects.config.json`). Cloudflare Workers Builds sets `WORKERS_CI=1` and uses `@astrojs/cloudflare`. See `docs/CLOUDFLARE_MIGRATION.md`.
+- Deployment (Cloudflare): `npm run deploy` (site Worker `ins`) and `npm run deploy:legacy-redirects`. A bare `npx wrangler deploy` also works via `wrangler.jsonc` → `build.command`.
 
 ### Gotchas
 - `npm run build` runs preprocessing scripts (`blog:fix-media`, `wp:resolve-images`) that **move stray images** and rewrite media paths, so the working tree becomes dirty after a build. This is expected; run `git checkout -- . && git clean -fd src/content public/blog-images` to restore if the changes were unintended.

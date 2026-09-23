@@ -2,8 +2,25 @@
 import { defineConfig, envField, sessionDrivers } from 'astro/config';
 
 import cloudflare from '@astrojs/cloudflare';
+import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
+
+// DNS is still on Vercel. Workers Builds sets WORKERS_CI; Vercel sets VERCEL.
+// `ASTRO_ADAPTER=vercel|cloudflare` overrides the auto-detect for local builds.
+const adapterName =
+  process.env.ASTRO_ADAPTER === 'vercel' || process.env.ASTRO_ADAPTER === 'cloudflare'
+    ? process.env.ASTRO_ADAPTER
+    : process.env.WORKERS_CI || process.env.CF_PAGES
+      ? 'cloudflare'
+      : process.env.VERCEL
+        ? 'vercel'
+        : 'cloudflare';
+
+const adapter =
+  adapterName === 'vercel'
+    ? vercel()
+    : cloudflare({ imageService: 'compile', prerenderEnvironment: 'node' });
 
 // https://astro.build/config
 export default defineConfig({
@@ -65,10 +82,8 @@ export default defineConfig({
     })
   ],
 
-  // `compile` optimizes every `<Image />` with sharp during the build, so prerendered pages ship the
-  // same pre-generated WebP assets as before. The few SSR routes fall back to the original file.
-  //
-  // Prerendering runs in Node because pages bake in the current date (`SITE_CONTENT_UPDATED`,
-  // JSON-LD `dateModified`), and `workerd` freezes its clock at the epoch until the first I/O.
-  adapter: cloudflare({ imageService: 'compile', prerenderEnvironment: 'node' })
+  // Cloudflare: `compile` pre-generates WebP at build time; prerendering runs in Node because
+  // `workerd` freezes its clock at the epoch until the first I/O (`dateModified` would become 1970).
+  // Vercel: the platform adapter serves the same prerendered pages while DNS still points here.
+  adapter
 });
