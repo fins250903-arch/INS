@@ -6,10 +6,15 @@
   "compatibility_date": "2026-04-15",
   // `nodejs_compat` is required by `Buffer` usage in the GitHub publisher and by Astro internals.
   "compatibility_flags": ["nodejs_compat"],
-  // Astro's build replaces this entry with `dist/server/entry.mjs` through the deploy config it
-  // writes to `.wrangler/deploy/config.json`, so every wrangler command must run after `astro build`.
+  // Workers Builds' default deploy command is a bare `npx wrangler deploy` (no prior `astro build`).
+  // This command builds the site and copies the generated Worker to the path wrangler expects
+  // from `main` (see scripts/cf-workers-build.mjs).
+  "build": { "command": "node scripts/cf-workers-build.mjs" },
+  // Package export (no file extension) so Vite can resolve it during `astro build`. After the
+  // custom build, wrangler looks for `<repo>/@astrojs/cloudflare/entrypoints/server.js`.
   "main": "@astrojs/cloudflare/entrypoints/server",
   "assets": {
+    "directory": "./dist/client",
     "binding": "ASSETS",
     // Prerendered pages are directories containing `index.html`; Astro emits trailing-slash URLs.
     "html_handling": "auto-trailing-slash",

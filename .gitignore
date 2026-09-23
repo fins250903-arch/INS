@@ -32,3 +32,6 @@ secrets/
 .wrangler/
 .dev.vars
 worker-configuration.d.ts
+
+# Copy of dist/server/entry.mjs for a bare `npx wrangler deploy` (see scripts/cf-workers-build.mjs)
+/@astrojs/
