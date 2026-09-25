@@ -33,12 +33,14 @@
     "ins": {
       "config": "wrangler.jsonc",
       "hostnames": ["insbs.net"],
-      "role": "Serves the site (prerendered pages + SSR)."
+      "bind_via": "dashboard",
+      "role": "Serves the site (prerendered pages + SSR). Bind insbs.net in the dashboard — wrangler custom_domain fails while the zone is Pending and breaks Workers Builds."
     },
     "ins-legacy-redirects": {
       "config": "workers/legacy-redirects/wrangler.jsonc",
       "hostnames": ["www.insbs.net", "osak.insbs.net", "hyg.insbs.net", "siga.insbs.net"],
-      "role": "308 to https://insbs.net using redirects.config.json host rules (same as the old Vercel host redirects)."
+      "bind_via": "wrangler",
+      "role": "308 to https://insbs.net using redirects.config.json host rules (same as the old Vercel host redirects). Not deployed by the ins Workers Builds project."
     }
   },
   "dns_preserve": [

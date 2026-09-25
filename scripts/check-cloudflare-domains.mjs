@@ -19,23 +19,26 @@ const bind = readFileSync(join(ROOT, 'cloudflare/dns-import.bind'), 'utf-8');
 const site = loadJsonc(join(ROOT, 'wrangler.jsonc'));
 const legacy = loadJsonc(join(ROOT, 'workers/legacy-redirects/wrangler.jsonc'));
 
-const expected = {
-  ins: domains.workers.ins.hostnames,
-  'ins-legacy-redirects': domains.workers['ins-legacy-redirects'].hostnames
-};
-
-const actual = {
-  ins: (site.routes ?? []).filter((r) => r.custom_domain).map((r) => r.pattern),
-  'ins-legacy-redirects': (legacy.routes ?? []).filter((r) => r.custom_domain).map((r) => r.pattern)
+const configs = {
+  ins: site,
+  'ins-legacy-redirects': legacy
 };
 
 let failed = 0;
-for (const name of Object.keys(expected)) {
-  const want = [...expected[name]].sort().join(',');
-  const got = [...actual[name]].sort().join(',');
-  if (want !== got) {
+for (const [name, spec] of Object.entries(domains.workers)) {
+  const actual = (configs[name].routes ?? []).filter((r) => r.custom_domain).map((r) => r.pattern);
+  const bindVia = spec.bind_via ?? 'wrangler';
+  const want = bindVia === 'dashboard' ? [] : spec.hostnames;
+  const wantKey = [...want].sort().join(',');
+  const gotKey = [...actual].sort().join(',');
+  if (wantKey !== gotKey) {
     failed += 1;
-    console.error(`${name} custom domains\n  expected: ${want}\n  actual:   ${got}`);
+    console.error(
+      `${name} wrangler custom domains (bind_via=${bindVia})\n  expected in wrangler: ${wantKey || '(none — bind in the dashboard)'}\n  actual:               ${gotKey || '(none)'}`
+    );
+  }
+  if (bindVia === 'dashboard' && spec.hostnames.length) {
+    console.log(`${name} hostnames for the dashboard: ${spec.hostnames.join(', ')}`);
   }
 }
 
@@ -52,6 +55,12 @@ for (const rec of domains.dns_preserve ?? []) {
 }
 
 if (failed) process.exit(1);
+const dashboardHosts = Object.values(domains.workers)
+  .filter((w) => w.bind_via === 'dashboard')
+  .reduce((n, w) => n + w.hostnames.length, 0);
+const wranglerHosts = Object.values(domains.workers)
+  .filter((w) => (w.bind_via ?? 'wrangler') === 'wrangler')
+  .reduce((n, w) => n + w.hostnames.length, 0);
 console.log(
-  `Cloudflare custom domains match cloudflare/domains.json (${expected.ins.length} on ins, ${expected['ins-legacy-redirects'].length} on ins-legacy-redirects; ${domains.dns_preserve.length} extra DNS records in BIND import).`
+  `cloudflare/domains.json is consistent (${wranglerHosts} wrangler custom domains, ${dashboardHosts} dashboard hostnames, ${domains.dns_preserve.length} extra DNS records in BIND import).`
 );
