@@ -109,16 +109,16 @@ npm run deploy:legacy-redirects   # www / osak / hyg / siga のリダイレク�
   1. [Cloudflare Dashboard](https://dash.cloudflare.com) に、Worker `ins` がある **同じログイン** で入る
   2. **Workers & Pages → ins → Settings → Domains & Routes → Add**
   3. `insbs.net` を追加する（Custom Domain）
-  4. `www` / `osak` / `hyg` / `siga` は Worker `ins-legacy-redirects` 側で同じ操作、
-     または `npm run deploy:legacy-redirects`（こちらは wrangler の `custom_domain` を使う）
+  4. `www` / `osak` / `hyg` / `siga` は、先に Worker `ins-legacy-redirects` を手順 3.5 で作ってから、
+     同じ **Domains & Routes → Add** で結びます（Pending ゾーンでは wrangler の `custom_domain` は使いません）
 
   | Vercel（現行） | Cloudflare Worker | 結び方 | 挙動 |
   | :--- | :--- | :--- | :--- |
   | `insbs.net`（Production） | `ins` | ダッシュボード | サイト本体（SSG + SSR） |
-  | `www.insbs.net`（apex へリダイレクト） | `ins-legacy-redirects` | wrangler | `https://insbs.net/:splat` へ 308 |
-  | `osak.insbs.net`（ホスト別リダイレクト） | `ins-legacy-redirects` | wrangler | `/wp1/` → `/osaka/` など |
-  | `hyg.insbs.net` | `ins-legacy-redirects` | wrangler | `/wp1/` → `/hyougo/` など |
-  | `siga.insbs.net` | `ins-legacy-redirects` | wrangler | `/wp1/` → `/siga/` など |
+  | `www.insbs.net`（apex へリダイレクト） | `ins-legacy-redirects` | ダッシュボード | `https://insbs.net/:splat` へ 308 |
+  | `osak.insbs.net`（ホスト別リダイレクト） | `ins-legacy-redirects` | ダッシュボード | `/wp1/` → `/osaka/` など |
+  | `hyg.insbs.net` | `ins-legacy-redirects` | ダッシュボード | `/wp1/` → `/hyougo/` など |
+  | `siga.insbs.net` | `ins-legacy-redirects` | ダッシュボード | `/wp1/` → `/siga/` など |
 
   apex とレガシーサブドメインを同じ Worker に載せない理由は、`public/_redirects` がホスト名を
   見ないからです。`hyg.insbs.net/` を `ins` に付けると `/osaka/` へ落ちます。
@@ -172,9 +172,17 @@ Build command に `npm run build` を入れると同じビルドが 2 回走り�
 
 - Node.js は直下の `.node-version`（`22`）で固定しています。Workers Builds のデフォルトは Node 24、
   `package.json` の `engines` は `>=22.12.0` です。
-- `ins-legacy-redirects` は別 Worker です。Workers Builds で扱うなら **2 つ目のプロジェクト**として同じ
-  リポジトリを接続し、Deploy command に `npm run deploy:legacy-redirects`（非本番は
-  `npm run deploy:legacy-redirects:preview`）を設定します。
+- `ins-legacy-redirects` は **別 Worker** です。サイト用の `ins` プロジェクトでは作られません。
+  ダッシュボードにこの名前が無いときは、次で 2 つ目の Workers Builds を作ります。
+
+  1. **Workers & Pages → Create → Connect to Git**（同じリポジトリ `fins250903-arch/INS`）
+  2. プロジェクト名を `ins-legacy-redirects` にする
+  3. Production branch は `main`、Root directory は空、Build command は空
+  4. **Deploy command だけ変える**（ここを忘れると、またサイト本体 `ins` を上書きします）
+     - 本番: `npm run deploy:legacy-redirects`
+     - 非本番: `npm run deploy:legacy-redirects:preview`
+  5. デプロイ成功後、**Settings → Domains & Routes → Add** で
+     `www.insbs.net` / `osak.insbs.net` / `hyg.insbs.net` / `siga.insbs.net` を追加する
 - GitHub Actions のワークフロー（`.github/workflows/deploy-cloudflare.yml`）は `CLOUDFLARE_API_TOKEN` が
   未登録ならデプロイ手順をスキップし、検証とビルドだけを行います。Workers Builds と二重にデプロイしたく
   ない場合は、手順 2 のシークレットを登録しないでください。

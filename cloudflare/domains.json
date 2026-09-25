@@ -39,8 +39,8 @@
     "ins-legacy-redirects": {
       "config": "workers/legacy-redirects/wrangler.jsonc",
       "hostnames": ["www.insbs.net", "osak.insbs.net", "hyg.insbs.net", "siga.insbs.net"],
-      "bind_via": "wrangler",
-      "role": "308 to https://insbs.net using redirects.config.json host rules (same as the old Vercel host redirects). Not deployed by the ins Workers Builds project."
+      "bind_via": "dashboard",
+      "role": "308 to https://insbs.net using redirects.config.json host rules. Create this as a second Workers Builds project (deploy command npm run deploy:legacy-redirects), then bind the four hostnames in the dashboard. Not created by the ins project."
     }
   },
   "dns_preserve": [

@@ -1,17 +1,15 @@
 {
-  // Redirect-only Worker for the non-canonical hostnames of insbs.net.
+  // Redirect-only Worker for www / osak / hyg / siga.
   // Deploy with: npm run deploy:legacy-redirects
+  // Do not put custom_domain routes here while the zone is Pending — the same
+  // zone_not_found failure that broke Worker `ins` on main. Bind hostnames in
+  // the dashboard after this Worker exists (cloudflare/domains.json).
   "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "ins-legacy-redirects",
   "main": "src/index.ts",
   "compatibility_date": "2026-04-15",
+  "workers_dev": true,
   "observability": {
     "enabled": true
-  },
-  "routes": [
-    { "pattern": "www.insbs.net", "custom_domain": true },
-    { "pattern": "osak.insbs.net", "custom_domain": true },
-    { "pattern": "hyg.insbs.net", "custom_domain": true },
-    { "pattern": "siga.insbs.net", "custom_domain": true }
-  ]
+  }
 }
