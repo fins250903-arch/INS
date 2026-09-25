@@ -235,7 +235,7 @@ export const keywordLps: KeywordLp[] = [
     slug: 'pet-ke',
     keyword: '車ペット毛',
     fvCopy: '【{{region}}】シートに絡みついたペットの毛\n特殊機材で根こそぎ除去',
-    pageTitle: '【{{region}}】車のペットの毛（犬・猫）｜特殊機材で根こそぎ除去｜INS'
+    pageTitle: '【{{region}}】車のペットの毛（犬・猫）｜特殊機材で根こそぎ除去｜INS',
     troubles: [
       'シートやフロアマットの織り目にペットの細い毛が絡まり、家庭用掃除機では全く吸い取れない',
       '粘着粘着ローラー（コロコロ）を何枚使ってもキリがなく、手作業での掃除に限界を感じている',
