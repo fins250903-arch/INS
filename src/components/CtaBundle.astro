@@ -27,7 +27,7 @@ const {
       {benefitHighlight ? (
         <>
           {benefitHighlight}
-          <span class="cta-subtext">（365日24時間・見積無料）</span>
+          <span class="cta-subtext cta-subtext-line">365日24時間・見積無料</span>
         </>
       ) : (
         <>
@@ -123,6 +123,12 @@ const {
     font-size: 0.95rem;
     color: #666666;
     font-weight: 700;
+  }
+
+  .cta-subtext-line {
+    display: block;
+    margin-top: 0.2rem;
+    white-space: nowrap;
   }
 
   .cta-action-area {
