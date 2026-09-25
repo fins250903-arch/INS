@@ -23,6 +23,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
+    /* Avoid a single leftover character on the last mobile line. */
+    text-wrap: pretty;
+    line-break: strict;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   @media (max-width: 900px) {

@@ -241,8 +241,10 @@ const formatDate = (date: Date) => {
   <div class="relative mx-auto w-full max-w-6xl px-6 py-10 sm:py-12 lg:py-14">
     <div class="flex flex-col gap-5">
       <div>
-        <h1 class="fv-title text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-          {regionName}｜車内の嘔吐・ゲロ掃除<br />出張 車内清掃（即日・立会不要）
+        <h1 class="fv-title text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-pretty">
+          {regionName}｜嘔吐・ゲロ掃除
+          <br />出張車内清掃
+          <br />即日・立会不要
         </h1>
         <p class="fv-sub mt-5 text-sm font-bold tracking-wide text-white/95 sm:text-base">
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">即日訪問</span>
@@ -1167,6 +1169,8 @@ DIYは軽度向きで深部汚れは限界`}
       font-size: 2.15rem !important; /* 約120%〜130%拡大 */
       line-height: 1.25 !important;
       letter-spacing: -0.01em !important;
+      text-wrap: pretty;
+      line-break: strict;
     }
     .fv-sub {
       font-size: 1.05rem !important; /* 約120%拡大 */

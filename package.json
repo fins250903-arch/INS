@@ -17,6 +17,7 @@
     "cf:redirects:check": "tsx scripts/generate-cloudflare-redirects.ts --check && tsx scripts/generate-vercel-redirects.ts --check",
     "cf:redirects:verify": "tsx scripts/verify-redirects.ts",
     "cf:domains:check": "node scripts/check-cloudflare-domains.mjs",
+    "cf:lp:audit": "node scripts/audit-lp-cloudflare.mjs",
     "vercel:redirects": "tsx scripts/generate-vercel-redirects.ts",
     "vercel:redirects:check": "tsx scripts/generate-vercel-redirects.ts --check",
     "deploy": "wrangler deploy --no-autoconfig",
