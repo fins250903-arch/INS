@@ -49,6 +49,9 @@ jobs:
       - name: Fail if the committed public/_redirects is out of date
         run: npm run cf:redirects:check
 
+      - name: Fail if Worker custom domains drift from cloudflare/domains.json
+        run: npm run cf:domains:check
+
       - name: Build production site
         run: npm run build
 

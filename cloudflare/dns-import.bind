@@ -1,0 +1,14 @@
+; Extra DNS records to import into the Cloudflare zone `insbs.net`
+; AFTER adding the site in Cloudflare and BEFORE switching nameservers.
+;
+; Do not import A/AAAA/CNAME for @, www, osak, hyg, or siga — `wrangler deploy`
+; creates those as Worker custom domains.
+;
+; Dashboard: DNS → Records → Import and Export → Import
+; Or: nsupdate-style paste. TTL values match the live Vercel zone (2026-09-25).
+
+insbs.net. 3600 IN MX 1 smtp.google.com.
+insbs.net. 60 IN TXT "google-site-verification=IolN3zW9p79labypkA-LK5HKHJMM6bmrUGlrRaN__RQ"
+insbs.net. 60 IN CAA 0 issue "letsencrypt.org"
+insbs.net. 60 IN CAA 0 issue "pki.goog"
+insbs.net. 60 IN CAA 0 issue "sectigo.com"

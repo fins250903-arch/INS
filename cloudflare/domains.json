@@ -1,0 +1,93 @@
+{
+  "$comment": "Vercel dashboard domains → Cloudflare Workers custom domains. Extra DNS (MX/TXT/CAA) is not created by wrangler; import cloudflare/dns-import.bind after adding the zone. Keep wrangler routes in sync via npm run cf:domains:check.",
+  "zone": "insbs.net",
+  "canonical": "https://insbs.net",
+  "vercel_to_cloudflare": [
+    {
+      "hostname": "insbs.net",
+      "vercel": "Production domain on the ins project (A records on Vercel DNS)",
+      "cloudflare": "custom_domain on Worker ins"
+    },
+    {
+      "hostname": "www.insbs.net",
+      "vercel": "Redirect to apex (Vercel domain setting)",
+      "cloudflare": "custom_domain on Worker ins-legacy-redirects → 308 https://insbs.net/:splat"
+    },
+    {
+      "hostname": "osak.insbs.net",
+      "vercel": "Host-scoped redirects (e.g. /wp1/ → /osaka/)",
+      "cloudflare": "custom_domain on Worker ins-legacy-redirects"
+    },
+    {
+      "hostname": "hyg.insbs.net",
+      "vercel": "Host-scoped redirects (e.g. /wp1/ → /hyougo/)",
+      "cloudflare": "custom_domain on Worker ins-legacy-redirects"
+    },
+    {
+      "hostname": "siga.insbs.net",
+      "vercel": "Host-scoped redirects (e.g. /wp1/ → /siga/)",
+      "cloudflare": "custom_domain on Worker ins-legacy-redirects"
+    }
+  ],
+  "workers": {
+    "ins": {
+      "config": "wrangler.jsonc",
+      "hostnames": ["insbs.net"],
+      "role": "Serves the site (prerendered pages + SSR)."
+    },
+    "ins-legacy-redirects": {
+      "config": "workers/legacy-redirects/wrangler.jsonc",
+      "hostnames": ["www.insbs.net", "osak.insbs.net", "hyg.insbs.net", "siga.insbs.net"],
+      "role": "308 to https://insbs.net using redirects.config.json host rules (same as the old Vercel host redirects)."
+    }
+  },
+  "dns_preserve": [
+    {
+      "type": "MX",
+      "name": "@",
+      "priority": 1,
+      "content": "smtp.google.com",
+      "ttl": 3600,
+      "why": "Google Workspace / Gmail"
+    },
+    {
+      "type": "TXT",
+      "name": "@",
+      "content": "google-site-verification=IolN3zW9p79labypkA-LK5HKHJMM6bmrUGlrRaN__RQ",
+      "ttl": 60,
+      "why": "Google Search Console"
+    },
+    {
+      "type": "CAA",
+      "name": "@",
+      "flags": 0,
+      "tag": "issue",
+      "content": "letsencrypt.org",
+      "ttl": 60,
+      "why": "Copied from Vercel DNS"
+    },
+    {
+      "type": "CAA",
+      "name": "@",
+      "flags": 0,
+      "tag": "issue",
+      "content": "pki.goog",
+      "ttl": 60,
+      "why": "Copied from Vercel DNS"
+    },
+    {
+      "type": "CAA",
+      "name": "@",
+      "flags": 0,
+      "tag": "issue",
+      "content": "sectigo.com",
+      "ttl": 60,
+      "why": "Copied from Vercel DNS"
+    }
+  ],
+  "do_not_copy": [
+    "A/AAAA for @ and www (Vercel anycast) — Worker custom domains create these",
+    "CNAME for osak/hyg/siga to cname.vercel-dns.com — Worker custom domains create these",
+    "NS ns1/ns2.vercel-dns.com — replaced by Cloudflare nameservers at the registrar"
+  ]
+}

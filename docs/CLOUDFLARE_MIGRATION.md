@@ -20,7 +20,8 @@ DNS が Vercel のあいだ、`main` への push は **Vercel と Cloudflare Wor
 | 静的ページ | Vercel Edge Network | Workers Static Assets（`dist/client`、651 ページ） |
 | SSR ルート | Vercel Functions | Worker（`/admin/blog-manager/`、`/api/**`、`/auth`、`/callback`、`/wp1/**`、`/image-proxy`） |
 | リダイレクト | `vercel.json`（227 件） | `public/_redirects`（206 件）＋ `ins-legacy-redirects` Worker（31 件） |
-| DNS | Vercel DNS（`ns1/ns2.vercel-dns.com`） | Cloudflare DNS |
+| DNS | Vercel DNS（`ns1/ns2.vercel-dns.com`） | Cloudflare DNS（追加レコードは `cloudflare/dns-import.bind`） |
+| 本番ホスト | Vercel プロジェクトの Domains（apex / www / osak / hyg / siga） | Worker `custom_domain`（対応表は `cloudflare/domains.json`） |
 | `www` → apex | Vercel のドメイン設定 | `ins-legacy-redirects` Worker |
 | ブログ記事 | `src/content/blog/**`（Git 管理・186 記事） | 同じ（リポジトリごと移行されるため作業不要） |
 | ブログ画像 | `public/blog-images/**`（約 30MB） | 同じ（Workers Static Assets として配信） |
@@ -34,20 +35,34 @@ DNS が Vercel のあいだ、`main` への push は **Vercel と Cloudflare Wor
 
 1. Cloudflare アカウントにログインし、**Add a site** で `insbs.net` をゾーンとして追加します。
 2. Cloudflare が既存 DNS をスキャンします。**この時点ではネームサーバーを切り替えないでください。**
-3. スキャン結果に以下が含まれているか確認し、足りないものは手で追加します（Vercel DNS 側の値は
-   `dig` で確認できます）。
-   - メール関連（MX / SPF / DKIM / DMARC）— **取りこぼすとメールが止まります。最優先で確認**
-   - Google Search Console の TXT 検証レコード
-   - その他 CNAME / TXT（SendGrid、各種検証用など）
-   - `insbs.net` / `www` / `osak` / `hyg` / `siga` の A・CNAME は追加不要です（手順 3 で Worker の
-     カスタムドメインとして自動作成されます）
+   `wrangler.jsonc` の `custom_domain` はゾーンが同じアカウントに無いとデプロイ自体が失敗します
+   （Workers Builds で以前落ちた理由）。**ゾーン追加 → 手順 3 のデプロイ → ネームサーバー切替**
+   の順を守ってください。
+3. スキャン結果に以下が含まれているか確認し、足りないものは手で追加します。Vercel ダッシュボード
+   のドメイン割り当ては `cloudflare/domains.json` に写してあり、**A / CNAME 以外** の現行レコードは
+   `cloudflare/dns-import.bind` です。ダッシュボードの **DNS → Records → Import and Export → Import**
+   にそのファイルを流し込むか、下表を手で入れます。
 
-   移行前の値は以下で取得できます。
+   | 種別 | 名前 | 値 | 用途 |
+   | :--- | :--- | :--- | :--- |
+   | MX | `@` | `1 smtp.google.com` | Google Workspace / Gmail |
+   | TXT | `@` | `google-site-verification=IolN3zW9p79labypkA-LK5HKHJMM6bmrUGlrRaN__RQ` | Google Search Console |
+   | CAA | `@` | `0 issue "letsencrypt.org"` / `"pki.goog"` / `"sectigo.com"` | 現行 Vercel DNS と同じ |
+
+   - SPF / DKIM / DMARC は現行ゾーンに無いのでコピー対象ではありません。
+   - `insbs.net` / `www` / `osak` / `hyg` / `siga` の A・CNAME（Vercel anycast / `cname.vercel-dns.com`）
+     は **入れない** でください。手順 3 の `wrangler deploy` が Worker カスタムドメインとして作ります。
+   - NS（`ns1/ns2.vercel-dns.com`）もコピーしません。手順 5 でレジストラ側を Cloudflare に変えます。
+
+   移行前の値は以下で再確認できます。
 
    ```bash
-   for name in @ www osak hyg siga; do dig +noall +answer ANY ${name}.insbs.net @ns1.vercel-dns.com; done
-   dig +noall +answer MX insbs.net @ns1.vercel-dns.com
-   dig +noall +answer TXT insbs.net @ns1.vercel-dns.com
+   npm run cf:domains:check
+   dig +short NS insbs.net
+   dig +short MX insbs.net
+   dig +short TXT insbs.net
+   dig +short CAA insbs.net
+   for name in www osak hyg siga; do echo "== $name =="; dig +short CNAME ${name}.insbs.net; dig +short A ${name}.insbs.net; done
    ```
 
 4. API トークンを発行します（**My Profile → API Tokens → Create Token**）。
@@ -84,12 +99,22 @@ npm run deploy:legacy-redirects   # www / osak / hyg / siga のリダイレク�
 - Worker が必要とする Cloudflare リソースは静的アセット（`dist/client`）だけです。KV・D1・R2 の事前作成は不要です。
   `Astro.session` はどこからも使っていないため `astro.config.mjs` で `sessionDrivers.null()` を指定しており、
   セッション用 KV 名前空間を作らなくてもデプロイできます（使う場合は `astro.config.mjs` のコメント参照）。
-- 初回の `wrangler deploy` は `*.workers.dev` に出します。`wrangler.jsonc` に
-  `custom_domain` を書いておくと、ゾーン `insbs.net` がまだ Cloudflare に無いアカウントでは
-  本番デプロイ（Workers Builds）が失敗します。ゾーンを追加したあと、ダッシュボードの
-  **Workers → ins → Settings → Domains & Routes** で `insbs.net` を追加してください。
-  `www` / `osak` / `hyg` / `siga` は `npm run deploy:legacy-redirects` のあと同じ画面、
-  または `workers/legacy-redirects/wrangler.jsonc` の `routes` で追加します。
+- デプロイは `*.workers.dev` **と** Vercel と同じホスト名を Worker カスタムドメインとして結びます。
+  ゾーン `insbs.net` が手順 1 で同じアカウントに入っていることが必須です。ホスト名の対応は
+  `cloudflare/domains.json`（`npm run cf:domains:check` で wrangler と突き合わせ）です。
+
+  | Vercel（現行） | Cloudflare Worker | 挙動 |
+  | :--- | :--- | :--- |
+  | `insbs.net`（Production） | `ins` | サイト本体（SSG + SSR） |
+  | `www.insbs.net`（apex へリダイレクト） | `ins-legacy-redirects` | `https://insbs.net/:splat` へ 308 |
+  | `osak.insbs.net`（ホスト別リダイレクト） | `ins-legacy-redirects` | `/wp1/` → `/osaka/` など |
+  | `hyg.insbs.net` | `ins-legacy-redirects` | `/wp1/` → `/hyougo/` など |
+  | `siga.insbs.net` | `ins-legacy-redirects` | `/wp1/` → `/siga/` など |
+
+  apex とレガシーサブドメインを同じ Worker に載せない理由は、`public/_redirects` がホスト名を
+  見ないからです。`hyg.insbs.net/` を `ins` に付けると `/osaka/` へ落ちます。
+  ホスト別ルールは `redirects.config.json` の `host` 付きエントリを
+  `ins-legacy-redirects` が評価します（Vercel `vercel.json` の `has: host` と同じ）。
 
 ### Worker のシークレット登録
 
@@ -167,11 +192,14 @@ npm run cf:redirects:verify
 
 ## 5. DNS 切り替え（ネームサーバー変更）
 
-1. Cloudflare が案内するネームサーバー（例 `xxx.ns.cloudflare.com`）を **レジストラ** 側で設定します。
+1. 手順 1 の BIND インポートと手順 3 の Worker カスタムドメインが揃っていることを確認します。
+   apex / www / osak / hyg / siga の A・CNAME は Worker 側が作っているはずです。Vercel の
+   anycast レコードがゾーンに残っていたら削除してください（切替後に古い IP へ戻ります）。
+2. Cloudflare が案内するネームサーバー（例 `xxx.ns.cloudflare.com`）を **レジストラ** 側で設定します。
    現在は `ns1.vercel-dns.com` / `ns2.vercel-dns.com` です。
-2. 反映（通常数分〜数時間、最大 48 時間）を待ち、Cloudflare ダッシュボードのゾーンが **Active** に
+3. 反映（通常数分〜数時間、最大 48 時間）を待ち、Cloudflare ダッシュボードのゾーンが **Active** に
    なることを確認します。
-3. TTL の関係で切り替え中は Vercel と Cloudflare の両方に振り分けられます。**この期間中は Vercel の
+4. TTL の関係で切り替え中は Vercel と Cloudflare の両方に振り分けられます。**この期間中は Vercel の
    プロジェクトを削除しないでください。**
 
 ```bash
@@ -267,6 +295,21 @@ The command `npm i @astrojs/cloudflare@^14.3.3 wrangler@^4.x` exited with code 1
 ダッシュボードの Deploy command は `npx wrangler deploy`（デフォルト）のままでも、
 `wrangler.jsonc` があるコミットなら自動セットアップは走りません。`npm run deploy` の方が
 `--no-autoconfig` 付きでより安全です。
+
+### `Could not find zone for insbs.net` / custom domain のデプロイ失敗
+
+`wrangler.jsonc` と `workers/legacy-redirects/wrangler.jsonc` に `custom_domain` があるため、
+ゾーン `insbs.net` が **この Cloudflare アカウントにまだ無い** と `wrangler deploy` と
+Workers Builds が失敗します（以前 `custom_domain` を外した理由）。
+
+対処はカスタムドメインを外すことではなく、手順 1 でゾーンを追加してから **Retry build** /
+`npm run deploy` することです。ネームサーバーはまだ Vercel のままで構いません。
+ゾーンだけ先に作り、Worker がホスト名を予約してから手順 5 で切替えます。
+
+```bash
+npm run cf:domains:check
+npx wrangler deploy --no-autoconfig --dry-run
+```
 
 ### `SESSION bindings must have an "id" field`
 
