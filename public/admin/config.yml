@@ -32,12 +32,9 @@ collections:
     media_folder: public/blog-images
     public_folder: /blog-images
     summary: '{{date}} · {{regionFull}} · {{title}}'
-    sortable_fields:
-      - { field: date, default_sort: desc }
-      - title
-      - region
-      - regionFull
-      - commit_date
+    # decap-cms@3.3.0 only accepts field-name strings here.
+    # Object form `{ field, default_sort }` needs Decap 3.10+.
+    sortable_fields: [date, title, region, regionFull, commit_date]
     view_filters:
       - label: 下書き
         field: draft
