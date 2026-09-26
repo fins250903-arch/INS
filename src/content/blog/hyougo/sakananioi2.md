@@ -1,13 +1,24 @@
 ---
-title: "【3分で無臭】生魚の汁の臭いを家にある2つで消す！簡単掃除術"
-date: "2026-01-07"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
+title: 【3分で無臭】生魚の汁の臭いを家にある2つで消す！簡単掃除術
+urlSlug: sakananioi2
+date: 2026-09-26
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
+seo:
+  meta_description: >
+    3分で終わる無臭化ステップ
+
+    まずはキッチンペーパーで、こすらずに汁を吸い取ってください。 ここでゴシゴシ広げてしまうのが、臭いを奥へ押し込んでしまう一番の失敗の元です。
+
+    次に、水で濡らして固く絞った布で拭きます。 このとき、絶対にお湯は使わないでください。 魚のタンパク質はお湯で固まって繊維にこびりつき、余計に取れなくなるからです。 ここは冷たい水か、せいぜいぬるま湯で拭くのが正解。
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
