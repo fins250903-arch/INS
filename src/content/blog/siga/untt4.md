@@ -1,15 +1,23 @@
 ---
-title: "【5分で解決】シエンタのシート汚れを消す3つの応急処置"
-urlSlug: "untt4"
-date: "2026-09-24"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
-thumbnail: "-------------------0803-1.jpg"
+title: 【5分で解決】シエンタのシート汚れを消す3つの応急処置
+urlSlug: untt4
+date: 2026-09-24
+region: siga
+regionFull: 滋賀県
+areaLabel: 滋賀・近畿エリア
+thumbnail: /blog-images/シエンタ　813　1.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
+seo:
+  noindex: false
+  meta_description: なぜこの方法が有効なのか、少し専門的な話をします。
+    3年乗っているシエンタのシートは、一見きれいに見えても、繊維が適度に馴染んでいて水分を吸い込みやすくなっています。
+    特に名古屋の多湿な環境では、放置すると菌が爆発的に増え、数日後に「何だか臭う……」という事態を招きかねません。
+    この3ステップは、クリーニングの現場でも行われる「予備洗浄」のロジックに基づいています
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
