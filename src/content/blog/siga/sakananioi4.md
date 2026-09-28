@@ -1,14 +1,25 @@
 ---
-title: "生魚の汁の臭いを家にある2つで消す！簡単掃除術"
-date: "2026-01-07"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
+title: 生魚の汁の臭いを家にある2つで消す！簡単掃除術
+urlSlug: sakananioi4
+date: 2026-09-28
+region: siga
+regionFull: 滋賀県
+areaLabel: 滋賀・近畿エリア
 draft: false
 categories:
-  - "souji"
-  - "blog"
-  - "seisou"
+  - souji
+  - blog
+  - seisou
+seo:
+  meta_description: >
+    まずはキッチンペーパーで、こすらずに汁を吸い取ってください。 ここでゴシゴシ広げてしまうのが、臭いを奥へ押し込んでしまう一番の失敗の元です。
+
+    次に、水で濡らして固く絞った布で拭きます。 このとき、絶対にお湯は使わないでください。 魚のタンパク質はお湯で固まって繊維にこびりつき、余計に取れなくなるからです。 ここは冷たい水か、せいぜいぬるま湯で拭くのが正解。
+
+    仕上げに、お酢を水で半分に薄めたものを布に含ませて、トントンと叩くように拭き上げます。 お酢の匂いは乾けばすぐに飛ぶので安心してください。
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
