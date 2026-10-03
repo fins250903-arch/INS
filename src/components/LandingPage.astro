@@ -233,10 +233,10 @@ const formatDate = (date: Date) => {
 };
 ---
 
-<section class="relative flex min-h-[min(36rem,88svh)] flex-col justify-center overflow-hidden bg-black text-white">
+<section class="lp-fv relative flex min-h-[min(36rem,88svh)] flex-col justify-center overflow-hidden text-white">
   <div class="absolute inset-0">
-    <Image src={bgHero} alt="背景画像" class="h-full w-full object-cover" />
-    <div class="absolute inset-0 bg-black/50"></div>
+    <Image src={bgHero} alt="背景画像" class="lp-fv-photo h-full w-full object-cover" />
+    <div class="lp-fv-scrim absolute inset-0"></div>
   </div>
   <div class="relative mx-auto w-full max-w-6xl px-6 py-10 sm:py-12 lg:py-14">
     <div class="flex flex-col gap-5">
@@ -251,7 +251,7 @@ const formatDate = (date: Date) => {
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">嘔吐・ゲロ対応</span>
           <span class="inline-block border-b-2 border-primary pb-0.5">立会不要</span>
         </p>
-        <div class="mt-4 flex flex-wrap items-center gap-6 rounded-xl bg-black/40 px-5 py-4 backdrop-blur-sm">
+        <div class="mt-4 flex flex-wrap items-center gap-6 rounded-xl bg-slate-950/60 px-5 py-4 shadow-lg backdrop-blur-sm">
           <div>
             <div class="fv-stamp" title="自社アンケート調査（2025年）">
               <span class="fv-stamp-label">顧客満足</span>
@@ -1131,6 +1131,33 @@ DIYは軽度向きで深部汚れは限界`}
 
 <!-- Task 2: スマホ用FV視認性最適化用のスタイル上書き -->
 <style>
+  /*
+    Region LP first view shares the dark seat photo with keyword LPs.
+    Brighten the photo and use a lighter scrim; the copy panel stays
+    translucent dark so white text and amber highlights remain readable.
+  */
+  .lp-fv {
+    background-color: #4b5563;
+  }
+  .lp-fv-photo {
+    filter: brightness(1.38) contrast(1.05) saturate(1.1);
+  }
+  .lp-fv-scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.58) 0%,
+      rgba(15, 23, 42, 0.34) 52%,
+      rgba(15, 23, 42, 0.42) 100%
+    );
+  }
+  .fv-title,
+  .fv-sub,
+  .fv-desc {
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.55),
+      0 2px 12px rgba(0, 0, 0, 0.35);
+  }
+
   /* 丸いハンコ（太鼓判）スタイル */
   .fv-stamp {
     width: 82px;
