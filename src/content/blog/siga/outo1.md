@@ -1,16 +1,25 @@
 ---
-title: "車内で嘔吐　落ち着いて対処！"
-date: "2026-02-14"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
-thumbnail: "outo-1.jpg"
+title: 車内で嘔吐　落ち着いて対処！
+urlSlug: outo1
+date: 2026-10-09
+region: siga
+regionFull: 滋賀県
+areaLabel: 滋賀・近畿エリア
+thumbnail: outo-1.jpg
 draft: false
 categories:
-  - "siga"
-  - "outo1"
-  - "seisou"
-  - "sizuoka"
+  - siga
+  - outo1
+  - seisou
+  - sizuoka
+seo:
+  noindex: false
+  meta_description: |
+    ゴム手袋＋ペーパーで「広げず」吸い取る
+    芳香剤・塩素系は臭いの固定化につながる
+    4日を超えるとウレタン内部への染み込みリスクが急上昇する
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
