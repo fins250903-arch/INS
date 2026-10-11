@@ -1,14 +1,23 @@
 ---
-title: "車酔い　子供が車内で嘔吐　あわてないで！"
-date: "2026-02-14"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "outo-1.jpg"
+title: 車酔い　子供が車内で嘔吐　あわてないで！
+urlSlug: outo1
+date: 2026-10-11
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: outo-1.jpg
 draft: false
 categories:
-  - "outo1"
-  - "seisou"
+  - outo1
+  - seisou
+seo:
+  meta_description: |
+    ゴム手袋＋ペーパーで「広げず」吸い取る
+    芳香剤・塩素系は臭いの固定化につながる
+    4日を超えるとウレタン内部への染み込みリスクが急上昇する
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
