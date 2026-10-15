@@ -1,14 +1,23 @@
 ---
-title: "たいへん！他人の車に嘔吐　個人賠償責任保険で解決できる？"
-date: "2026-02-20"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "kodomo_hakike_otokonoko-1.png"
+title: たいへん！ウソでしょ他人の車に嘔吐　個人賠償責任保険で解決できる？
+urlSlug: outo3
+date: 2026-10-15
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: kodomo_hakike_otokonoko-1.png
 draft: false
 categories:
-  - "outo1"
-  - "seisou"
+  - outo1
+  - seisou
+seo:
+  meta_description: |
+    撮影→保険会社へ連絡→見積、の順がトラブルになりにくい
+    免責金額未満は自己負担になりやすい
+    他人の子どもが嘔吐したケースは個人賠償の相談が多い
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
