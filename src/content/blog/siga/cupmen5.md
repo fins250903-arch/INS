@@ -1,14 +1,23 @@
 ---
-title: "タントを救え！100均とお湯で豚骨臭を消し去る5つの神手順"
-date: "2026-01-28"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
-thumbnail: "o3264244814022184548.jpg"
+title: タントを救え！100均とお湯で豚骨臭を消し去る5つの神手順
+urlSlug: cupmen5
+date: 2026-10-17
+region: siga
+regionFull: 滋賀県
+areaLabel: 滋賀・近畿エリア
+thumbnail: o3264244814022184548.jpg
 draft: false
 categories:
-  - "souji"
-  - "seisou"
+  - souji
+  - seisou
+seo:
+  noindex: false
+  meta_description: |
+    熱いままこすらない
+    油分は中性〜アルカリで分解する
+    フロアまでこぼれたらマット下も見る
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
