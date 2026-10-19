@@ -13,7 +13,7 @@ import {
 } from '../../data/lp-aio-content';
 import regionLpsMain from '../../data/region-lp.json';
 import regionLpsExtra from '../../data/region-lp-extra.json';
-import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../../data/lp-pricing';
+import { pricingNotesForRegion, pricingOptions, pricingPartial, pricingPartialDeodorizeNote, pricingSet } from '../../data/lp-pricing';
 import { buildRegionFaqs } from '../../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
 import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../../data/site';
@@ -111,6 +111,7 @@ const pageDescription = fillKeywordCopy(keyword.description, regionName, regionF
 const canonical = `/${regionSlug}/${keyword.slug}/`;
 const isVomitKeyword = keyword.slug === 'shanai-outo';
 
+const pricingNotes = pricingNotesForRegion(regionSlug);
 const faqs = [
   ...(keyword.faqs ?? []).map((faq) => ({
     q: fillKeywordCopy(faq.q, regionName, regionFull),
@@ -435,6 +436,7 @@ const flowSteps = [
           <h3 class="mt-10 text-xl font-bold text-slate-900 flex items-center gap-2">
             <span class="text-emerald-500">📍</span> 部分部分クリーニング
           </h3>
+          <p class="mt-2 text-sm font-semibold text-red-600">{pricingPartialDeodorizeNote}</p>
           <p class="mt-2 text-sm text-gray-600">「汚れた座席だけをピンポイントで綺麗にしたい」というご要望にお応えします。</p>
           <div class="mt-4 overflow-x-auto">
             <table class="w-full text-sm border-collapse bg-white rounded-lg overflow-hidden shadow-sm border border-slate-200">
@@ -442,6 +444,7 @@ const flowSteps = [
                 <tr class="bg-slate-100 text-slate-700">
                   <th class="p-4 text-left font-bold border-b border-slate-200">項目</th>
                   <th class="p-4 text-left font-bold border-b border-slate-200">料金</th>
+                  <th class="p-4 text-left font-bold border-b border-slate-200">消臭・脱臭 セット（税込）</th>
                 </tr>
               </thead>
               <tbody class="text-slate-800">
@@ -449,6 +452,7 @@ const flowSteps = [
                   <tr class="border-t border-slate-100 hover:bg-slate-50/50">
                     <td class="p-4 font-semibold">{row.label}</td>
                     <td class="p-4 font-bold text-emerald-600">{row.price}</td>
+                    <td class="p-4 font-bold text-emerald-600">{row.deodorizeSet}</td>
                   </tr>
                 ))}
               </tbody>
@@ -481,7 +485,7 @@ const flowSteps = [
           <div class="mt-6 text-sm leading-relaxed text-slate-700 border-t border-slate-200 pt-6">
             <p class="font-extrabold text-red-600">⚠️ 追加作業について※お見積り時にすり合わせいたします。</p>
             <ul class="mt-2 list-disc list-inside space-y-1 pl-2 text-gray-600">
-              {additionalNotes.map((note) => (
+              {pricingNotes.map((note) => (
                 <li>{note}</li>
               ))}
             </ul>

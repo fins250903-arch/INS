@@ -22,9 +22,12 @@ export const pricingSet = [
   }
 ] as const;
 
+/** 部分クリーニングへ消臭・脱臭を足すときの一律加算 */
+export const pricingPartialDeodorizeNote = '消臭・脱臭を追加する場合は一律 +5,000円';
+
 export const pricingPartial = [
-  { label: '座席シート単体（1脚）', price: '18,000円' },
-  { label: '後部座席シートのみ', price: '22,000円' }
+  { label: '座席シート単体（1脚）', price: '18,000円', deodorizeSet: '23,000円' },
+  { label: '後部座席シートのみ', price: '22,000円', deodorizeSet: '27,000円' }
 ] as const;
 
 export const pricingOptions = [
@@ -44,3 +47,33 @@ export const additionalNotes = [
   '指定エリア外は、出張料金加算（主に島しょ部）',
   '駐車場利用料金（コインパーキング利用時のみ）'
 ] as const;
+
+/**
+ * Prefecture LPs where travel is not advertised as free.
+ * 熊本・福井・和歌山・滋賀・岐阜・静岡・佐賀
+ */
+export const travelFeeSurchargeRegionSlugs = [
+  'kumamoto',
+  'fukui',
+  'wakayama',
+  'siga',
+  'gifu',
+  'sizuoka',
+  'saga'
+] as const;
+
+/** Shown on the pricing table instead of a free-travel claim. */
+export const travelFeeSurchargeNote =
+  '地域により　出張費が加算されます　詳細は、お問合せ下さい';
+
+const travelFeeFreePattern = /出張費[\s　]*無料/;
+
+export function pricingNotesForRegion(regionSlug?: string): readonly string[] {
+  const surcharge =
+    regionSlug != null &&
+    (travelFeeSurchargeRegionSlugs as readonly string[]).includes(regionSlug);
+  if (!surcharge) return additionalNotes;
+
+  const withoutFreeTravel = additionalNotes.filter((note) => !travelFeeFreePattern.test(note));
+  return [...withoutFreeTravel, travelFeeSurchargeNote];
+}
