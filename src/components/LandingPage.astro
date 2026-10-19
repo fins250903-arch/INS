@@ -12,7 +12,7 @@ import {
   type LpBlogFeedItem
 } from '../lib/blog-lp-feed';
 import {
-  additionalNotes,
+  pricingNotesForRegion,
   pricingOptions,
   pricingPartial,
   pricingSet
@@ -221,6 +221,7 @@ const voiceGallery = [
 ];
 
 const faqs = buildRegionFaqs(regionName, regionFull, regionSlug);
+const pricingNotes = pricingNotesForRegion(regionSlug);
 const regionalIntro = getRegionalIntro(regionSlug, regionName, regionFull);
 const hasKeywordMatrix = Boolean(regionSlug && regionLpLinks.some((region) => region.slug === regionSlug));
 const vomitKeywordHref = hasKeywordMatrix ? `/${regionSlug}/shanai-outo/` : hrefForSlug('outo1');
@@ -1011,7 +1012,7 @@ DIYは軽度向きで深部汚れは限界`}
       <div class="mt-4 text-sm leading-relaxed">
         <p class="font-semibold text-cta-red">追加作業 ※別途お見積りします。</p>
         <ul class="mt-2 list-disc list-inside">
-          {additionalNotes.map((note) => (
+          {pricingNotes.map((note) => (
             <li>{note}</li>
           ))}
         </ul>

@@ -13,7 +13,7 @@ import {
 } from '../../data/lp-aio-content';
 import regionLpsMain from '../../data/region-lp.json';
 import regionLpsExtra from '../../data/region-lp-extra.json';
-import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../../data/lp-pricing';
+import { pricingNotesForRegion, pricingOptions, pricingPartial, pricingSet } from '../../data/lp-pricing';
 import { buildRegionFaqs } from '../../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
 import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../../data/site';
@@ -111,6 +111,7 @@ const pageDescription = fillKeywordCopy(keyword.description, regionName, regionF
 const canonical = `/${regionSlug}/${keyword.slug}/`;
 const isVomitKeyword = keyword.slug === 'shanai-outo';
 
+const pricingNotes = pricingNotesForRegion(regionSlug);
 const faqs = [
   ...(keyword.faqs ?? []).map((faq) => ({
     q: fillKeywordCopy(faq.q, regionName, regionFull),
@@ -481,7 +482,7 @@ const flowSteps = [
           <div class="mt-6 text-sm leading-relaxed text-slate-700 border-t border-slate-200 pt-6">
             <p class="font-extrabold text-red-600">⚠️ 追加作業について※お見積り時にすり合わせいたします。</p>
             <ul class="mt-2 list-disc list-inside space-y-1 pl-2 text-gray-600">
-              {additionalNotes.map((note) => (
+              {pricingNotes.map((note) => (
                 <li>{note}</li>
               ))}
             </ul>
