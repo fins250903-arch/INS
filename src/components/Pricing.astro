@@ -1,5 +1,5 @@
 ---
-import { additionalNotes, pricingOptions, pricingPartial, pricingSet } from '../data/lp-pricing';
+import { additionalNotes, pricingOptions, pricingPartial, pricingPartialDeodorizeNote, pricingSet } from '../data/lp-pricing';
 import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
 ---
 
@@ -43,6 +43,7 @@ import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
       </div>
 
       <h3 class="mt-8 text-xl font-bold">📍 【個別】部分クリーニング</h3>
+      <p class="mt-2 text-sm font-semibold text-cta-red">{pricingPartialDeodorizeNote}</p>
       <p class="mt-2 text-sm text-gray-600">「ここだけ綺麗にしたい」というご要望に。※床マット・ドア内側・シートベルトは除きます。</p>
       <div class="mt-4 overflow-x-auto">
         <table class="w-full text-sm border border-gray-200 bg-white">
@@ -50,6 +51,7 @@ import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
             <tr class="bg-gray-100">
               <th class="p-3 text-left">項目</th>
               <th class="p-3 text-left">料金</th>
+              <th class="p-3 text-left">消臭・脱臭 セット（税込）</th>
             </tr>
           </thead>
           <tbody>
@@ -57,6 +59,7 @@ import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
               <tr class="border-t border-gray-200">
                 <td class="p-3">{row.label}</td>
                 <td class="p-3 font-semibold">{row.price}</td>
+                <td class="p-3 font-bold">{row.deodorizeSet}</td>
               </tr>
             ))}
           </tbody>

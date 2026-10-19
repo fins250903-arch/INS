@@ -22,9 +22,12 @@ export const pricingSet = [
   }
 ] as const;
 
+/** 部分クリーニングへ消臭・脱臭を足すときの一律加算 */
+export const pricingPartialDeodorizeNote = '消臭・脱臭を追加する場合は一律 +5,000円';
+
 export const pricingPartial = [
-  { label: '座席シート単体（1脚）', price: '18,000円' },
-  { label: '後部座席シートのみ', price: '22,000円' }
+  { label: '座席シート単体（1脚）', price: '18,000円', deodorizeSet: '23,000円' },
+  { label: '後部座席シートのみ', price: '22,000円', deodorizeSet: '27,000円' }
 ] as const;
 
 export const pricingOptions = [
