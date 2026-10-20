@@ -14,7 +14,7 @@ export function isGitHubPublishConfigured(): boolean {
   return Boolean(readSecret('BLOG_PUBLISH_GITHUB_TOKEN'));
 }
 
-function getPublishConfig() {
+export function getGitHubPublishConfig() {
   const token = readSecret('BLOG_PUBLISH_GITHUB_TOKEN');
   if (!token) return null;
 
@@ -27,7 +27,7 @@ function getPublishConfig() {
 }
 
 async function githubFetch(path: string, init?: RequestInit) {
-  const config = getPublishConfig();
+  const config = getGitHubPublishConfig();
   if (!config) throw new Error('GitHub publish is not configured');
 
   const response = await fetch(`https://api.github.com${path}`, {
@@ -49,7 +49,7 @@ async function githubFetch(path: string, init?: RequestInit) {
 }
 
 async function getFileSha(filePath: string): Promise<string | null> {
-  const config = getPublishConfig();
+  const config = getGitHubPublishConfig();
   if (!config) return null;
 
   const response = await fetch(
@@ -78,7 +78,7 @@ export async function publishTextFile(
   content: string,
   message: string
 ): Promise<{ commitSha: string }> {
-  const config = getPublishConfig();
+  const config = getGitHubPublishConfig();
   if (!config) throw new Error('GitHub publish is not configured');
 
   const sha = await getFileSha(filePath);
@@ -107,7 +107,7 @@ export async function publishBinaryFile(
   buffer: Buffer,
   message: string
 ): Promise<{ commitSha: string }> {
-  const config = getPublishConfig();
+  const config = getGitHubPublishConfig();
   if (!config) throw new Error('GitHub publish is not configured');
 
   const sha = await getFileSha(filePath);
@@ -135,7 +135,7 @@ export async function deleteRepoFile(filePath: string, message: string): Promise
   const sha = await getFileSha(filePath);
   if (!sha) return;
 
-  const config = getPublishConfig();
+  const config = getGitHubPublishConfig();
   if (!config) throw new Error('GitHub publish is not configured');
 
   await githubFetch(`/repos/${config.owner}/${config.repoName}/contents/${filePath}`, {

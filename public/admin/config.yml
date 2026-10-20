@@ -1,9 +1,12 @@
 # Decap CMS — INS Astro blog (https://decapcms.org/docs/basic-steps/)
+# GitHub OAuth (`/auth`) needs DECAP_GITHUB_CLIENT_ID / SECRET on the Worker.
+# Those secrets are not available in production, so the CMS talks to
+# `/api/decap-proxy` after the password gate on `/admin/`.
 backend:
-  name: github
-  repo: fins250903-arch/INS
+  name: proxy
+  proxy_url: /api/decap-proxy
   branch: main
-  base_url: https://insbs.net
+  login: false
 
 local_backend: false
 
