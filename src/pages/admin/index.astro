@@ -1,17 +1,152 @@
 ---
-/** Decap CMS — static HTML so /admin/ is served straight from Cloudflare's static assets */
-export const prerender = true;
+export const prerender = false;
+
+import { isAdminAuthenticated, setAdminAuthCookie, getAdminPassword } from '../../lib/admin-auth';
+
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+let loginError = '';
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const submittedPassword = formData.get('password')?.toString() || '';
+  if (submittedPassword === getAdminPassword()) {
+    setAdminAuthCookie(Astro.cookies);
+    return Astro.redirect('/admin/#/collections/blog');
+  }
+  loginError = 'パスワードが間違っています';
+}
+
+const authenticated = isAdminAuthenticated(Astro.cookies);
 ---
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>INS ブログ管理 | Decap CMS</title>
-    <link rel="stylesheet" href="/admin/cms-enhancements.css" />
+    <title>{authenticated ? 'INS ブログ管理' : 'ブログ管理ログイン'}</title>
+    {
+      authenticated && (
+        <>
+          <link rel="stylesheet" href="/admin/cms-enhancements.css" />
+        </>
+      )
+    }
+    {
+      !authenticated && (
+        <style>
+          body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            font-family: system-ui, sans-serif;
+            color: #0f172a;
+          }
+          form {
+            width: min(100% - 2rem, 28rem);
+            background: #fff;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgb(15 23 42 / 0.08);
+          }
+          h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+          }
+          p {
+            margin: 0 0 1.5rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+          }
+          label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+          }
+          input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 0.7rem 0.9rem;
+            font-size: 1rem;
+          }
+          button {
+            width: 100%;
+            margin-top: 1rem;
+            border: 0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            background: #2563eb;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+          }
+          .error {
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            background: #fef2f2;
+            color: #b91c1c;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+          }
+        </style>
+      )
+    }
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.9.0/dist/decap-cms.js"></script>
+    {
+      authenticated ? (
+        <>
+          <div id="nc-root" />
+          <script
+            is:inline
+            crossorigin
+            src="https://unpkg.com/react@18/umd/react.production.min.js"
+          />
+          <script
+            is:inline
+            crossorigin
+            src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+          />
+          <script is:inline src="https://unpkg.com/decap-cms@3.3.0/dist/decap-cms.js" />
+          <script is:inline>
+            // Decap's proxy login screen reads `config.backend.login` as a plain
+            // property, which stays unset on its Immutable config. The password
+            // gate above already authenticated this browser, so continue in.
+            (function () {
+              var started = Date.now();
+              var timer = setInterval(function () {
+                var button = document.querySelector('#nc-root button');
+                var label = button ? (button.textContent || '').replace(/\s+/g, ' ').trim() : '';
+                if (button && /login|ログイン/i.test(label)) {
+                  button.click();
+                  clearInterval(timer);
+                }
+                if (Date.now() - started > 8000) clearInterval(timer);
+              }, 100);
+            })();
+          </script>
+        </>
+      ) : (
+        <form method="POST" action="/admin/">
+          <h1>ブログ管理ログイン</h1>
+          <p>記事一覧を開くにはパスワードが必要です。</p>
+          {loginError && <div class="error">{loginError}</div>}
+          <label for="password">パスワード</label>
+          <input id="password" name="password" type="password" required autofocus />
+          <button type="submit">ログイン</button>
+        </form>
+      )
+    }
   </body>
 </html>
