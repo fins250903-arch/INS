@@ -3,7 +3,11 @@
   "type": "module",
   "version": "0.0.1",
   "engines": {
-    "node": ">=22.12.0"
+    "node": "22.x"
+  },
+  "overrides": {
+    "sharp": "0.35.5",
+    "path-to-regexp": "6.3.0"
   },
   "scripts": {
     "dev": "astro dev",
@@ -42,19 +46,21 @@
     "sachi:sync": "npm run gsc:sync"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.7.0",
-    "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/vercel": "^10.0.8",
-    "@tailwindcss/postcss": "^4.2.4",
-    "astro": "^6.0.0",
+    "@astrojs/cloudflare": "^14.4.2",
+    "@astrojs/markdown-remark": "^7.3.4",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.16",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.2",
     "dotenv": "^17.4.2",
     "google-auth-library": "^10.6.2",
     "googleapis": "^171.4.0",
-    "tailwindcss": "^4.3.0"
+    "sharp": "0.35.5",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "fast-xml-parser": "^5.8.0",
     "tsx": "^4.22.3",
-    "wrangler": "^4.136.2"
+    "wrangler": "^4.151.3"
   }
 }

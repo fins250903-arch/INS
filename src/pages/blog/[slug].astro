@@ -1,8 +1,7 @@
 ---
-import { findPostsBySlug, getBlogPath } from '../../lib/blog-content';
+import { findPostsBySlug, getBlogPath, getBlogSlug, getPublishedBlogPosts } from '../../lib/blog-content';
 
 export async function getStaticPaths() {
-  const { getPublishedBlogPosts, getBlogSlug } = await import('../../lib/blog-content');
   const posts = await getPublishedBlogPosts();
   const slugs = Array.from(new Set(posts.map((post) => getBlogSlug(post))));
 
@@ -25,3 +24,4 @@ const preferred =
   matches.sort((a, b) => a.data.region.localeCompare(b.data.region))[0];
 
 return Astro.redirect(encodeURI(getBlogPath(preferred)));
+---
