@@ -170,8 +170,8 @@ Build command に `npm run build` を入れると同じビルドが 2 回走り�
 `dist/server/entry.mjs` と `.wrangler/deploy/config.json`（`wrangler.jsonc` からのリダイレクト設定）を
 生成し、`wrangler deploy` はそれを読んで実際の Worker 本体と静的アセット（`dist/client`）を決めます。
 
-- Node.js は直下の `.node-version`（`22`）で固定しています。Workers Builds のデフォルトは Node 24、
-  `package.json` の `engines` は `>=22.12.0` です。
+- Node.js は直下の `.node-version`（`22.23.4`）で固定しています。これは 2026-10-21 の Node.js セキュリティリリースです。Workers Builds のデフォルトは Node 24 ですが、その既定イメージは今回の修正より古いことがあります。
+  `package.json` の `engines` は `22.x` です。Vercel はメジャーバージョンだけを選べるため、`>=22` だと Node 24 に寄ることがあります。
 - `ins-legacy-redirects` は **別 Worker** です。サイト用の `ins` プロジェクトでは作られません。
   ダッシュボードにこの名前が無いときは、次で 2 つ目の Workers Builds を作ります。
 

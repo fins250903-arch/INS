@@ -7,7 +7,7 @@ Japanese car-interior cleaning business. Everything (public marketing pages, blo
 CMS) is served by one dev server. There is no database, Docker, or separate backend.
 
 ### Running the app (development)
-- Requires Node.js `>=22.12.0` (see `engines` in `package.json`); npm is the package manager (`package-lock.json`).
+- Requires Node.js 22.23.4 (see `.node-version`). `package.json` `engines.node` is `22.x` so Vercel stays on the Node 22 line and receives its security rollups. npm is the package manager (`package-lock.json`).
 - Dev server: `npm run dev` serves the whole product at `http://localhost:4321/`. Use `npm run dev:lan` to bind `0.0.0.0`.
 - Admin blog manager: `http://localhost:4321/admin/blog-manager/`. Default password is `admin123` (overridable via `ADMIN_PASSWORD`). See `BLOG_MANAGER_GUIDE.md`.
 - All environment variables (`.env.example`) are optional and have graceful fallbacks: without `BLOG_PUBLISH_GITHUB_TOKEN` the admin manager saves posts to local content files instead of publishing to GitHub; Decap CMS (`/admin/`) login and the GSC CLI (`npm run gsc`) need their respective credentials but are not needed to run/test the site.

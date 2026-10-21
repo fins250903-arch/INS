@@ -9,7 +9,7 @@ Astro 6 (SSR) marketing site and blog for a Japanese car-interior cleaning busin
   and `siga` hostnames.
 - Path redirects live in `redirects.config.json` and are compiled into `public/_redirects`.
 
-Requires Node.js 22 (see `.node-version`) and npm.
+Requires Node.js 22.23.4 or newer (see `.node-version`) and npm.
 
 ## Commands
 

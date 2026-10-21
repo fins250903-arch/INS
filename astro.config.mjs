@@ -1,9 +1,11 @@
 // @ts-check
 import { defineConfig, envField, sessionDrivers } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 
 import cloudflare from '@astrojs/cloudflare';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
 import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
 
 // DNS is still on Vercel. Workers Builds sets WORKERS_CI; Vercel sets VERCEL.
@@ -25,6 +27,12 @@ const adapter =
 // https://astro.build/config
 export default defineConfig({
   site: 'https://insbs.net',
+  // Keep Astro 6 HTML whitespace so inline text does not collapse after the v7 default.
+  compressHTML: true,
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 
   // No page or endpoint uses `Astro.session`. Without an explicit driver the Cloudflare adapter adds a
   // `SESSION` KV binding to the generated wrangler config, and `wrangler deploy` then rejects it with
@@ -33,7 +41,10 @@ export default defineConfig({
   session: { driver: sessionDrivers.null() },
 
   markdown: {
-    rehypePlugins: [rehypeBlogImages]
+    // Astro 7 defaults to Sätteri, which does not run rehype plugins.
+    processor: unified({
+      rehypePlugins: [rehypeBlogImages],
+    }),
   },
 
   env: {
