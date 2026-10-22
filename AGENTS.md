@@ -11,6 +11,7 @@ CMS) is served by one dev server. There is no database, Docker, or separate back
 - Dev server: `npm run dev` serves the whole product at `http://localhost:4321/`. Use `npm run dev:lan` to bind `0.0.0.0`.
 - Admin blog manager: `http://localhost:4321/admin/blog-manager/`. Default password is `admin123` (overridable via `ADMIN_PASSWORD`). See `BLOG_MANAGER_GUIDE.md`.
 - All environment variables (`.env.example`) are optional and have graceful fallbacks: without `BLOG_PUBLISH_GITHUB_TOKEN` the admin manager saves posts to local content files instead of publishing to GitHub; Decap CMS (`/admin/`) login and the GSC CLI (`npm run gsc`) need their respective credentials but are not needed to run/test the site.
+- On Cloudflare, that token is read only from Worker `ins` → **Settings → Runtime → ランタイム変数とシークレット** (Runtime variables and secrets), as a Secret. Settings → Build / Workers Builds build variables are not visible when a post is published. See `docs/CLOUDFLARE_MIGRATION.md`.
 
 ### Lint / test / build (see `package.json` scripts)
 - There is **no lint or test framework** configured. "Validation" is `npm run blog:validate` (checks blog paths/frontmatter). It prints warnings about stray images but still exits 0. `npm run cf:redirects:check` fails when `public/_redirects` is stale, and `npm run cf:redirects:verify` replays the redirect expectations captured before the Cloudflare migration.

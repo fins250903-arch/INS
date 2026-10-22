@@ -33,7 +33,8 @@
   // Routes → Add insbs.net. Map: cloudflare/domains.json.
   "workers_dev": true,
   // Plain-text dashboard variables are deleted on `wrangler deploy` unless this is true.
-  // BLOG_PUBLISH_GITHUB_TOKEN must be a Secret (`npx wrangler secret put`), not one of these vars.
+  // BLOG_PUBLISH_GITHUB_TOKEN is a runtime Secret (Settings → Runtime → ランタイム変数とシークレット).
+  // A Build variable is not visible when a post is published.
   "keep_vars": true,
   "vars": {
     "DECAP_SITE_URL": "https://insbs.net",
