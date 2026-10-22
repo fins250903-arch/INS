@@ -26,7 +26,7 @@ function requireWritableTarget(): void {
   if (canWriteToWorkingTree) return;
   throw new Error(
     'ブログの保存先が設定されていません。Cloudflare Worker はリポジトリを直接書き換えられないため、' +
-      'シークレット BLOG_PUBLISH_GITHUB_TOKEN を設定してください。'
+      'Worker ins のシークレット BLOG_PUBLISH_GITHUB_TOKEN を設定してください。'
   );
 }
 
