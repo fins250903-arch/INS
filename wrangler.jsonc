@@ -32,6 +32,10 @@
   // dashboard after the zone exists: Workers → ins → Settings → Domains &
   // Routes → Add insbs.net. Map: cloudflare/domains.json.
   "workers_dev": true,
+  // Plain-text dashboard variables are deleted on `wrangler deploy` unless this is true.
+  // BLOG_PUBLISH_GITHUB_TOKEN is a runtime Secret (Settings → Runtime → ランタイム変数とシークレット).
+  // A Build variable is not visible when a post is published.
+  "keep_vars": true,
   "vars": {
     "DECAP_SITE_URL": "https://insbs.net",
     "BLOG_PUBLISH_GITHUB_REPO": "fins250903-arch/INS",
