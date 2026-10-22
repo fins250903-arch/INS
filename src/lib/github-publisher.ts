@@ -1,4 +1,11 @@
 import { getSecret } from 'astro:env/server';
+import {
+  contentsApiPath,
+  contentsApiUrl,
+  githubRestHeaders,
+  normalizeGithubToken,
+  summarizeGithubFailure
+} from './github-rest';
 
 type GitHubContentResponse = {
   content?: { sha?: string };
@@ -7,7 +14,11 @@ type GitHubContentResponse = {
 
 function readSecret(key: string): string | undefined {
   const value = getSecret(key);
-  return typeof value === 'string' && value.length > 0 ? value : undefined;
+  if (typeof value !== 'string') return undefined;
+  // Secrets pasted into the dashboard often include a trailing newline or a copied "Bearer " prefix.
+  // Either value makes the Authorization header illegal and GitHub never sees the token.
+  const trimmed = normalizeGithubToken(value);
+  return trimmed.length > 0 ? trimmed : undefined;
 }
 
 export function isGitHubPublishConfigured(): boolean {
@@ -33,16 +44,14 @@ async function githubFetch(path: string, init?: RequestInit) {
   const response = await fetch(`https://api.github.com${path}`, {
     ...init,
     headers: {
-      accept: 'application/vnd.github+json',
-      authorization: `Bearer ${config.token}`,
-      'x-github-api-version': '2022-11-28',
+      ...githubRestHeaders(config.token),
       ...(init?.headers || {})
     }
   });
 
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(`GitHub API error (${response.status}): ${body}`);
+    throw new Error(summarizeGithubFailure(response.status, body));
   }
 
   return response;
@@ -52,21 +61,14 @@ async function getFileSha(filePath: string): Promise<string | null> {
   const config = getGitHubPublishConfig();
   if (!config) return null;
 
-  const response = await fetch(
-    `https://api.github.com/repos/${config.owner}/${config.repoName}/contents/${filePath}?ref=${encodeURIComponent(config.branch)}`,
-    {
-      headers: {
-        accept: 'application/vnd.github+json',
-        authorization: `Bearer ${config.token}`,
-        'x-github-api-version': '2022-11-28'
-      }
-    }
-  );
+  const response = await fetch(contentsApiUrl(config.owner, config.repoName, filePath, config.branch), {
+    headers: githubRestHeaders(config.token)
+  });
 
   if (response.status === 404) return null;
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(`GitHub get file failed (${response.status}): ${body}`);
+    throw new Error(summarizeGithubFailure(response.status, body));
   }
 
   const data = (await response.json()) as GitHubContentResponse;
@@ -89,14 +91,11 @@ export async function publishTextFile(
   };
   if (sha) body.sha = sha;
 
-  const response = await githubFetch(
-    `/repos/${config.owner}/${config.repoName}/contents/${filePath}`,
-    {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body)
-    }
-  );
+  const response = await githubFetch(contentsApiPath(config.owner, config.repoName, filePath), {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
 
   const data = (await response.json()) as { commit?: { sha?: string } };
   return { commitSha: data.commit?.sha || '' };
@@ -118,14 +117,11 @@ export async function publishBinaryFile(
   };
   if (sha) body.sha = sha;
 
-  const response = await githubFetch(
-    `/repos/${config.owner}/${config.repoName}/contents/${filePath}`,
-    {
-      method: 'PUT',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body)
-    }
-  );
+  const response = await githubFetch(contentsApiPath(config.owner, config.repoName, filePath), {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
 
   const data = (await response.json()) as { commit?: { sha?: string } };
   return { commitSha: data.commit?.sha || '' };
@@ -138,7 +134,7 @@ export async function deleteRepoFile(filePath: string, message: string): Promise
   const config = getGitHubPublishConfig();
   if (!config) throw new Error('GitHub publish is not configured');
 
-  await githubFetch(`/repos/${config.owner}/${config.repoName}/contents/${filePath}`, {
+  await githubFetch(contentsApiPath(config.owner, config.repoName, filePath), {
     method: 'DELETE',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({

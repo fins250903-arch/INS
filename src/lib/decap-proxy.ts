@@ -336,12 +336,15 @@ export async function handleDecapProxy(request: Request, cookies: AstroCookies):
         });
       }
       case 'persistEntry':
-        return persistEntry(params);
+        // Await so a GitHub rejection is caught here. A bare `return promise`
+        // leaves the try/catch and Astro answers with an empty 500, which
+        // Decap reports as "Failed to execute 'json' on 'Response'".
+        return await persistEntry(params);
       case 'persistMedia':
-        return persistMedia(params);
+        return await persistMedia(params);
       case 'deleteFile':
       case 'deleteFiles':
-        return deleteFiles(action, params);
+        return await deleteFiles(action, params);
       case 'unpublishedEntries':
         return json([]);
       case 'getDeployPreview':
@@ -350,7 +353,8 @@ export async function handleDecapProxy(request: Request, cookies: AstroCookies):
         return json({ error: `Unknown action ${action}` }, 422);
     }
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Proxy request failed';
+    const raw = error instanceof Error ? error.message : 'Proxy request failed';
+    const message = raw.replace(/\s+/g, ' ').trim().slice(0, 500) || 'Proxy request failed';
     return json({ error: message }, 500);
   }
 }
