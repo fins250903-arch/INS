@@ -1,13 +1,22 @@
 ---
-title: "100均2品で解決！セレナのコーヒー染みを5分で消す方法"
-date: "2026-02-12"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
-thumbnail: "kohikobosi2.jpg"
+title: 100均2品で解決！セレナのコーヒー染みを5分で消す方法
+urlSlug: 100kinnkohi
+date: 2026-10-23
+region: siga
+regionFull: 滋賀県
+areaLabel: 滋賀・近畿エリア
+thumbnail: kohikobosi2.jpg
 draft: false
 categories:
-  - "seisou"
+  - seisou
+seo:
+  meta_description: |-
+    熱を加えない
+    アルカリ（セスキ等）で中和してから吸い取る
+    シートレールまで流れたら家庭では限界
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
