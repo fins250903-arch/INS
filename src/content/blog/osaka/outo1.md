@@ -1,18 +1,27 @@
 ---
-title: "車内で嘔吐！でも大丈夫な対応方法"
-date: "2026-02-14"
-region: "osaka"
-regionFull: "大阪府"
-areaLabel: "大阪・近畿エリア"
-thumbnail: "outo-1.jpg"
+title: 車内で嘔吐！でも大丈夫な対応方法
+urlSlug: outo1
+date: 2026-02-14
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: outo-1.jpg
 draft: false
 categories:
-  - "kyouto"
-  - "oosaka"
-  - "gunnma"
-  - "ibaraki"
-  - "outo1"
-  - "seisou"
+  - kyouto
+  - oosaka
+  - gunnma
+  - ibaraki
+  - outo1
+  - seisou
+seo:
+  meta_description: |-
+    ゴム手袋＋ペーパーで「広げず」吸い取る
+    芳香剤・塩素系は臭いの固定化につながる
+    4日を超えるとウレタン内部への染み込みリスクが急上昇する
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
