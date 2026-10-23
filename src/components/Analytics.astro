@@ -1,0 +1,145 @@
+---
+// src/components/Analytics.astro
+interface Props {
+  ga4Id?: string;
+}
+
+const { ga4Id = import.meta.env.PUBLIC_GA4_ID || 'G-LTFRTZY7FE' } = Astro.props;
+---
+
+{ga4Id && (
+  <>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+    <script is:inline define:vars={{ ga4Id }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      // URLから地域とキーワードカテゴリを自動抽出
+      (function() {
+        var path = window.location.pathname.replace(/^\/|\/$/g, '');
+        var segments = path.split('/');
+        var area = segments[0] || 'top';
+        var category = segments[1] || 'general';
+
+        // 初期設定とページビュー
+        gtag('config', ga4Id, {
+          send_page_view: true,
+          lp_area: area,
+          lp_category: category
+        });
+
+        // クリック計測 & スクロール計測の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+          // --- 1. 電話タップ・LINE・問い合わせ クリック計測 ---
+          document.addEventListener('click', function(e) {
+            var target = e.target;
+            if (!target) return;
+            var anchor = target.closest('a');
+            if (!anchor) return;
+
+            var href = anchor.getAttribute('href') || '';
+            var clickText = (anchor.innerText || anchor.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+
+            // クリック箇所の判定
+            var clickPosition = 'body';
+            if (anchor.closest('.fixed, [class*="bottom-0"]')) {
+              clickPosition = 'floating_bar';
+            } else if (anchor.closest('header, [class*="header"]')) {
+              clickPosition = 'header';
+            } else if (anchor.closest('footer, [class*="footer"]')) {
+              clickPosition = 'footer';
+            } else if (anchor.closest('.lp-fv, [class*="Hero"], [class*="fv-"]')) {
+              clickPosition = 'fv';
+            } else if (anchor.closest('.cta-bundle-box, [class*="cta-bundle"]')) {
+              clickPosition = 'cta_bundle';
+            } else if (anchor.closest('#pricing, [class*="Pricing"]')) {
+              clickPosition = 'pricing';
+            }
+
+            // ① 電話タップ (tel:)
+            if (href.indexOf('tel:') === 0) {
+              gtag('event', 'tel_click', {
+                event_category: 'conversion',
+                event_label: clickText,
+                tel_number: href.replace('tel:', ''),
+                click_text: clickText,
+                click_position: clickPosition,
+                lp_area: area,
+                lp_category: category,
+                page_path: window.location.pathname
+              });
+            }
+            // ② LINE相談 (lin.ee)
+            else if (href.indexOf('lin.ee') !== -1) {
+              gtag('event', 'contact_click', {
+                event_category: 'conversion',
+                contact_type: 'line',
+                click_text: clickText,
+                click_position: clickPosition,
+                lp_area: area,
+                lp_category: category,
+                page_path: window.location.pathname
+              });
+            }
+            // ③ 問い合わせページ (/contact/)
+            else if (href.indexOf('/contact') !== -1) {
+              gtag('event', 'contact_click', {
+                event_category: 'conversion',
+                contact_type: 'form',
+                click_text: clickText,
+                click_position: clickPosition,
+                lp_area: area,
+                lp_category: category,
+                page_path: window.location.pathname
+              });
+            }
+          }, true);
+
+          // --- 2. スクロール到達深度計測 (25%, 50%, 75%, 90%) ---
+          var scrollMarks = { 25: false, 50: false, 75: false, 90: false };
+          var checkScroll = function() {
+            var docHeight = Math.max(
+              document.body.scrollHeight,
+              document.documentElement.scrollHeight,
+              document.body.offsetHeight,
+              document.documentElement.offsetHeight
+            );
+            var winHeight = window.innerHeight || document.documentElement.clientHeight;
+            var maxScroll = docHeight - winHeight;
+            if (maxScroll <= 0) return;
+
+            var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            var scrollPercent = Math.min(100, Math.round((currentScroll / maxScroll) * 100));
+
+            [25, 50, 75, 90].forEach(function(mark) {
+              if (scrollPercent >= mark && !scrollMarks[mark]) {
+                scrollMarks[mark] = true;
+                gtag('event', 'scroll_depth', {
+                  percent_scrolled: mark,
+                  lp_area: area,
+                  lp_category: category,
+                  page_path: window.location.pathname
+                });
+              }
+            });
+          };
+
+          var ticking = false;
+          window.addEventListener('scroll', function() {
+            if (!ticking) {
+              window.requestAnimationFrame(function() {
+                checkScroll();
+                ticking = false;
+              });
+              ticking = true;
+            }
+          }, { passive: true });
+        });
+      })();
+    </script>
+  </>
+)}
