@@ -1,0 +1,31 @@
+name: Weekly GA4 LP Audit
+
+on:
+  schedule:
+    # 毎週月曜日 0:00 UTC (日本時間 9:00 AM) に自動実行
+    - cron: '0 0 * * 1'
+  workflow_dispatch: # 手動実行ボタンも用意
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run LP Audit Engine
+        run: |
+          python ga4_lp_checker.py || true
+
+      - name: Upload Audit Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-lp-audit-report
+          path: |
+            weekly_audit_*.md
+            weekly_audit_*.html
