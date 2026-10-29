@@ -9,7 +9,8 @@ import { regionLpLinks } from '../../data/region-lp-links';
 import { fillKeywordCopy, keywordLps, resolveKeywordFv } from '../../data/keyword-lp';
 import {
   emergencyIntro,
-  emergencyVomitSteps
+  emergencyVomitSteps,
+  LP_FV_BASE_PRICE_LINE
 } from '../../data/lp-aio-content';
 import regionLpsMain from '../../data/region-lp.json';
 import regionLpsExtra from '../../data/region-lp-extra.json';
@@ -239,6 +240,9 @@ const flowSteps = [
               </span>
               <p class="flex-1 text-xs font-semibold leading-relaxed text-slate-800 sm:text-sm whitespace-pre-line">
                 {fv.fvLead}
+              </p>
+              <p class="basis-full text-sm font-black leading-snug text-slate-950 sm:text-base">
+                {LP_FV_BASE_PRICE_LINE}
               </p>
             </div>
             

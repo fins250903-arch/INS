@@ -24,6 +24,7 @@ import {
   emergencyPetSteps,
   emergencyVomitSteps,
   getRegionalIntro,
+  LP_FV_BASE_PRICE_LINE,
   insuranceMatrixNote,
   insuranceMatrixRows
 } from '../data/lp-aio-content';
@@ -266,6 +267,9 @@ const formatDate = (date: Date) => {
             立会も不要！ <span class="text-amber-300 font-bold">嘔吐</span>、<span class="text-amber-300 font-bold">お漏らし</span><br />
             <span class="text-amber-300 font-bold">灯油こぼし</span>も <span class="text-amber-300 font-bold underline decoration-amber-300">ニオイ徹底洗浄</span>
           </p>
+          <p class="fv-price basis-full text-base font-black leading-snug text-amber-200 sm:text-lg">
+            {LP_FV_BASE_PRICE_LINE}
+          </p>
         </div>
         <div class="mt-4 flex justify-start w-full">
           <CtaBundle
@@ -305,40 +309,46 @@ const formatDate = (date: Date) => {
       ／
       <a href={hrefForSlug('diy3')} class="font-semibold text-cta-red underline hover:text-primary">自分で掃除する場合の注意</a>
     </p>
-    <div class="mt-6 overflow-x-auto -mx-2 px-2">
-      <table class="w-full min-w-[320px] text-xs sm:text-sm border-collapse">
+    <div class="mt-6 -mx-2 px-2">
+      <table class="w-full table-fixed border-collapse text-xs sm:text-sm [&_td]:break-words [&_th]:break-words">
+        <colgroup>
+          <col class="w-[34%]" />
+          <col class="w-[24%]" />
+          <col class="w-[20%]" />
+          <col class="w-[22%]" />
+        </colgroup>
         <thead>
           <tr class="bg-gray-50">
             <th class="border border-gray-200 px-2 py-2 text-left font-semibold">比較</th>
+            <th class="border border-gray-200 bg-primary/10 px-2 py-2 text-center font-semibold text-primary">出張車内清掃</th>
             <th class="border border-gray-200 px-2 py-2 text-center font-semibold">店舗持込</th>
             <th class="border border-gray-200 px-2 py-2 text-center font-semibold">ガソリンスタンド</th>
-            <th class="border border-gray-200 px-2 py-2 text-center font-semibold text-primary">出張車内清掃</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="border border-gray-200 px-2 py-2 font-medium">訪問・駐車場完結</td>
+            <td class="border border-gray-200 bg-primary/10 px-2 py-2 text-center font-bold text-primary">○</td>
             <td class="border border-gray-200 px-2 py-2 text-center">×</td>
             <td class="border border-gray-200 px-2 py-2 text-center">×</td>
-            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">○</td>
           </tr>
           <tr>
             <td class="border border-gray-200 px-2 py-2 font-medium">嘔吐・尿の奥染み</td>
+            <td class="border border-gray-200 bg-primary/10 px-2 py-2 text-center font-bold text-primary">○</td>
             <td class="border border-gray-200 px-2 py-2 text-center">△</td>
             <td class="border border-gray-200 px-2 py-2 text-center">×</td>
-            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">○</td>
           </tr>
           <tr>
             <td class="border border-gray-200 px-2 py-2 font-medium">立会</td>
+            <td class="border border-gray-200 bg-primary/10 px-2 py-2 text-center font-bold text-primary">不要可</td>
             <td class="border border-gray-200 px-2 py-2 text-center">要</td>
             <td class="border border-gray-200 px-2 py-2 text-center">要</td>
-            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">不要可</td>
           </tr>
           <tr>
             <td class="border border-gray-200 px-2 py-2 font-medium">即日・24h受付</td>
+            <td class="border border-gray-200 bg-primary/10 px-2 py-2 text-center font-bold text-primary">○</td>
             <td class="border border-gray-200 px-2 py-2 text-center">△</td>
             <td class="border border-gray-200 px-2 py-2 text-center">○</td>
-            <td class="border border-gray-200 px-2 py-2 text-center font-bold text-primary">○</td>
           </tr>
         </tbody>
       </table>
@@ -1157,7 +1167,8 @@ DIYは軽度向きで深部汚れは限界`}
   }
   .fv-title,
   .fv-sub,
-  .fv-desc {
+  .fv-desc,
+  .fv-price {
     text-shadow:
       0 1px 2px rgba(0, 0, 0, 0.55),
       0 2px 12px rgba(0, 0, 0, 0.35);
@@ -1222,6 +1233,10 @@ DIYは軽度向きで深部汚れは限界`}
     .fv-desc {
       font-size: 1.05rem !important; /* 約120%拡大 */
       line-height: 1.55 !important;
+    }
+    .fv-price {
+      font-size: 1.05rem !important;
+      line-height: 1.45 !important;
     }
   }
 </style>
