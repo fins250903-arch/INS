@@ -24,6 +24,7 @@ import {
   emergencyPetSteps,
   emergencyVomitSteps,
   getRegionalIntro,
+  LP_FV_BASE_PRICE_LINE,
   insuranceMatrixNote,
   insuranceMatrixRows
 } from '../data/lp-aio-content';
@@ -265,6 +266,9 @@ const formatDate = (date: Date) => {
             365日24時間受付中・迅速訪問<br />
             立会も不要！ <span class="text-amber-300 font-bold">嘔吐</span>、<span class="text-amber-300 font-bold">お漏らし</span><br />
             <span class="text-amber-300 font-bold">灯油こぼし</span>も <span class="text-amber-300 font-bold underline decoration-amber-300">ニオイ徹底洗浄</span>
+          </p>
+          <p class="fv-price basis-full text-base font-black leading-snug text-amber-200 sm:text-lg">
+            {LP_FV_BASE_PRICE_LINE}
           </p>
         </div>
         <div class="mt-4 flex justify-start w-full">
@@ -1157,7 +1161,8 @@ DIYは軽度向きで深部汚れは限界`}
   }
   .fv-title,
   .fv-sub,
-  .fv-desc {
+  .fv-desc,
+  .fv-price {
     text-shadow:
       0 1px 2px rgba(0, 0, 0, 0.55),
       0 2px 12px rgba(0, 0, 0, 0.35);
@@ -1222,6 +1227,10 @@ DIYは軽度向きで深部汚れは限界`}
     .fv-desc {
       font-size: 1.05rem !important; /* 約120%拡大 */
       line-height: 1.55 !important;
+    }
+    .fv-price {
+      font-size: 1.05rem !important;
+      line-height: 1.45 !important;
     }
   }
 </style>

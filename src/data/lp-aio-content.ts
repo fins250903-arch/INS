@@ -42,16 +42,31 @@ export function getPowerWaterAnswer(regionSlug?: string): string {
   return '多くの地域では発電機・給水タンクを持参し、電源・水道なしでも作業可能です（発電機持込オプション5,000円）。立体駐車場・機械式駐車場では搬入経路と作業スペースの事前確認が必要です。まずお電話（070-8428-0866）で駐車場の状況をお知らせください。';
 }
 
+/** Price line shown in every LP first view. Keep this string identical across templates. */
+export const LP_FV_BASE_PRICE_LINE = '基本料金は軽自動車24,000円〜（税込）';
+
+const LEGACY_FV_PRICE_LINE =
+  '基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）';
+
+/** Every region lead states the same first-view base price, once. */
+export function withUnifiedFvPriceLine(text: string): string {
+  const replaced = text.split(LEGACY_FV_PRICE_LINE).join(LP_FV_BASE_PRICE_LINE);
+  if (replaced.includes(LP_FV_BASE_PRICE_LINE)) return replaced;
+  const body = replaced.trimEnd();
+  const separator = body.endsWith('。') ? '' : '。';
+  return `${body}${separator}${LP_FV_BASE_PRICE_LINE}。`;
+}
+
 /** 地域別の結論ファースト文（AIO引用・テンプレ脱却用） */
 const REGION_INTRO: Record<string, string> = {
   tokyou:
-    '東京都の出張車内清掃とは、23区・多摩・島しょ部の一部まで、ご自宅・職場の駐車場へ専門スタッフが駆けつけ、嘔吐・灯油・ペット粗相などの緊急汚れをその場で洗浄・消臭するサービスです。立体駐車場・月極駐車場でも、搬入経路と作業スペースを事前確認のうえ対応します。基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）で、365日24時間受付・立会不要です。',
+    `東京都の出張車内清掃とは、23区・多摩・島しょ部の一部まで、ご自宅・職場の駐車場へ専門スタッフが駆けつけ、嘔吐・灯油・ペット粗相などの緊急汚れをその場で洗浄・消臭するサービスです。立体駐車場・月極駐車場でも、搬入経路と作業スペースを事前確認のうえ対応します。${LP_FV_BASE_PRICE_LINE}で、365日24時間受付・立会不要です。`,
   kanagawa:
     '神奈川県の出張車内清掃とは、横浜市・川崎市・相模原市・藤沢市など県内全域へ出張し、送迎・通勤・ペット同乗で起きやすい嘔吐・生活臭・獣臭を駐車場で完結させるサービスです。湘南・県央のマンション駐車場でも、作業音と搬入経路を事前確認のうえ対応します。365日24時間受付・立会不要です。',
   saitama:
     '埼玉県の出張車内清掃とは、さいたま市・川口市・川越市・所沢市など県内市町村へ出張し、送迎や買い物帰りの嘔吐・飲みこぼしを自宅・勤務先の駐車場で洗浄するサービスです。代車不要・預け期間なしで、365日24時間受付・立会不要です。',
   ibaraki:
-    '茨城県の出張車内清掃とは、水戸市・つくば市・日立市・土浦市など県内全域へ出張し、高速道路や送迎中の嘔吐・灯油こぼしなどの緊急トラブルを駐車場で処理するサービスです。基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）で、365日24時間受付です。',
+    `茨城県の出張車内清掃とは、水戸市・つくば市・日立市・土浦市など県内全域へ出張し、高速道路や送迎中の嘔吐・灯油こぼしなどの緊急トラブルを駐車場で処理するサービスです。${LP_FV_BASE_PRICE_LINE}で、365日24時間受付です。`,
   tiba:
     '千葉県の出張車内清掃とは、千葉市・船橋市・柏市・浦安市など県内全域へ出張し、レジャー帰りの嘔吐・魚臭・飲みこぼしを駐車場で完結させるサービスです。湾岸・内房・外房のご自宅・職場駐車場に対応し、365日24時間受付・立会不要です。',
   aiti:
@@ -77,7 +92,7 @@ const REGION_INTRO: Record<string, string> = {
   okinawa:
     '沖縄本島の出張車内清掃とは、那覇市・浦添市・宜野湾市など本島内の駐車場へ出張し、高温多湿特有のカビ臭・ペット臭・嘔吐汚れを温水吸引で処理するサービスです。離島（石垣・宮古等）は対応外のため、郵便番号で事前に可否をご案内します。',
   osaka:
-    '大阪府の出張車内清掃とは、大阪市24区・堺市・北摂・泉州など府内全域へ出張し、嘔吐・灯油こぼし・ペット粗相などの緊急トラブルを駐車場で完結させるサービスです。基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）で、365日24時間受付・立会不要です。'
+    `大阪府の出張車内清掃とは、大阪市24区・堺市・北摂・泉州など府内全域へ出張し、嘔吐・灯油こぼし・ペット粗相などの緊急トラブルを駐車場で完結させるサービスです。${LP_FV_BASE_PRICE_LINE}で、365日24時間受付・立会不要です。`
 };
 
 export function getRegionalIntro(
@@ -85,10 +100,11 @@ export function getRegionalIntro(
   regionName: string,
   regionFull: string
 ): string {
-  if (regionSlug && REGION_INTRO[regionSlug]) {
-    return REGION_INTRO[regionSlug];
-  }
-  return `${regionFull}の出張車内清掃とは、${regionName}（${regionFull}）内のご自宅・勤務先の駐車場へ専門スタッフが駆けつけ、嘔吐・灯油・ペット粗相などの緊急汚れをその場で洗浄・消臭するサービスです。基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）で、365日24時間受付・立会不要です。`;
+  const intro =
+    regionSlug && REGION_INTRO[regionSlug]
+      ? REGION_INTRO[regionSlug]
+      : `${regionFull}の出張車内清掃とは、${regionName}（${regionFull}）内のご自宅・勤務先の駐車場へ専門スタッフが駆けつけ、嘔吐・灯油・ペット粗相などの緊急汚れをその場で洗浄・消臭するサービスです。${LP_FV_BASE_PRICE_LINE}で、365日24時間受付・立会不要です。`;
+  return withUnifiedFvPriceLine(intro);
 }
 
 export const emergencyIntro =
