@@ -1,18 +1,27 @@
 ---
-title: "ここを要チェック！嘔吐物処理でやってはいけないこと"
-date: "2026-02-16"
-region: "hyougo"
-regionFull: "兵庫県"
-areaLabel: "兵庫・近畿エリア"
-thumbnail: "gero5.jpg"
+title: ここを要チェック！嘔吐物処理でやってはいけないこと
+urlSlug: outo2
+date: 2026-10-31
+region: hyougo
+regionFull: 兵庫県
+areaLabel: 兵庫・近畿エリア
+thumbnail: gero5.jpg
 draft: false
 categories:
-  - "hyougo"
-  - "miyagi"
-  - "hirosima"
-  - "kumamoto"
-  - "outo1"
-  - "seisou"
+  - hyougo
+  - miyagi
+  - hirosima
+  - kumamoto
+  - outo1
+  - seisou
+seo:
+  meta_description: |
+    こすると繊維の奥へ押し込む
+    ノロ等が疑われる場合は使い捨ての手袋と袋を使う
+    表面がきれいに見えても内部の臭いが残ることが多い
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
