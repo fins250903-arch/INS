@@ -135,8 +135,9 @@ const editorTemplates = ARTICLE_TEMPLATES.map((item) => ({
                 ) : (
                   <Fragment>
                     <strong>記事を保存できません。</strong>
-                    Cloudflare Worker はリポジトリを直接書き換えられないため、Worker のシークレット
-                    <code class="rounded bg-amber-100 px-1">BLOG_PUBLISH_GITHUB_TOKEN</code> を設定してください。
+                    Worker ins の Settings → Runtime → ランタイム変数とシークレット に
+                    <code class="rounded bg-amber-100 px-1">BLOG_PUBLISH_GITHUB_TOKEN</code>
+                    を Secret として入れてください。ビルド変数では公開処理から読めません。
                   </Fragment>
                 )}
               </div>
