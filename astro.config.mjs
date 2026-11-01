@@ -7,6 +7,7 @@ import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { rehypeBlogImages } from './src/lib/rehype-blog-images.mjs';
+import { includeInSitemap, sitemapLastmod } from './scripts/sitemap-policy.ts';
 
 // DNS is still on Vercel. Workers Builds sets WORKERS_CI; Vercel sets VERCEL.
 // `ASTRO_ADAPTER=vercel|cloudflare` overrides the auto-detect for local builds.
@@ -84,13 +85,13 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      // thanks / compare / 岡山(okayama) は noindex のためサイトマップから除外
-      // 広島(hirosima) はサービス提供終了により LP を廃止（ページ自体を生成しない）
-      filter: (page) =>
-        !page.includes('/thanks/') &&
-        !page.includes('/compare/') &&
-        !page.includes('/okayama/') &&
-        !page.includes('/admin')
+      // thanks / compare / 岡山は noindex。管理画面・転送URL・終了した広島も出さない。
+      // ブログの lastmod は記事の updatedDate、なければ公開日。
+      filter: includeInSitemap,
+      serialize(item) {
+        const lastmod = sitemapLastmod(item.url);
+        return lastmod ? { ...item, lastmod } : item;
+      }
     })
   ],
 
