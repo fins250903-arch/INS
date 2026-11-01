@@ -6,9 +6,15 @@ import {
   CONTACT_EMAIL,
   SITE_CANONICAL_ORIGIN,
   SITE_CONTENT_UPDATED,
+  SITE_HOME_PATH,
   TEL_DISPLAY
 } from '../data/site';
-import { pricingSet } from '../data/lp-pricing';
+import {
+  baseInteriorPriceRange,
+  pricingKei,
+  pricingLarge,
+  pricingSet
+} from '../data/lp-pricing';
 import { canonicalUrl, pageId, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
 import { buildJsonLdGraph } from './json-ld-graph';
 import {
@@ -18,12 +24,18 @@ import {
   webPageNode
 } from './json-ld-site';
 
-const LP_PRICE_RANGE = '26000-42000';
-
+/**
+ * Final article URLs. `/blog/{slug}/` 302s to the Fukuoka copy when it exists,
+ * otherwise the region slug that sorts first (outo3-2 → hyougo).
+ */
 const SERVICE_SUBJECT_OF = [
-  { '@type': 'BlogPosting', url: canonicalUrl('/blog/outo1/'), name: '車内で嘔吐！でも大丈夫な対応方法' },
-  { '@type': 'BlogPosting', url: canonicalUrl('/blog/no1/'), name: '愛車のニオイ撃退！車内徹底消臭クリーニング術' },
-  { '@type': 'BlogPosting', url: canonicalUrl('/blog/outo3-2/'), name: '他人の車に嘔吐は個人賠償責任保険で解決できる？' }
+  { '@type': 'BlogPosting', url: canonicalUrl('/blog/fukuoka/outo1/'), name: '車内で嘔吐！でも大丈夫な対応方法' },
+  { '@type': 'BlogPosting', url: canonicalUrl('/blog/fukuoka/no1/'), name: '愛車のニオイ撃退！車内徹底消臭クリーニング術' },
+  {
+    '@type': 'BlogPosting',
+    url: canonicalUrl('/blog/hyougo/outo3-2/'),
+    name: '他人の車に嘔吐は個人賠償責任保険で解決できる？'
+  }
 ];
 
 function blogPostingNode(href: string, name: string): Record<string, unknown> {
@@ -135,7 +147,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     '@type': 'Offer',
     position: i + 1,
     name: row.label,
-    price: yenToNumber(row.total),
+    price: yenToNumber(row.interiorCleaning),
     priceCurrency: 'JPY',
     availability: 'https://schema.org/InStock',
     url: pageUrl
@@ -180,7 +192,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     subjectOf,
     telephone: tel,
     email: CONTACT_EMAIL,
-    priceRange: LP_PRICE_RANGE,
+    priceRange: baseInteriorPriceRange(),
     image: `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/favicon.png`,
     parentOrganization: { '@id': SITE_ORGANIZATION_ID },
     employee: { '@id': SITE_PERSON_ID },
@@ -211,7 +223,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
       '@type': 'Offer',
       itemOffered: { '@id': serviceId },
       priceCurrency: 'JPY',
-      description: `軽四 ${pricingSet[0].total}〜／${pricingSet[2].label} ${pricingSet[2].total}（税込・基本）`
+      description: `車内清掃（税込・基本）${pricingKei.interiorCleaning}〜${pricingLarge.interiorCleaning}。嘔吐加算後のセット計は${pricingKei.total}〜${pricingLarge.total}`
     }
   };
 
@@ -219,7 +231,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     input.pageTitle ?? `${input.regionName}｜${BUSINESS_NAME}出張車内清掃・車内クリーニング`;
 
   const breadcrumbItems = [
-    { name: BUSINESS_NAME, path: '/' },
+    { name: BUSINESS_NAME, path: SITE_HOME_PATH },
     ...(input.breadcrumbMiddle ? [input.breadcrumbMiddle] : []),
     { name: pageName, path: input.path }
   ];

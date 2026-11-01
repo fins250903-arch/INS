@@ -1,6 +1,7 @@
 import { getBlogTopic, AIO_ANSWER_END, AIO_ANSWER_START, type LpHeadingLink } from '../data/blog-topics';
 import { resolveStoreLpPath } from '../data/region-lp-links';
 import { TOPIC_KEYWORD_SLUG } from '../data/keyword-lp';
+import { basePriceFaqAnswer } from '../data/lp-pricing';
 import { TEL_DISPLAY, TEL_HREF } from '../data/site';
 
 export type RelatedPostLink = {
@@ -156,7 +157,7 @@ export function buildTopicFaqs(input: {
     },
     {
       q: '料金の目安はいくらですか？',
-      a: '税込の基本料金の目安は軽自動車・軽SUV 22,000円、普通車 28,000円、大型車・SUV・ミニバン 36,000円です。嘔吐・灯油などは加算や専用洗浄があるため、現地見積が正確です。'
+      a: basePriceFaqAnswer()
     },
     {
       q: '自分で掃除してもいいですか？',

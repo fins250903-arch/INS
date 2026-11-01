@@ -3,6 +3,10 @@
  * Used for Answer-First openings, related-article linking, and LP heading deep-links.
  */
 
+import { keiInteriorPriceClause, pricingKei, pricingLabel, pricingOptionByLabel } from './lp-pricing';
+
+const keroseneSeatPrice = pricingOptionByLabel('灯油').price;
+
 export type LpHeadingId =
   | 'heading-what-is'
   | 'heading-emergency-first-aid'
@@ -92,7 +96,7 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     id: 'vomit',
     label: '車内嘔吐',
     answer:
-      '車内嘔吐は、こすらず固形分を取り除き、市販の消臭スプレーは使わず、4日以内に温水吸引でシート内部まで洗浄するのが最短です。{regionFull}では駐車場完結の出張清掃（軽自動車22,000円〜・税込）で対応できます。',
+      `車内嘔吐は、こすらず固形分を取り除き、市販の消臭スプレーは使わず、4日以内に温水吸引でシート内部まで洗浄するのが最短です。{regionFull}では駐車場完結の出張清掃（${keiInteriorPriceClause()}）で対応できます。`,
     bullets: [
       'ゴム手袋＋ペーパーで「広げず」吸い取る',
       '芳香剤・塩素系は臭いの固定化につながる',
@@ -232,7 +236,7 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     id: 'kerosene',
     label: '灯油こぼし',
     answer:
-      '車内の灯油は火気厳禁です。全ドア開放で換気し、液体をこすらず吸い取り、残臭は専門の灯油洗浄が必要です。{regionFull}では1席あたり税込30,000円目安の灯油専用洗浄に対応します。',
+      `車内の灯油は火気厳禁です。全ドア開放で換気し、液体をこすらず吸い取り、残臭は専門の灯油洗浄が必要です。{regionFull}では1席あたり${keroseneSeatPrice}（税込）の灯油専用洗浄に対応します。`,
     bullets: [
       '火気厳禁・すぐに換気する',
       '新聞紙や布で吸い取り、こすらない',
@@ -404,7 +408,7 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     bullets: [
       '移動と預け期間がない',
       '深部汚れは家庭機材より業務用吸引が向く',
-      '料金は現地見積が基本（軽22,000円〜）'
+      `料金は現地見積が基本（${pricingLabel(pricingKei.label)} ${pricingKei.interiorCleaning}〜）`
     ],
     lpHeadings: [H('heading-what-is'), H('heading-compare-outreach'), H('heading-flow'), H('heading-pricing')],
     relatedSlugs: ['syuttyou22', 'syuttyou33', 'syuttyou55', 'sennjyou2', 'ranking-osaka-carclean'],

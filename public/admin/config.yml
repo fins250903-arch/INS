@@ -67,6 +67,13 @@ collections:
         date_format: YYYY-MM-DD
         time_format: false
         required: true
+      - label: 更新日
+        name: updatedDate
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        required: false
+        hint: '空なら公開日を dateModified に使います。ビルド日では上書きしません。'
       - label: 地域（識別子）
         name: region
         widget: select

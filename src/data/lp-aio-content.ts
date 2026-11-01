@@ -1,5 +1,11 @@
 /** AIO・情報型検索向けの共通・地域別コンテンツ（LP表示とFAQで共有） */
 
+import { pricingKei, pricingOptionByLabel, pricingPartial } from './lp-pricing';
+
+const partialSeatPrice = pricingPartial[0].price;
+const generatorBringInPrice = pricingOptionByLabel('発電機').price;
+const keroseneSeatPrice = pricingOptionByLabel('灯油').price;
+
 export type InsuranceMatrixRow = {
   situation: string;
   insurance: string;
@@ -25,7 +31,7 @@ export const insuranceMatrixRows: InsuranceMatrixRow[] = [
   {
     situation: '免責金額（5〜10万円）未満の軽微な汚れ',
     insurance: '自己負担が一般的',
-    support: '部分洗浄18,000円〜で対応可'
+    support: `部分洗浄${partialSeatPrice}〜で対応可`
   }
 ];
 
@@ -37,13 +43,13 @@ const POWER_BORROW_SLUGS = new Set(['fukuoka', 'okinawa']);
 
 export function getPowerWaterAnswer(regionSlug?: string): string {
   if (regionSlug && POWER_BORROW_SLUGS.has(regionSlug)) {
-    return '多くの作業は発電機・給水タンクの持参で対応可能ですが、福岡・沖縄本島など一部エリアでは現場の電源・水道をお借りする場合があります（発電機持込オプション5,000円）。立体駐車場・機械式駐車場では搬入経路と作業スペースの事前確認が必要です。まずお電話（070-8428-0866）で駐車場の状況をお知らせください。';
+    return `多くの作業は発電機・給水タンクの持参で対応可能ですが、福岡・沖縄本島など一部エリアでは現場の電源・水道をお借りする場合があります（発電機持込オプション${generatorBringInPrice}）。立体駐車場・機械式駐車場では搬入経路と作業スペースの事前確認が必要です。まずお電話（070-8428-0866）で駐車場の状況をお知らせください。`;
   }
-  return '多くの地域では発電機・給水タンクを持参し、電源・水道なしでも作業可能です（発電機持込オプション5,000円）。立体駐車場・機械式駐車場では搬入経路と作業スペースの事前確認が必要です。まずお電話（070-8428-0866）で駐車場の状況をお知らせください。';
+  return `多くの地域では発電機・給水タンクを持参し、電源・水道なしでも作業可能です（発電機持込オプション${generatorBringInPrice}）。立体駐車場・機械式駐車場では搬入経路と作業スペースの事前確認が必要です。まずお電話（070-8428-0866）で駐車場の状況をお知らせください。`;
 }
 
 /** Price line shown in every LP first view. Keep this string identical across templates. */
-export const LP_FV_BASE_PRICE_LINE = '基本料金は軽自動車24,000円〜（税込）';
+export const LP_FV_BASE_PRICE_LINE = `基本料金は軽自動車${pricingKei.interiorCleaning}〜（税込）`;
 
 const LEGACY_FV_PRICE_LINE =
   '基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）';
@@ -119,7 +125,7 @@ export const emergencyVomitSteps = [
 export const emergencyKeroseneSteps = [
   '火気厳禁。直ちに全ドアを開けて換気する',
   '新聞紙・布で液体を吸い取る（こすらない）',
-  '中性洗剤を薄めた液で表面を拭き、数日臭いが残る場合は専門洗浄へ（灯油専用洗浄 1席30,000円・税込）'
+  `中性洗剤を薄めた液で表面を拭き、数日臭いが残る場合は専門洗浄へ（灯油専用洗浄 1席${keroseneSeatPrice}）`
 ];
 
 export const emergencyPetSteps = [

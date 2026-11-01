@@ -14,6 +14,8 @@ import { getAllMdPosts } from '../../lib/blog-md-collection';
 import { deleteBlogPost } from '../../lib/blog-publish';
 import { formatBlogDate } from '../../lib/blog-content';
 
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
 const isAuthenticated = isAdminAuthenticated(Astro.cookies);
 let loginError = '';
 
@@ -61,6 +63,7 @@ const sortedPosts = sortMdPosts(filteredPosts, sortOrder);
   title="ブログ管理画面"
   description="ブログ記事を管理する画面です"
   canonical="/admin/blog-manager/"
+  noindex
 >
   <main class="min-h-screen bg-slate-50">
     {

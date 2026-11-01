@@ -6,6 +6,8 @@ const blog = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    /** Article revision. Falls back to `date` in JSON-LD and the byline when omitted. */
+    updatedDate: z.coerce.date().optional(),
     /** 地域識別子（osaka / fukuoka など） */
     region: z.enum(['fukuoka', 'osaka', 'hyougo', 'siga', 'aiti', 'saitama']),
     /** 地域の正式名称（例: 大阪府） */

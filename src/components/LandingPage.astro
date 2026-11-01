@@ -16,7 +16,8 @@ import {
   pricingOptions,
   pricingPartial,
   pricingPartialDeodorizeNote,
-  pricingSet
+  pricingSet,
+  pricingStandard
 } from '../data/lp-pricing';
 import {
   emergencyIntro,
@@ -1035,9 +1036,9 @@ DIYは軽度向きで深部汚れは限界`}
       <h3 class="mt-6 text-xl font-bold">📝 お見積り例</h3>
       <p class="mt-2 text-sm font-semibold">普通車内で嘔吐し、座席と床面が汚れている場合</p>
       <ul class="mt-2 text-sm list-disc list-inside">
-        <li><strong>普通車セット（車内清掃）</strong>：29,000円 --- A</li>
-        <li><strong>加算（嘔吐・うんち）</strong>：3,000円 --- B</li>
-        <li>💰 A＋B <strong>合計：32,000円（税込）</strong></li>
+        <li><strong>普通車セット（車内清掃）</strong>：{pricingStandard.interiorCleaning} --- A</li>
+        <li><strong>加算（嘔吐・うんち）</strong>：{pricingStandard.addon} --- B</li>
+        <li>💰 A＋B <strong>合計：{pricingStandard.total}（税込）</strong></li>
       </ul>
     </div>
   </div>
@@ -1048,7 +1049,7 @@ DIYは軽度向きで深部汚れは限界`}
   <div class="max-w-4xl mx-auto px-6 text-center">
     <p class="text-xl sm:text-2xl font-bold text-gray-900 mb-3">その汚れとニオイ、諦める前にご相談ください！</p>
     <p class="text-sm sm:text-base text-gray-600 mb-8 max-w-xl mx-auto leading-relaxed">
-      「こんなにキレイになるなら、もっと早く頼めばよかった」とお喜びの声をいただいています。<br class="hidden sm:inline" />お見積りは完全無料、追加料金なしの明朗会計です。
+      「こんなにキレイになるなら、もっと早く頼めばよかった」とお喜びの声をいただいています。<br class="hidden sm:inline" />お見積りは完全無料です。お見積り後の追加請求はありません。
     </p>
     <CtaBundle />
   </div>

@@ -19,7 +19,7 @@ import {
 import { resolveBlogSeoMeta } from '../../../lib/blog-seo';
 import { collectLpHeadingLinks, collectRelatedBlogLinks, getBlogTopic, replaceRegionPlaceholder, buildTopicFaqs } from '../../../lib/blog-aio';
 import { resolveStoreLpPath } from '../../../data/region-lp-links';
-import { SITE_CONTENT_UPDATED, SITE_PERSON_NAME, SITE_PERSON_JOB_TITLE } from '../../../data/site';
+import { SITE_PERSON_NAME, SITE_PERSON_JOB_TITLE } from '../../../data/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -57,12 +57,15 @@ const faqs = buildTopicFaqs({
   regionFull: post.data.regionFull
 });
 
+const publishedOn = post.data.date.toISOString().slice(0, 10);
+const modifiedOn = (post.data.updatedDate ?? post.data.date).toISOString().slice(0, 10);
+
 const blogJsonLd = buildBlogPostJsonLd({
   path: pagePath,
   title: post.data.title,
   description: seo.description,
-  datePublished: post.data.date.toISOString(),
-  dateModified: SITE_CONTENT_UPDATED,
+  datePublished: publishedOn,
+  dateModified: modifiedOn,
   imageUrl: seo.ogImage,
   keywords: seo.keywords,
   regionFull: post.data.regionFull,
@@ -100,7 +103,7 @@ const blogJsonLd = buildBlogPostJsonLd({
       <p class="mt-1 text-xs font-medium text-primary">{getAreaLabel(post)}</p>
       <h1 class="mt-2 text-2xl font-bold leading-snug sm:text-3xl">{post.data.title}</h1>
       <p class="mt-2 text-xs text-gray-500">
-        監修：{SITE_PERSON_NAME}（{SITE_PERSON_JOB_TITLE}）／最終確認 {SITE_CONTENT_UPDATED}
+        監修：{SITE_PERSON_NAME}（{SITE_PERSON_JOB_TITLE}）／最終確認 {modifiedOn}
       </p>
 
       <BlogAioLead

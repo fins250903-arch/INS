@@ -12,6 +12,8 @@ export interface BlogMdPost {
   filePath: string;
   title: string;
   date: string;
+  /** YYYY-MM-DD. Omitted posts fall back to `date`. */
+  updatedDate?: string;
   regionFull: string;
   areaLabel?: string;
   urlSlug?: string;
@@ -155,6 +157,7 @@ function serializeFrontmatter(data: BlogMdPost): string {
   pushScalar('title', data.title);
   if (data.urlSlug) pushScalar('urlSlug', data.urlSlug);
   pushScalar('date', formatDateValue(data.date));
+  if (data.updatedDate) pushScalar('updatedDate', formatDateValue(data.updatedDate));
   pushScalar('region', data.region);
   pushScalar('regionFull', data.regionFull);
   if (data.areaLabel) pushScalar('areaLabel', data.areaLabel);
@@ -196,6 +199,7 @@ export function toBlogMdPost(
     filePath,
     title: String(data.title || slug),
     date: formatDateValue(data.date),
+    updatedDate: data.updatedDate ? formatDateValue(data.updatedDate) : undefined,
     regionFull: String(data.regionFull || ''),
     areaLabel: data.areaLabel ? String(data.areaLabel) : undefined,
     urlSlug: data.urlSlug ? String(data.urlSlug) : slug,
