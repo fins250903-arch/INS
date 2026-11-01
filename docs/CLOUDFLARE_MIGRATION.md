@@ -156,13 +156,19 @@ push ごとに Cloudflare 側でビルドとデプロイが走ります（GitHub
 | Production branch | `main` |
 | Root directory | `/`（空欄） |
 | Build command | 空欄 |
-| Deploy command | `npx wrangler deploy`（ダッシュボードのデフォルトのままで可） |
-| Non-production branch deploy command | `npx wrangler versions upload`（デフォルトのままで可） |
+| Deploy command（本番ブランチ `main`） | `npx wrangler deploy` |
+| Preview command（本番以外のブランチ） | `npx wrangler preview` |
 
 `wrangler.jsonc` の `build.command`（`scripts/cf-workers-build.mjs`）が `astro build` を実行してから
-生成物を wrangler が見つけられるパスへコピーします。そのため Build command は空欄で、
-Deploy command は Cloudflare のデフォルト（`npx wrangler deploy`）のままで通ります。
+生成物を wrangler が見つけられるパスへコピーします。そのため Build command は空欄にします。
 Build command に `npm run build` を入れると同じビルドが 2 回走ります。
+
+本番の Deploy command を `npx wrangler preview` にすると、`insbs.net` は更新されません。
+`wrangler preview` は Preview URL を作るだけで、本番 Worker には載せません。さらに
+`wrangler.jsonc` に `previews` が無いと、open beta の警告の直後に
+「`previews` block が無い」というエラーで止まります（カスタムビルドの前です）。
+`previews` ブロックはリポジトリに入っています。Preview command は非本番ブランチだけに使い、
+本番は `npx wrangler deploy` のままにしてください。
 
 `npm run deploy` / `npm run deploy:preview` は同じ wrangler コマンドです（カスタムビルドが先に走ります）。
 
