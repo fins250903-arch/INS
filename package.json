@@ -12,7 +12,8 @@
   "scripts": {
     "dev": "astro dev",
     "dev:lan": "astro dev --host 0.0.0.0",
-    "build": "npm run redirects && npm run blog:fix-media && npm run wp:resolve-images && astro build",
+    "build": "npm run redirects && npm run llms && npm run blog:fix-media && npm run wp:resolve-images && astro build",
+    "llms": "tsx scripts/generate-llms-txt.ts",
     "preview": "wrangler dev --config dist/server/wrangler.json",
     "preview:lan": "wrangler dev --config dist/server/wrangler.json --ip 0.0.0.0",
     "astro": "astro",
