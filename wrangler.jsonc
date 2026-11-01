@@ -6,9 +6,9 @@
   "compatibility_date": "2026-04-15",
   // `nodejs_compat` is required by `Buffer` usage in the GitHub publisher and by Astro internals.
   "compatibility_flags": ["nodejs_compat"],
-  // Workers Builds' default deploy command is a bare `npx wrangler deploy` (no prior `astro build`).
-  // This command builds the site and copies the generated Worker to the path wrangler expects
-  // from `main` (see scripts/cf-workers-build.mjs).
+  // Production (`npx wrangler deploy`) runs this before upload. Workers Builds' Build
+  // command should stay empty so this is not executed twice. `npx wrangler preview`
+  // is only for non-production branches and does not publish insbs.net.
   "build": { "command": "node scripts/cf-workers-build.mjs" },
   // Package export (no file extension) so Vite can resolve it during `astro build`. After the
   // custom build, wrangler looks for `<repo>/@astrojs/cloudflare/entrypoints/server.js`.
@@ -36,5 +36,15 @@
     "DECAP_SITE_URL": "https://insbs.net",
     "BLOG_PUBLISH_GITHUB_REPO": "fins250903-arch/INS",
     "BLOG_PUBLISH_GITHUB_BRANCH": "main"
+  },
+  // Required by `npx wrangler preview` (Workers Builds preview command, open beta).
+  // Without this block the command exits before the custom build. Previews do not
+  // inherit `vars`. Assets, compatibility, and `main` stay at the top level.
+  "previews": {
+    "vars": {
+      "DECAP_SITE_URL": "https://insbs.net",
+      "BLOG_PUBLISH_GITHUB_REPO": "fins250903-arch/INS",
+      "BLOG_PUBLISH_GITHUB_BRANCH": "main"
+    }
   }
 }
