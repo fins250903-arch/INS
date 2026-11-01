@@ -1,8 +1,10 @@
 import {
   BUSINESS_NAME,
   CONTACT_EMAIL,
+  LINE_OFFICIAL_URL,
   SITE_CANONICAL_ORIGIN,
   SITE_CONTENT_UPDATED,
+  SITE_HOME_PATH,
   SITE_PERSON_IMAI_ID,
   SITE_PERSON_JOB_TITLE,
   SITE_PERSON_NAME,
@@ -16,13 +18,7 @@ function telE164(): string {
   return `+${digits}`;
 }
 
-const ORGANIZATION_SAME_AS = [
-  'https://insbs.net/blog/',
-  'https://lin.ee/Xs8Orp2',
-  'https://insbs.net/ok2/seatclean1/',
-  'https://insbs.net/ok2/nio/',
-  'https://insbs.net/ok2/outoseet/'
-] as const;
+const ORGANIZATION_SAME_AS = [LINE_OFFICIAL_URL] as const;
 
 /** 全ページ共通：Organization + WebSite */
 export function siteOrganizationNode(): Record<string, unknown> {
@@ -30,7 +26,7 @@ export function siteOrganizationNode(): Record<string, unknown> {
     '@type': 'Organization',
     '@id': SITE_ORGANIZATION_ID,
     name: BUSINESS_NAME,
-    url: canonicalUrl('/'),
+    url: canonicalUrl(SITE_HOME_PATH),
     logo: `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/favicon.png`,
     telephone: telE164(),
     email: CONTACT_EMAIL,
@@ -57,8 +53,7 @@ export function sitePersonNode(): Record<string, unknown> {
       '車内消臭',
       '嘔吐物・尿・灯油・タバコ臭の除去',
       'シート温水吸引洗浄'
-    ],
-    sameAs: ['https://insbs.net/blog/']
+    ]
   };
 }
 
@@ -66,7 +61,7 @@ export function siteWebSiteNode(): Record<string, unknown> {
   return {
     '@type': 'WebSite',
     '@id': SITE_WEBSITE_ID,
-    url: canonicalUrl('/'),
+    url: canonicalUrl(SITE_HOME_PATH),
     name: BUSINESS_NAME,
     inLanguage: 'ja-JP',
     publisher: { '@id': SITE_ORGANIZATION_ID }

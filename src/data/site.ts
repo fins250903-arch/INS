@@ -5,6 +5,15 @@
 export const SITE_CANONICAL_ORIGIN = 'https://insbs.net' as const;
 
 /**
+ * Final URL of the apex `/` redirect (308 → /osaka/).
+ * Use this for navigable JSON-LD urls. `@id` values stay on the origin.
+ */
+export const SITE_HOME_PATH = '/osaka/' as const;
+
+/** Official LINE profile. Organization sameAs lists external profiles only. */
+export const LINE_OFFICIAL_URL = 'https://lin.ee/Xs8Orp2' as const;
+
+/**
  * サイト本文・料金表・FAQの最終見直し日（JSON-LD `dateModified`・LP「最終更新」表示に使用）。
  *
  * AEO/SEO のフレッシュネス指標を最大化するため、固定日ではなくビルド（デプロイ）時点の

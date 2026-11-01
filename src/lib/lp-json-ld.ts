@@ -6,6 +6,7 @@ import {
   CONTACT_EMAIL,
   SITE_CANONICAL_ORIGIN,
   SITE_CONTENT_UPDATED,
+  SITE_HOME_PATH,
   TEL_DISPLAY
 } from '../data/site';
 import {
@@ -23,10 +24,18 @@ import {
   webPageNode
 } from './json-ld-site';
 
+/**
+ * Final article URLs. `/blog/{slug}/` 302s to the Fukuoka copy when it exists,
+ * otherwise the region slug that sorts first (outo3-2 → hyougo).
+ */
 const SERVICE_SUBJECT_OF = [
-  { '@type': 'BlogPosting', url: canonicalUrl('/blog/outo1/'), name: '車内で嘔吐！でも大丈夫な対応方法' },
-  { '@type': 'BlogPosting', url: canonicalUrl('/blog/no1/'), name: '愛車のニオイ撃退！車内徹底消臭クリーニング術' },
-  { '@type': 'BlogPosting', url: canonicalUrl('/blog/outo3-2/'), name: '他人の車に嘔吐は個人賠償責任保険で解決できる？' }
+  { '@type': 'BlogPosting', url: canonicalUrl('/blog/fukuoka/outo1/'), name: '車内で嘔吐！でも大丈夫な対応方法' },
+  { '@type': 'BlogPosting', url: canonicalUrl('/blog/fukuoka/no1/'), name: '愛車のニオイ撃退！車内徹底消臭クリーニング術' },
+  {
+    '@type': 'BlogPosting',
+    url: canonicalUrl('/blog/hyougo/outo3-2/'),
+    name: '他人の車に嘔吐は個人賠償責任保険で解決できる？'
+  }
 ];
 
 function blogPostingNode(href: string, name: string): Record<string, unknown> {
@@ -222,7 +231,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     input.pageTitle ?? `${input.regionName}｜${BUSINESS_NAME}出張車内清掃・車内クリーニング`;
 
   const breadcrumbItems = [
-    { name: BUSINESS_NAME, path: '/' },
+    { name: BUSINESS_NAME, path: SITE_HOME_PATH },
     ...(input.breadcrumbMiddle ? [input.breadcrumbMiddle] : []),
     { name: pageName, path: input.path }
   ];
