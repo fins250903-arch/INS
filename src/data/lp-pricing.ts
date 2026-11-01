@@ -40,6 +40,54 @@ export const pricingOptions = [
   { label: '灯油専用洗浄（1席あたり）', price: '30,000円' }
 ] as const;
 
+/** 車内清掃列。FAQ・上部テキスト・ブログ・JSON-LD の「基本料金」はここだけを参照する。 */
+export const pricingKei = pricingSet[0];
+export const pricingStandard = pricingSet[1];
+export const pricingLarge = pricingSet[2];
+
+export function pricingLabel(label: string): string {
+  return label.replace(/[\s\u3000]+/g, ' ').trim();
+}
+
+/** First integer in a table cell such as `24,000円` or `3,000-7,000円`. */
+export function parseYenAmount(label: string): number {
+  const matched = label.replace(/,/g, '').match(/\d+/);
+  return matched ? Number.parseInt(matched[0], 10) : 0;
+}
+
+export function pricingOptionByLabel(part: string): (typeof pricingOptions)[number] {
+  const row = pricingOptions.find((item) => item.label.includes(part));
+  if (!row) {
+    throw new Error(`Unknown pricing option: ${part}`);
+  }
+  return row;
+}
+
+/** schema.org priceRange for the 車内清掃 column (min-max, yen digits only). */
+export function baseInteriorPriceRange(): string {
+  const amounts = pricingSet.map((row) => parseYenAmount(row.interiorCleaning));
+  return `${Math.min(...amounts)}-${Math.max(...amounts)}`;
+}
+
+/** One sentence that lists 車内清掃, 嘔吐加算, and セット合計 from the table. */
+export function formatPricingSetSummary(): string {
+  const base = pricingSet.map((row) => `${pricingLabel(row.label)} ${row.interiorCleaning}`).join('、');
+  const addons = pricingSet.map((row) => `${pricingLabel(row.label)} ${row.addon}`).join('、');
+  const totals = pricingSet.map((row) => `${pricingLabel(row.label)} ${row.total}`).join('、');
+  return `料金表の車内清掃（税込・基本）は${base}です。嘔吐・うんちの加算は${addons}で、セット合計は${totals}です。`;
+}
+
+export function basePriceFaqAnswer(): string {
+  const deodorize = pricingOptionByLabel('消臭・脱臭').price;
+  const kerosene = pricingOptionByLabel('灯油').price;
+  return `${formatPricingSetSummary()}ひどい嘔吐・糞尿・激臭の消臭はオプション（${deodorize}）、灯油専用洗浄は1席${kerosene}です。抗菌コートや地域による出張費も料金表のとおり別途です。訪問後に現車確認のうえお見積りします。`;
+}
+
+/** Short clause for blog leads. Uses the kei 車内清掃 price, not the rear-seat partial. */
+export function keiInteriorPriceClause(): string {
+  return `${pricingLabel(pricingKei.label)}の車内清掃 ${pricingKei.interiorCleaning}〜・税込`;
+}
+
 export const additionalNotes = [
   '革張りシートは、洗剤保湿剤が変わる為 5,000円',
   'エアコン内部洗浄（簡易洗浄） 10,000円',

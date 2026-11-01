@@ -1,4 +1,12 @@
 import type { LpFaq } from './lp-faqs';
+import {
+  basePriceFaqAnswer,
+  formatPricingSetSummary,
+  pricingOptionByLabel
+} from './lp-pricing';
+
+const keroseneSeatPrice = pricingOptionByLabel('灯油').price;
+const generatorBringInPrice = pricingOptionByLabel('発電機').price;
 
 export type RegionFaqPack = {
   /** regionCoverageFaq の回答を上書き（市区名・出張の実情を厚くする） */
@@ -23,7 +31,7 @@ export const regionFaqBySlug: Record<string, RegionFaqPack> = {
       },
       {
         q: '大阪府内の出張車内清掃の料金目安は？',
-        a: '軽自動車22,000円・普通車28,000円・大型・SUV・ミニバン36,000円（税込・基本）が目安です。嘔吐・糞尿・激臭などはオプション（3,000〜7,000円程度）となることがあり、現車確認後にお見積りします。'
+        a: basePriceFaqAnswer()
       }
     ]
   },
@@ -123,7 +131,7 @@ export const regionFaqBySlug: Record<string, RegionFaqPack> = {
     extras: [
       {
         q: '茨城県で嘔吐・灯油こぼしの応急処置後、プロに頼む目安は？',
-        a: '市販消臭スプレーや強い摩擦は避け、固形分を吸い取ったうえで24時間以内の相談が安全です。嘔吐は4日以内、灯油は火気厳禁で換気後、臭いが数日残る場合は専門洗浄（灯油1席30,000円・税込）をご検討ください。'
+        a: `市販消臭スプレーや強い摩擦は避け、固形分を吸い取ったうえで24時間以内の相談が安全です。嘔吐は4日以内、灯油は火気厳禁で換気後、臭いが数日残る場合は専門洗浄（灯油1席${keroseneSeatPrice}）をご検討ください。`
       },
       {
         q: '茨城県内の出張、即日対応は可能ですか？',
@@ -151,7 +159,7 @@ export const regionFaqBySlug: Record<string, RegionFaqPack> = {
     extras: [
       {
         q: '岐阜県で灯油を車内にこぼした場合、出張ではどこまで対応できますか？',
-        a: '石油系成分の乳化洗浄と温水吸引で、シート・フロアの染みと臭いを処理します。灯油専用洗浄は1席30,000円（税込）が目安です。大量こぼしは保険適用のご相談も可能です。'
+        a: `石油系成分の乳化洗浄と温水吸引で、シート・フロアの染みと臭いを処理します。灯油専用洗浄は1席${keroseneSeatPrice}が目安です。大量こぼしは保険適用のご相談も可能です。`
       },
       {
         q: '岐阜県内、当日の出張依頼は可能ですか？',
@@ -193,7 +201,7 @@ export const regionFaqBySlug: Record<string, RegionFaqPack> = {
     extras: [
       {
         q: '滋賀県で食べこぼし・生活臭が拭いても戻る場合、出張では何をしますか？',
-        a: '繊維奥の有機物を温水洗浄と吸引で除去し、芳香剤で誤魔化さない工程で対応します。軽自動車22,000円〜・普通車28,000円〜（税込）が基本目安です。'
+        a: `繊維奥の有機物を温水洗浄と吸引で除去し、芳香剤で誤魔化さない工程で対応します。${formatPricingSetSummary()}`
       },
       {
         q: '滋賀県内、他人の車を子どもが汚した場合の保険は？',
@@ -211,7 +219,7 @@ export const regionFaqBySlug: Record<string, RegionFaqPack> = {
       },
       {
         q: '福岡県への出張、電源・水道は必要ですか？',
-        a: '発電機・給水タンクの持参で対応できる場合が多いですが、現場条件により電源・水道をお借りする場合があります（発電機持込オプション5,000円）。事前にお電話でご確認ください。'
+        a: `発電機・給水タンクの持参で対応できる場合が多いですが、現場条件により電源・水道をお借りする場合があります（発電機持込オプション${generatorBringInPrice}）。事前にお電話でご確認ください。`
       }
     ]
   },
@@ -225,7 +233,7 @@ export const regionFaqBySlug: Record<string, RegionFaqPack> = {
       },
       {
         q: '佐賀県内の出張車内清掃の料金目安は？',
-        a: '軽自動車22,000円・普通車28,000円・大型・SUV・ミニバン36,000円（税込・基本）が目安です。嘔吐・糞尿・激臭などはオプション（3,000〜7,000円程度）となることがあります。'
+        a: basePriceFaqAnswer()
       }
     ]
   },

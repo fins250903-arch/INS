@@ -8,7 +8,12 @@ import {
   SITE_CONTENT_UPDATED,
   TEL_DISPLAY
 } from '../data/site';
-import { pricingSet } from '../data/lp-pricing';
+import {
+  baseInteriorPriceRange,
+  pricingKei,
+  pricingLarge,
+  pricingSet
+} from '../data/lp-pricing';
 import { canonicalUrl, pageId, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
 import { buildJsonLdGraph } from './json-ld-graph';
 import {
@@ -17,8 +22,6 @@ import {
   siteWebSiteNode,
   webPageNode
 } from './json-ld-site';
-
-const LP_PRICE_RANGE = '26000-42000';
 
 const SERVICE_SUBJECT_OF = [
   { '@type': 'BlogPosting', url: canonicalUrl('/blog/outo1/'), name: '車内で嘔吐！でも大丈夫な対応方法' },
@@ -135,7 +138,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     '@type': 'Offer',
     position: i + 1,
     name: row.label,
-    price: yenToNumber(row.total),
+    price: yenToNumber(row.interiorCleaning),
     priceCurrency: 'JPY',
     availability: 'https://schema.org/InStock',
     url: pageUrl
@@ -180,7 +183,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     subjectOf,
     telephone: tel,
     email: CONTACT_EMAIL,
-    priceRange: LP_PRICE_RANGE,
+    priceRange: baseInteriorPriceRange(),
     image: `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/favicon.png`,
     parentOrganization: { '@id': SITE_ORGANIZATION_ID },
     employee: { '@id': SITE_PERSON_ID },
@@ -211,7 +214,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
       '@type': 'Offer',
       itemOffered: { '@id': serviceId },
       priceCurrency: 'JPY',
-      description: `軽四 ${pricingSet[0].total}〜／${pricingSet[2].label} ${pricingSet[2].total}（税込・基本）`
+      description: `車内清掃（税込・基本）${pricingKei.interiorCleaning}〜${pricingLarge.interiorCleaning}。嘔吐加算後のセット計は${pricingKei.total}〜${pricingLarge.total}`
     }
   };
 

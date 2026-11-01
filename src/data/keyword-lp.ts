@@ -1,3 +1,8 @@
+import { pricingOptionByLabel, pricingPartial, pricingStandard } from './lp-pricing';
+
+const partialSeatPrice = pricingPartial[0].price;
+const keroseneSeatPrice = pricingOptionByLabel('灯油').price;
+
 export type KeywordFaq = { q: string; a: string };
 
 export interface KeywordLp {
@@ -65,7 +70,7 @@ export const keywordLps: KeywordLp[] = [
     pageTitle: '【{{region}}】車内で嘔吐した｜ゲロ掃除・即日出張洗浄｜INS',
     fvSub: ['こすらず吸い取る', '消臭スプレー禁止', '4日以内に温水吸引'],
     fvLead:
-      '365日24時間・立会不要。市販スプレーはウレタンに臭いを固定します。固形分を吸ったあと、4日以内に駐車場へ出張洗浄。部分洗浄18,000円〜（税込）。',
+      `365日24時間・立会不要。市販スプレーはウレタンに臭いを固定します。固形分を吸ったあと、4日以内に駐車場へ出張洗浄。部分洗浄${partialSeatPrice}〜（税込）。`,
     ctaPhone: '嘔吐の緊急相談（電話・24時間）',
     ctaLine: 'シート写真で嘔吐の概算をLINE',
     troubles: [
@@ -83,7 +88,7 @@ export const keywordLps: KeywordLp[] = [
       },
       {
         q: '車内のゲロ臭は自分で取れますか？業者料金の目安は？',
-        a: '表面の軽い臭いは換気と吸い取りで一時的に和らぎますが、胃酸がウレタンに入ると翌日以降に戻ります。当店の部分洗浄は1席18,000円〜、普通車セット＋嘔吐加算の目安は32,000円（税込）です。365日24時間、駐車場完結・立会不要で出張します。'
+        a: `表面の軽い臭いは換気と吸い取りで一時的に和らぎますが、胃酸がウレタンに入ると翌日以降に戻ります。当店の部分洗浄は1席${partialSeatPrice}〜、普通車セット＋嘔吐加算の目安は${pricingStandard.total}（税込）です。365日24時間、駐車場完結・立会不要で出張します。`
       },
       {
         q: '子どもの車内嘔吐に保険は使えますか？',
@@ -218,9 +223,9 @@ export const keywordLps: KeywordLp[] = [
     keyword: '車内 灯油 こぼし',
     fvCopy: '【{{region}}】車内にこぼした灯油の悪臭\nベタつく油分を特殊分解洗浄',
     pageTitle: '【{{region}}】車内の灯油こぼし｜悪臭・油分の特殊分解洗浄｜INS',
-    fvSub: ['火気厳禁で換気', 'こすらず吸い取る', '1席30,000円〜'],
+    fvSub: ['火気厳禁で換気', 'こすらず吸い取る', `1席${keroseneSeatPrice}〜`],
     fvLead:
-      '365日24時間。灯油は引火と樹脂劣化のリスクがあります。新聞紙で吸い取り、中性洗剤で表面を拭き、残臭は灯油専用洗浄（1席30,000円・税込）。保険の見積書発行に対応します。',
+      `365日24時間。灯油は引火と樹脂劣化のリスクがあります。新聞紙で吸い取り、中性洗剤で表面を拭き、残臭は灯油専用洗浄（1席${keroseneSeatPrice}）。保険の見積書発行に対応します。`,
     ctaPhone: '灯油こぼしの緊急相談（電話）',
     ctaLine: '写真で灯油洗浄の概算をLINE',
     troubles: [
