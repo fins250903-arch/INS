@@ -89,7 +89,8 @@ export default defineConfig({
       filter: (page) =>
         !page.includes('/thanks/') &&
         !page.includes('/compare/') &&
-        !page.includes('/okayama/')
+        !page.includes('/okayama/') &&
+        !page.includes('/admin')
     })
   ],
 
