@@ -14,12 +14,17 @@ function entrySlug(entry: BlogEntry): string {
 }
 
 function toPost(entry: BlogEntry): BlogMdPost {
-  const { date, ...rest } = entry.data;
+  const { date, updatedDate, ...rest } = entry.data;
   return toBlogMdPost(
     entry.data.region as BlogRegionSlug,
     entrySlug(entry),
     entry.filePath ?? '',
-    { ...rest, date: date instanceof Date ? date.toISOString().slice(0, 10) : date },
+    {
+      ...rest,
+      date: date instanceof Date ? date.toISOString().slice(0, 10) : date,
+      updatedDate:
+        updatedDate instanceof Date ? updatedDate.toISOString().slice(0, 10) : updatedDate
+    },
     entry.body ?? ''
   );
 }

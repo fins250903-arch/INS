@@ -1,4 +1,4 @@
-import { BUSINESS_NAME, SITE_CONTENT_UPDATED, SITE_HOME_PATH, SITE_PERSON_NAME } from '../data/site';
+import { BUSINESS_NAME, SITE_HOME_PATH, SITE_PERSON_NAME } from '../data/site';
 import { canonicalUrl, pageId, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
 import { buildJsonLdGraph } from './json-ld-graph';
 import { siteOrganizationNode, sitePersonNode, siteWebSiteNode, webPageNode } from './json-ld-site';
@@ -31,7 +31,7 @@ export function buildBlogPostJsonLd(input: {
   const webpageId = `${baseId}#webpage`;
   const breadcrumbId = `${baseId}#breadcrumb`;
   const howtoId = `${baseId}#howto`;
-  const dateModified = input.dateModified || SITE_CONTENT_UPDATED;
+  const dateModified = (input.dateModified || input.datePublished).slice(0, 10);
 
   const article: Record<string, unknown> = {
     '@type': 'BlogPosting',

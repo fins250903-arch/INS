@@ -254,6 +254,18 @@ const editorTemplates = ARTICLE_TEMPLATES.map((item) => ({
                   </div>
 
                   <div>
+                    <label for="updatedDate" class="mb-1 block text-sm font-medium text-slate-700">
+                      更新日（空なら公開日）
+                    </label>
+                    <input
+                      type="date"
+                      id="updatedDate"
+                      value={editPost.updatedDate || ''}
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+
+                  <div>
                     <label for="region" class="mb-1 block text-sm font-medium text-slate-700">
                       地域サイト
                     </label>
@@ -646,6 +658,7 @@ const editorTemplates = ARTICLE_TEMPLATES.map((item) => ({
         urlSlug,
         title: getField('title')?.value || '',
         date: getField('date')?.value || new Date().toISOString().slice(0, 10),
+        updatedDate: getField('updatedDate')?.value || undefined,
         regionFull: getField('regionFull')?.value || '',
         areaLabel: getField('areaLabel')?.value || '',
         thumbnail: getField('thumbnail')?.value || '',
