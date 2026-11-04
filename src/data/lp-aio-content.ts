@@ -1,6 +1,12 @@
 /** AIO・情報型検索向けの共通・地域別コンテンツ（LP表示とFAQで共有） */
 
-import { pricingKei, pricingOptionByLabel, pricingPartial } from './lp-pricing';
+import {
+  pricingKei,
+  pricingLarge,
+  pricingOptionByLabel,
+  pricingPartial,
+  pricingStandard
+} from './lp-pricing';
 
 const partialSeatPrice = pricingPartial[0].price;
 const generatorBringInPrice = pricingOptionByLabel('発電機').price;
@@ -48,15 +54,27 @@ export function getPowerWaterAnswer(regionSlug?: string): string {
   return `多くの地域では発電機・給水タンクを持参し、電源・水道なしでも作業可能です（発電機持込オプション${generatorBringInPrice}）。立体駐車場・機械式駐車場では搬入経路と作業スペースの事前確認が必要です。まずお電話（070-8428-0866）で駐車場の状況をお知らせください。`;
 }
 
-/** Price line shown in every LP first view. Keep this string identical across templates. */
-export const LP_FV_BASE_PRICE_LINE = `基本料金は軽自動車${pricingKei.interiorCleaning}〜（税込）`;
+/** Price line shown in every LP first view. Amounts come from the 車内清掃 column. */
+export const LP_FV_BASE_PRICE_LINE = `基本料金は軽自動車${pricingKei.interiorCleaning}・普通車${pricingStandard.interiorCleaning}・大型車${pricingLarge.interiorCleaning}（税込）`;
 
-const LEGACY_FV_PRICE_LINE =
-  '基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）';
+const LEGACY_FV_PRICE_LINES = [
+  '基本料金は軽自動車22,000円〜・普通車28,000円〜（税込）',
+  `基本料金は軽自動車${pricingKei.interiorCleaning}〜（税込）`
+] as const;
+
+/**
+ * One sentence under the base-price line. Wording stays inside the insurance matrix:
+ * coverage can apply, and it depends on the contract. No zero-deductible promise.
+ */
+export const FV_INSURANCE_NOTICE =
+  '保険が使える場合があります。適用は契約内容により異なります。';
 
 /** Every region lead states the same first-view base price, once. */
 export function withUnifiedFvPriceLine(text: string): string {
-  const replaced = text.split(LEGACY_FV_PRICE_LINE).join(LP_FV_BASE_PRICE_LINE);
+  let replaced = text;
+  for (const legacy of LEGACY_FV_PRICE_LINES) {
+    replaced = replaced.split(legacy).join(LP_FV_BASE_PRICE_LINE);
+  }
   if (replaced.includes(LP_FV_BASE_PRICE_LINE)) return replaced;
   const body = replaced.trimEnd();
   const separator = body.endsWith('。') ? '' : '。';
