@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
+import FvServiceNotices from '../../components/FvServiceNotices.astro';
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
@@ -244,6 +245,11 @@ const flowSteps = [
               <p class="basis-full text-sm font-black leading-snug text-slate-950 sm:text-base">
                 {LP_FV_BASE_PRICE_LINE}
               </p>
+              <FvServiceNotices
+                regionSlug={regionSlug}
+                insuranceHref={`/${regionSlug}/#heading-insurance-matrix`}
+                tone="on-light"
+              />
             </div>
             
             <!-- FV内CTAボタン -->

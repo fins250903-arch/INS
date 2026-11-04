@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import AntimicrobialCampaignBanner from './AntimicrobialCampaignBanner.astro';
 import CtaBundle from './CtaBundle.astro';
+import FvServiceNotices from './FvServiceNotices.astro';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
 import { getPublishedBlogPosts, getBlogSlug } from '../lib/blog-content';
 import {
@@ -271,6 +272,7 @@ const formatDate = (date: Date) => {
           <p class="fv-price basis-full text-base font-black leading-snug text-amber-200 sm:text-lg">
             {LP_FV_BASE_PRICE_LINE}
           </p>
+          <FvServiceNotices regionSlug={regionSlug} insuranceHref="#heading-insurance-matrix" />
         </div>
         <div class="mt-4 flex justify-start w-full">
           <CtaBundle

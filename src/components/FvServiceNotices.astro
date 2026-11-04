@@ -1,0 +1,30 @@
+---
+import { FV_INSURANCE_NOTICE } from '../data/lp-aio-content';
+import { fvTravelIncludedExample } from '../data/lp-pricing';
+
+interface Props {
+  regionSlug?: string;
+  /** Region LP insurance matrix. Keyword pages link back to the parent LP. */
+  insuranceHref: string;
+  tone?: 'on-dark' | 'on-light';
+}
+
+const { regionSlug, insuranceHref, tone = 'on-dark' } = Astro.props;
+const travelExample = fvTravelIncludedExample(regionSlug);
+const box =
+  tone === 'on-dark'
+    ? 'fv-notices mt-3 w-full basis-full rounded-lg bg-black/60 px-3 py-2 text-xs font-semibold leading-relaxed text-white sm:text-sm'
+    : 'fv-notices mt-3 w-full basis-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold leading-relaxed text-slate-900 sm:text-sm';
+const linkClass =
+  tone === 'on-dark'
+    ? 'ml-1 underline decoration-amber-200 text-amber-200'
+    : 'ml-1 underline text-primary';
+---
+
+<div class={box}>
+  <p>{travelExample}</p>
+  <p class="mt-1">
+    {FV_INSURANCE_NOTICE}
+    <a class={linkClass} href={insuranceHref}>保険の表で確認</a>
+  </p>
+</div>

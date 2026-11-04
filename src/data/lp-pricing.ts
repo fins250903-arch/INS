@@ -116,12 +116,30 @@ export const travelFeeSurchargeNote =
 
 const travelFeeFreePattern = /出張費[\s　]*無料/;
 
-export function pricingNotesForRegion(regionSlug?: string): readonly string[] {
-  const surcharge =
+export function isTravelFeeSurchargeRegion(regionSlug?: string): boolean {
+  return (
     regionSlug != null &&
-    (travelFeeSurchargeRegionSlugs as readonly string[]).includes(regionSlug);
-  if (!surcharge) return additionalNotes;
+    (travelFeeSurchargeRegionSlugs as readonly string[]).includes(regionSlug)
+  );
+}
+
+export function pricingNotesForRegion(regionSlug?: string): readonly string[] {
+  if (!isTravelFeeSurchargeRegion(regionSlug)) return additionalNotes;
 
   const withoutFreeTravel = additionalNotes.filter((note) => !travelFeeFreePattern.test(note));
   return [...withoutFreeTravel, travelFeeSurchargeNote];
+}
+
+/**
+ * Short first-view note for a total that includes travel.
+ * The price table publishes no travel yen amount. Non-surcharge regions only
+ * add travel outside the designated area (mainly islands), so the 車内清掃
+ * line above is the in-area example. Surcharge regions say travel is extra
+ * and do not publish the add-on amount.
+ */
+export function fvTravelIncludedExample(regionSlug?: string): string {
+  if (isTravelFeeSurchargeRegion(regionSlug)) {
+    return '出張費込みの総額の例：この地域は上の基本料金に、地域により出張費が加算されます。加算額の掲載はないため、込みの総額はお問い合わせください。オプションとコインパーキング代は別です。';
+  }
+  return '出張費込みの総額の例：指定エリア内では、上の基本料金が総額の例です。指定エリア外（主に島しょ部）は出張費が加算されます。オプションとコインパーキング代は別です。';
 }
