@@ -138,6 +138,7 @@ export const ARTICLE_TEMPLATES: ArticleTemplate[] = TEMPLATE_ORDER.map((id) => {
     outreach: { description: '出張車内清掃の選び方', categories: ['syuttyou', 'seisou'] },
     milk: { description: '牛乳・乳製品', categories: ['stain', 'seisou'] },
     oil: { description: 'オイル汚れ', categories: ['oil', 'seisou'] },
+    childseat: { description: 'チャイルドシート下の食べかす・甘い飲み物', categories: ['stain', 'seisou'] },
     general: { description: '総合', categories: ['seisou'] }
   };
 
