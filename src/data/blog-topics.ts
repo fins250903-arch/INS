@@ -50,6 +50,7 @@ export type BlogTopicId =
   | 'outreach'
   | 'milk'
   | 'oil'
+  | 'childseat'
   | 'general';
 
 export type LpHeadingLink = {
@@ -442,6 +443,20 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     relatedSlugs: ['oilwash', 'oilwash1', 'tt1', 'diy3'],
     keywords: ['オイル汚れ', '作業着', '油分']
   },
+  childseat: {
+    id: 'childseat',
+    label: 'チャイルドシート下の汚れ',
+    answer:
+      `チャイルドシートの下は、食べかす・砂・甘い飲み物が座面に残りやすい場所です。固形分はこすらず吸い取り、熱湯・塩素・消臭スプレーは使わないでください。座面の奥まで染みたベタつきは{regionFull}の出張車内清掃（${keiInteriorPriceClause()}）で吸引できます。`,
+    bullets: [
+      'シートを外す前に、周囲のカスと砂を掃除機で吸う',
+      '甘い飲み物の糖分は、ゴシゴシすると繊維を傷めやすい',
+      'チャイルドシート本体はメーカーの手入れ案内に従い、車のシート側は別に洗浄する'
+    ],
+    lpHeadings: [H('heading-compare-outreach'), H('heading-pricing'), H('heading-worries')],
+    relatedSlugs: ['j1', 'diy3', 'yuka', 'sakaimilk', 'kusumi'],
+    keywords: ['チャイルドシート汚れ', 'チャイルドシート下', '食べこぼし', '後部座席']
+  },
   general: {
     id: 'general',
     label: '車内清掃（総合）',
@@ -564,6 +579,7 @@ export const SLUG_TO_TOPIC: Record<string, BlogTopicId> = {
   yuka: 'floor',
   yuka1: 'floor',
   yukasita: 'floor',
+  'childseat-yogore': 'childseat',
   '他人の車に嘔吐　個人賠償責任保険で解決できる': 'insurance',
   '車の魚臭さ撃退': 'fish'
 };
@@ -596,6 +612,9 @@ export function detectTopicId(
   }
 
   const haystack = `${title} ${categories.join(' ')}`;
+  if (/チャイルドシート/.test(haystack) && !/嘔吐|ゲロ|尿|おしっこ|灯油|ペット|犬|猫/.test(haystack)) {
+    return 'childseat';
+  }
   if (/保険|賠償/.test(haystack)) return 'insurance';
   if (/嘔吐|ゲロ|酔い/.test(haystack)) return 'vomit';
   if (/灯油/.test(haystack)) return 'kerosene';

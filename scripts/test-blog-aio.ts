@@ -10,6 +10,9 @@ assert.equal(detectTopicId('ranking-osaka-carclean'), 'ranking');
 assert.equal(detectTopicId('sakananioi3'), 'fish');
 assert.equal(detectTopicId('boxytoyu1'), 'kerosene');
 assert.equal(detectTopicId('unknown-slug', '灯油をこぼした'), 'kerosene');
+assert.equal(detectTopicId('childseat-yogore'), 'childseat');
+assert.equal(detectTopicId('unknown-slug', 'チャイルドシートの下の汚れ'), 'childseat');
+assert.equal(detectTopicId('unknown-slug', 'チャイルドシートに嘔吐'), 'vomit');
 
 const topic = getBlogTopic('outo1');
 assert.ok(topic.answer.includes('{regionFull}'));
