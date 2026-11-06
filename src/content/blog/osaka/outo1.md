@@ -1,7 +1,8 @@
 ---
 title: 車内で嘔吐！でも大丈夫な対応方法
 urlSlug: outo1
-date: 2026-02-14
+date: 2026-11-06
+updatedDate: 2026-11-06
 region: osaka
 regionFull: 大阪府
 areaLabel: 大阪・近畿エリア
