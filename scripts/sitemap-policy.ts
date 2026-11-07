@@ -7,6 +7,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { keywordLps } from '../src/data/keyword-lp.ts';
+import { SITE_CONTENT_UPDATED } from '../src/data/site.ts';
 import { createMatcher, type RedirectRule } from '../workers/legacy-redirects/src/match';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -88,6 +90,33 @@ function loadBlogLastmod(): Map<string, string> {
 
 const blogLastmod = loadBlogLastmod();
 
+function landingPageUrls(): Set<string> {
+  const urls = new Set<string>();
+  const regions = [
+    ...JSON.parse(readFileSync(path.join(ROOT, 'src/data/region-lp.json'), 'utf8')),
+    ...JSON.parse(readFileSync(path.join(ROOT, 'src/data/region-lp-extra.json'), 'utf8'))
+  ] as { slug: string }[];
+  for (const region of regions) {
+    urls.add(`${SITE_ORIGIN}/${region.slug}/`);
+    for (const keyword of keywordLps) {
+      urls.add(`${SITE_ORIGIN}/${region.slug}/${keyword.slug}/`);
+    }
+  }
+  return urls;
+}
+
+const landingPages = landingPageUrls();
+
+function normalizeSitemapUrl(pageUrl: string): string {
+  const url = new URL(pageUrl);
+  const pathname = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
+  return `${SITE_ORIGIN}${pathname}`;
+}
+
 export function sitemapLastmod(pageUrl: string): string | undefined {
-  return blogLastmod.get(pageUrl);
+  const normalized = normalizeSitemapUrl(pageUrl);
+  const article = blogLastmod.get(normalized);
+  if (article) return article;
+  if (landingPages.has(normalized)) return SITE_CONTENT_UPDATED;
+  return undefined;
 }

@@ -4,7 +4,7 @@ import type { CaseStudiesBlock } from '../data/lp-region-case-studies';
 import {
   BUSINESS_NAME,
   CONTACT_EMAIL,
-  SITE_CANONICAL_ORIGIN,
+  headquartersPostalAddress,
   SITE_CONTENT_UPDATED,
   SITE_HOME_PATH,
   TEL_DISPLAY
@@ -17,6 +17,7 @@ import {
 } from '../data/lp-pricing';
 import { canonicalUrl, pageId, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
 import { buildJsonLdGraph } from './json-ld-graph';
+import { WORK_PHOTO_URLS } from './published-images';
 import {
   siteOrganizationNode,
   sitePersonNode,
@@ -193,14 +194,10 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     telephone: tel,
     email: CONTACT_EMAIL,
     priceRange: baseInteriorPriceRange(),
-    image: `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/favicon.png`,
+    image: WORK_PHOTO_URLS,
     parentOrganization: { '@id': SITE_ORGANIZATION_ID },
     employee: { '@id': SITE_PERSON_ID },
-    address: {
-      '@type': 'PostalAddress',
-      addressCountry: 'JP',
-      addressRegion: input.regionFull
-    },
+    address: headquartersPostalAddress(),
     areaServed: {
       '@type': 'AdministrativeArea',
       name: input.regionFull
