@@ -86,7 +86,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // thanks / compare / 岡山は noindex。管理画面・転送URL・終了した広島も出さない。
-      // ブログの lastmod は記事の updatedDate、なければ公開日。
+      // ブログの lastmod は updatedDate、なければ公開日。LP は SITE_CONTENT_UPDATED。
       filter: includeInSitemap,
       serialize(item) {
         const lastmod = sitemapLastmod(item.url);
