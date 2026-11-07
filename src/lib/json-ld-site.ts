@@ -1,8 +1,10 @@
+import regionLpsExtra from '../data/region-lp-extra.json';
+import regionLpsMain from '../data/region-lp.json';
 import {
   BUSINESS_NAME,
   CONTACT_EMAIL,
+  headquartersPostalAddress,
   LINE_OFFICIAL_URL,
-  SITE_CANONICAL_ORIGIN,
   SITE_CONTENT_UPDATED,
   SITE_HOME_PATH,
   SITE_PERSON_IMAI_ID,
@@ -12,6 +14,16 @@ import {
 } from '../data/site';
 import { canonicalUrl, SITE_ORGANIZATION_ID, SITE_PERSON_ID, SITE_WEBSITE_ID } from './canonical-url';
 import { buildJsonLdGraph } from './json-ld-graph';
+import { CREW_PHOTO_URL, ORGANIZATION_LOGO_URL, WORK_PHOTO_URLS } from './published-images';
+
+/** Prefectures with a landing page. This is where crews visit, not the office address. */
+function organizationAreaServed(): Record<string, string>[] {
+  const names = new Set<string>();
+  for (const region of [...regionLpsMain, ...regionLpsExtra]) {
+    if (region.regionFull) names.add(region.regionFull);
+  }
+  return [...names].map((name) => ({ '@type': 'AdministrativeArea', name }));
+}
 
 function telE164(): string {
   const digits = `81${TEL_DISPLAY.replace(/\D/g, '').replace(/^0/, '')}`;
@@ -27,16 +39,18 @@ export function siteOrganizationNode(): Record<string, unknown> {
     '@id': SITE_ORGANIZATION_ID,
     name: BUSINESS_NAME,
     url: canonicalUrl(SITE_HOME_PATH),
-    logo: `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/favicon.png`,
+    logo: ORGANIZATION_LOGO_URL,
+    image: WORK_PHOTO_URLS,
     telephone: telE164(),
     email: CONTACT_EMAIL,
+    address: headquartersPostalAddress(),
+    areaServed: organizationAreaServed(),
     sameAs: [...ORGANIZATION_SAME_AS],
     founder: { '@id': SITE_PERSON_IMAI_ID }
   };
 }
 
 export function sitePersonNode(): Record<string, unknown> {
-  const origin = SITE_CANONICAL_ORIGIN.replace(/\/$/, '');
   return {
     '@type': 'Person',
     '@id': SITE_PERSON_ID,
@@ -45,7 +59,7 @@ export function sitePersonNode(): Record<string, unknown> {
     description:
       '出張車内清掃・車内クリーニングの現場責任者。嘔吐・尿・灯油・タバコ臭など深部染みの温水吸引洗浄と消臭を担当。',
     url: SITE_PERSON_ID,
-    image: `${origin}/favicon.png`,
+    image: CREW_PHOTO_URL,
     worksFor: { '@id': SITE_ORGANIZATION_ID },
     knowsAbout: [
       '出張車内清掃',
