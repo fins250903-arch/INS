@@ -1,6 +1,6 @@
 ---
 import { additionalNotes, pricingOptions, pricingPartial, pricingPartialDeodorizeNote, pricingSet } from '../data/lp-pricing';
-import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+import { CONTACT_FORM_PATH } from '../data/site';
 ---
 
 <section class="py-16 bg-white" id="pricing">
@@ -101,8 +101,8 @@ import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
         無料見積もり・お問い合わせはこちら
       </a>
       <p class="mt-4">
-        <a href={CONTACT_MAILTO} class="text-primary font-bold underline break-all">{CONTACT_EMAIL}</a>
-        <span class="block mt-2 text-sm text-gray-600">メールでのお問い合わせ（上記をタップ）</span>
+        <a href={CONTACT_FORM_PATH} class="text-primary font-bold underline">メールで相談する</a>
+        <span class="block mt-2 text-sm text-gray-600">フォームからご相談いただけます</span>
       </p>
     </div>
   </div>

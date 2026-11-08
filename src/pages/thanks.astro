@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FloatingCTA from '../components/FloatingCTA.astro';
+import { LINE_OFFICIAL_URL, TEL_DISPLAY, TEL_HREF } from '../data/site';
 import { buildPageJsonLd } from '../lib/json-ld-site';
 
 const thanksJsonLd = buildPageJsonLd({
@@ -24,7 +25,20 @@ const thanksJsonLd = buildPageJsonLd({
     <section class="max-w-3xl mx-auto px-6 py-12 text-center">
       <h1 class="text-3xl font-bold">お問い合わせありがとうございます。</h1>
       <p class="mt-4 text-sm text-gray-600">担当者よりご連絡いたします。しばらくお待ちください。</p>
-      <a href="/osaka/" class="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-white font-bold">ホーム画面</a>
+      <div class="mx-auto mt-6 max-w-md space-y-3 text-left">
+        <a href={TEL_HREF} class="block rounded-xl border border-gray-200 p-4 text-lg font-bold hover:bg-gray-50 transition-colors">
+          TEL: {TEL_DISPLAY}
+        </a>
+        <a
+          href={LINE_OFFICIAL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block rounded-xl bg-[#06C755] p-4 text-center text-white font-bold hover:opacity-90 transition-opacity"
+        >
+          LINE公式アカウント
+        </a>
+      </div>
+      <a href="/osaka/" class="mt-6 inline-flex items-center justify-center rounded-full bg-gray-900 px-6 py-3 text-white font-bold">ホーム画面</a>
     </section>
   </main>
   <Footer />

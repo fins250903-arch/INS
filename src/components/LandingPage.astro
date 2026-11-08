@@ -33,7 +33,7 @@ import {
 import { buildRegionFaqs } from '../data/lp-faqs';
 import { keywordLps } from '../data/keyword-lp';
 import { regionLpLinks } from '../data/region-lp-links';
-import { CONTACT_EMAIL, CONTACT_MAILTO, HQ_ADDRESS_LINE, SITE_CONTENT_UPDATED } from '../data/site';
+import { CONTACT_FORM_PATH, HQ_ADDRESS_LINE, SITE_CONTENT_UPDATED } from '../data/site';
 import type { CaseStudiesBlock } from '../data/lp-region-case-studies';
 import bgHero from '../assets/images/images-1-e1756888161530.jpg';
 import ctaBg from '../assets/images/carclean15kb.jpg';
@@ -568,8 +568,8 @@ const formatDate = (date: Date) => {
       <div class="p-6 flex flex-col items-center gap-3 text-center">
         <a href="tel:070-8428-0866" class="text-2xl sm:text-3xl font-bold text-cta-red">TEL: 070-8428-0866</a>
         <p class="text-sm text-gray-500">（受付時間／365日24時間受付中）</p>
-        <a href={CONTACT_MAILTO} class="text-sm sm:text-base font-bold text-primary underline break-all">{CONTACT_EMAIL}</a>
-        <p class="text-xs text-gray-500">メールはタップでお問い合わせ画面が開きます</p>
+        <a href={CONTACT_FORM_PATH} class="text-sm sm:text-base font-bold text-primary underline">メールで相談する</a>
+        <p class="text-xs text-gray-500">フォームからお名前・電話番号・郵便番号・相談内容を送れます</p>
         <a href="/contact/" class="text-sm font-semibold text-gray-600 underline hover:text-primary">LINE・各種ご案内</a>
       </div>
     </div>
@@ -856,8 +856,8 @@ DIYは軽度向きで深部汚れは限界`}
       <div class="p-6 flex flex-col items-center gap-3 text-center">
         <a href="tel:070-8428-0866" class="text-2xl sm:text-3xl font-bold text-cta-red">TEL: 070-8428-0866</a>
         <p class="text-sm text-gray-500">（受付時間／365日24時間受付中）</p>
-        <a href={CONTACT_MAILTO} class="text-sm sm:text-base font-bold text-primary underline break-all">{CONTACT_EMAIL}</a>
-        <p class="text-xs text-gray-500">メールはタップでお問い合わせ画面が開きます</p>
+        <a href={CONTACT_FORM_PATH} class="text-sm sm:text-base font-bold text-primary underline">メールで相談する</a>
+        <p class="text-xs text-gray-500">フォームからお名前・電話番号・郵便番号・相談内容を送れます</p>
         <a href="/contact/" class="text-sm font-semibold text-gray-600 underline hover:text-primary">LINE・各種ご案内</a>
       </div>
     </div>
@@ -1143,7 +1143,7 @@ DIYは軽度向きで深部汚れは限界`}
       <CtaBundle />
     </div>
     
-    <a href={CONTACT_MAILTO} class="mt-6 block text-center text-sm text-white/70 underline break-all hover:text-white transition-colors">{CONTACT_EMAIL}</a>
+    <a href={CONTACT_FORM_PATH} class="mt-6 block text-center text-sm text-white/70 underline hover:text-white transition-colors">メールで相談する</a>
   </div>
 </section>
 

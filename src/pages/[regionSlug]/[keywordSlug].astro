@@ -18,7 +18,7 @@ import regionLpsExtra from '../../data/region-lp-extra.json';
 import { pricingNotesForRegion, pricingOptions, pricingPartial, pricingPartialDeodorizeNote, pricingSet } from '../../data/lp-pricing';
 import { buildRegionFaqs } from '../../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
-import { CONTACT_EMAIL, CONTACT_MAILTO, SITE_CONTENT_UPDATED } from '../../data/site';
+import { CONTACT_FORM_PATH, SITE_CONTENT_UPDATED } from '../../data/site';
 import { buildKeywordLpJsonLd } from '../../lib/lp-json-ld';
 import { isNoindexRegion } from '../../data/noindex-regions';
 import { prepareRegionLpContent } from '../../lib/blog-lp-feed';
@@ -399,7 +399,7 @@ const flowSteps = [
           <div class="p-8 flex flex-col items-center gap-4 text-center">
             <a href="tel:070-8428-0866" class="text-3xl font-black text-red-600 transition-colors hover:text-red-500">TEL: 070-8428-0866</a>
             <p class="text-xs text-gray-500">（お急ぎの際はお電話が最速です。深夜・早朝もお受けしております）</p>
-            <a href={CONTACT_MAILTO} class="text-sm font-bold text-emerald-600 underline hover:text-emerald-500 break-all">{CONTACT_EMAIL}</a>
+            <a href={CONTACT_FORM_PATH} class="text-sm font-bold text-emerald-600 underline hover:text-emerald-500">メールで相談する</a>
             <a href="https://lin.ee/Xs8Orp2" target="_blank" class="w-full max-w-sm bg-[#06C755] text-white py-3.5 rounded-xl font-extrabold text-base shadow hover:opacity-95 transition-opacity">
               LINE公式アカウントで写真を送って無料相談
             </a>
