@@ -1,14 +1,23 @@
 ---
-title: "そうなんだ！これが嘔吐物処理でやってはいけないこと"
-date: "2026-02-16"
-region: "siga"
-regionFull: "滋賀県"
-areaLabel: "滋賀・近畿エリア"
-thumbnail: "gero5.jpg"
+title: そうなんだ！これが嘔吐物処理でやってはいけないこと
+urlSlug: outo2
+date: 2026-11-08
+region: siga
+regionFull: 滋賀県
+areaLabel: 滋賀・近畿エリア
+thumbnail: gero5.jpg
 draft: false
 categories:
-  - "outo1"
-  - "seisou"
+  - outo1
+  - seisou
+seo:
+  noindex: false
+  meta_description: |
+    こすると繊維の奥へ押し込む
+    ノロ等が疑われる場合は使い捨ての手袋と袋を使う
+    表面がきれいに見えても内部の臭いが残ることが多い
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
