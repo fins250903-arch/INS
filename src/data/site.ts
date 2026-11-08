@@ -46,9 +46,12 @@ export const SITE_PERSON_IMAI_ID = 'https://insbs.net/#person-imai' as const;
 export const SITE_PERSON_NAME = '今井雄策' as const;
 export const SITE_PERSON_JOB_TITLE = '代表・出張車内清掃担当' as const;
 
-/** サイト共通の連絡先（LP・フッター・お問い合わせで共有） */
-export const CONTACT_EMAIL = 'fins250903@gmail.com' as const;
-export const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}` as const;
+/**
+ * Inquiry mailbox. The contact form posts here through FormSubmit.
+ * Visitor-facing email buttons link to CONTACT_FORM_PATH instead of mailto.
+ */
+export const CONTACT_EMAIL = 'info@insbs.net' as const;
+export const CONTACT_FORM_PATH = '/contact/#contact-form' as const;
 export const TEL_HREF = 'tel:070-8428-0866' as const;
 export const TEL_DISPLAY = '070-8428-0866' as const;
 

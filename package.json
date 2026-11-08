@@ -41,6 +41,7 @@
     "blog:aio:audit": "tsx scripts/audit-blog-aio.ts",
     "blog:aio:loop": "tsx scripts/verify-blog-aio-loop.ts",
     "blog:aio:test": "tsx scripts/test-blog-aio.ts",
+    "contact:test": "tsx scripts/test-contact-form.ts",
     "blog:fix-media": "node scripts/fix-blog-media-paths.mjs",
     "gsc": "tsx scripts/gsc/sync.ts",
     "gsc:sync": "npm run build && npm run gsc -- sync",

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoImg from '../assets/images/logo.png';
-import { CONTACT_EMAIL, CONTACT_MAILTO } from '../data/site';
+import { CONTACT_FORM_PATH } from '../data/site';
 import { regionLpLinks } from '../data/region-lp-links';
 import { resolveFooterCopy, type FooterRegionProps } from '../lib/footer-copy';
 
@@ -34,8 +34,8 @@ const copy = resolveFooterCopy(Astro.props as FooterRegionProps);
             <span class="block text-xs text-gray-400">お急ぎの方はこちら</span>
             <span class="text-2xl font-bold text-white group-hover:text-primary transition-colors">070-8428-0866</span>
           </a>
-          <a href={CONTACT_MAILTO} class="block text-gray-300 text-sm break-all hover:text-white transition-colors">
-            メール：{CONTACT_EMAIL}
+          <a href={CONTACT_FORM_PATH} class="block text-gray-300 text-sm hover:text-white transition-colors">
+            メールで相談
           </a>
           <a
             href="https://lin.ee/Xs8Orp2"
