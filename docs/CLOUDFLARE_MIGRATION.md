@@ -130,12 +130,28 @@ npm run deploy:legacy-redirects   # www / osak / hyg / siga のリダイレク�
 
 ### Worker のシークレット登録
 
-環境変数はすべて任意（未設定でも動作）ですが、本番同等にするには以下を登録します。
+環境変数はすべて任意（未設定でも動作）ですが、本番の公開処理が読むのは **ランタイム** の値だけです。
+ビルド変数（Settings → Build、Workers Builds のビルド用環境変数）に置いても、記事の保存からは見えません。
+
+ダッシュボードでは次の場所に入れます。
+
+1. **Workers & Pages → ins → Settings → Runtime**
+2. **ランタイム変数とシークレット**（Runtime variables and secrets）
+3. 種類は **Secret**。平文の Variable は `wrangler deploy` で消えることがあります
+
+| 名前 | 用途 |
+| :--- | :--- |
+| `ADMIN_PASSWORD` | `/admin/` と `/admin/blog-manager/` のパスワード。未設定時は `admin123` |
+| `BLOG_PUBLISH_GITHUB_TOKEN` | 記事の GitHub 保存。未設定だと公開は失敗する |
+| `DECAP_GITHUB_CLIENT_ID` | `/admin/` の GitHub OAuth（現行の proxy 公開には不要） |
+| `DECAP_GITHUB_CLIENT_SECRET` | 同上 |
+
+同じランタイムシークレットは CLI でも登録できます。これもビルド変数には入りません。
 
 ```bash
-npx wrangler secret put ADMIN_PASSWORD               # 未設定時は admin123
-npx wrangler secret put BLOG_PUBLISH_GITHUB_TOKEN    # 未設定時は記事保存がローカルモードになる
-npx wrangler secret put DECAP_GITHUB_CLIENT_ID       # /admin/（Decap CMS）ログイン用
+npx wrangler secret put ADMIN_PASSWORD
+npx wrangler secret put BLOG_PUBLISH_GITHUB_TOKEN
+npx wrangler secret put DECAP_GITHUB_CLIENT_ID
 npx wrangler secret put DECAP_GITHUB_CLIENT_SECRET
 ```
 
