@@ -324,6 +324,22 @@ const editorTemplates = ARTICLE_TEMPLATES.map((item) => ({
                     />
                   </div>
 
+                  <div>
+                    <label for="canonicalUrl" class="mb-1 block text-sm font-medium text-slate-700">
+                      正規URL（canonical）
+                    </label>
+                    <input
+                      type="url"
+                      id="canonicalUrl"
+                      value={editPost.canonicalUrl || ''}
+                      placeholder="https://insbs.net/blog/fukuoka/outo2/"
+                      class="w-full rounded-lg border border-slate-300 px-3 py-2 font-mono text-xs focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    />
+                    <p class="mt-1 text-xs text-slate-500">
+                      空欄ならこの記事自身のURLです。別URLを入れると、そのページを正規とし、この記事はサイトマップから外れます。
+                    </p>
+                  </div>
+
                   <div class="flex items-center gap-2">
                     <input type="checkbox" id="draft" checked={editPost.draft} class="h-4 w-4" />
                     <label for="draft" class="text-sm text-slate-700">下書きとして保存</label>
@@ -662,6 +678,7 @@ const editorTemplates = ARTICLE_TEMPLATES.map((item) => ({
         regionFull: getField('regionFull')?.value || '',
         areaLabel: getField('areaLabel')?.value || '',
         thumbnail: getField('thumbnail')?.value || '',
+        canonicalUrl: getField('canonicalUrl')?.value?.trim() || undefined,
         draft: getField('draft')?.checked ?? false,
         categories,
         tags: [],

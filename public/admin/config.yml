@@ -162,6 +162,7 @@ collections:
         name: canonicalUrl
         widget: string
         required: false
+        hint: 別URLを入れると、そのページを正規とし、この記事はサイトマップから外れます。空欄なら自身のURLです。
       - label: 下書き
         name: draft
         widget: boolean
