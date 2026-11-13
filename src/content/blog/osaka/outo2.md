@@ -1,18 +1,27 @@
 ---
-title: "知らなかった！やってはいけない嘔吐物処理とは"
-date: "2026-02-16"
-region: "osaka"
-regionFull: "大阪府"
-areaLabel: "大阪・近畿エリア"
-thumbnail: "gero5.jpg"
+title: 知らなかった！やってはいけない嘔吐物処理とは
+urlSlug: outo2
+date: 2026-11-13
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: gero5.jpg
 draft: false
 categories:
-  - "kyouto"
-  - "oosaka"
-  - "gunnma"
-  - "ibaraki"
-  - "outo1"
-  - "seisou"
+  - kyouto
+  - oosaka
+  - gunnma
+  - ibaraki
+  - outo1
+  - seisou
+seo:
+  meta_description: |
+    こすると繊維の奥へ押し込む
+    ノロ等が疑われる場合は使い捨ての手袋と袋を使う
+    表面がきれいに見えても内部の臭いが残ることが多い
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
