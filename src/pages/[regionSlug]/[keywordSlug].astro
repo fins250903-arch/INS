@@ -16,7 +16,7 @@ import {
 import regionLpsMain from '../../data/region-lp.json';
 import regionLpsExtra from '../../data/region-lp-extra.json';
 import { pricingNotesForRegion, pricingOptions, pricingPartial, pricingPartialDeodorizeNote, pricingSet } from '../../data/lp-pricing';
-import { buildRegionFaqs } from '../../data/lp-faqs';
+import { buildRegionFaqs, collapseNearDuplicateFaqs } from '../../data/lp-faqs';
 import { getCaseStudiesForSlug } from '../../data/lp-region-case-studies';
 import { CONTACT_FORM_PATH, SITE_CONTENT_UPDATED } from '../../data/site';
 import { buildKeywordLpJsonLd } from '../../lib/lp-json-ld';
@@ -114,13 +114,17 @@ const canonical = `/${regionSlug}/${keyword.slug}/`;
 const isVomitKeyword = keyword.slug === 'shanai-outo';
 
 const pricingNotes = pricingNotesForRegion(regionSlug);
-const faqs = [
-  ...(keyword.faqs ?? []).map((faq) => ({
-    q: fillKeywordCopy(faq.q, regionName, regionFull),
-    a: fillKeywordCopy(faq.a, regionName, regionFull)
-  })),
-  ...buildRegionFaqs(regionName, regionFull, regionSlug)
-];
+const faqs = collapseNearDuplicateFaqs(
+  [
+    ...(keyword.faqs ?? []).map((faq) => ({
+      q: fillKeywordCopy(faq.q, regionName, regionFull),
+      a: fillKeywordCopy(faq.a, regionName, regionFull)
+    })),
+    ...buildRegionFaqs(regionName, regionFull, regionSlug)
+  ],
+  regionName,
+  regionFull
+);
 const curatedCaseStudies = getCaseStudiesForSlug(regionSlug);
 const lpBlog = await prepareRegionLpContent({
   regionSlug,

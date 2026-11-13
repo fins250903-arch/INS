@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
-import { detectTopicId, getBlogTopic } from '../src/data/blog-topics.ts';
-import { buildAnswerFirstMarkdown, hasAnswerFirstBlock, rewriteInternalBlogHrefs, upsertAnswerFirstBlock } from '../src/lib/blog-aio-text.ts';
-import { canonicalUrl } from '../src/lib/canonical-url.ts';
+import regionLpsExtra from '../src/data/region-lp-extra.json';
+import regionLpsMain from '../src/data/region-lp.json';
+import { BLOG_TOPIC_FAQ_QUESTIONS, detectTopicId, getBlogTopic } from '../src/data/blog-topics.ts';
+import { buildRegionFaqs } from '../src/data/lp-faqs.ts';
+import { buildAnswerFirstMarkdown, buildTopicFaqs, hasAnswerFirstBlock, rewriteInternalBlogHrefs, upsertAnswerFirstBlock } from '../src/lib/blog-aio-text.ts';
+import { canonicalUrl, sameOriginPath } from '../src/lib/canonical-url.ts';
 import { selectPostsForRegionLp } from '../src/lib/blog-lp-feed.ts';
+import { includeInSitemap } from './sitemap-policy.ts';
 
 assert.equal(detectTopicId('outo1'), 'vomit');
 assert.equal(detectTopicId('outo3-2'), 'insurance');
@@ -120,5 +124,59 @@ const naraFeed = selectPostsForRegionLp(fakePosts, {
 });
 assert.equal(naraFeed[0].post.data.title, '奈良向け記事');
 assert.equal(naraFeed[0].reason, 'regionFull');
+
+const vomitFaqs = buildTopicFaqs({ slug: 'outo1', regionFull: '大阪府' });
+assert.equal(vomitFaqs[0].q, '車で子どもが吐いたら最初に何をすればいい？');
+assert.equal(vomitFaqs[0].a.includes('大阪府'), true);
+
+const dontFaqs = buildTopicFaqs({ slug: 'outo2', regionFull: '滋賀県' });
+assert.equal(dontFaqs[0].q, '車の嘔吐物処理でやってはいけないことは？');
+assert.equal(dontFaqs[0].q, BLOG_TOPIC_FAQ_QUESTIONS['vomit-dont']);
+for (const question of Object.values(BLOG_TOPIC_FAQ_QUESTIONS)) {
+  assert.equal(question.includes('はどうすればいいですか'), false);
+}
+
+assert.equal(sameOriginPath('https://insbs.net/blog/fukuoka/outo2/'), '/blog/fukuoka/outo2/');
+assert.equal(sameOriginPath('https://insbs.net/blog/fukuoka/outo2'), '/blog/fukuoka/outo2/');
+
+assert.equal(includeInSitemap('https://insbs.net/blog/siga/outo2/'), false);
+assert.equal(includeInSitemap('https://insbs.net/blog/fukuoka/outo2/'), true);
+assert.equal(includeInSitemap('https://insbs.net/blog/osaka/outo1/'), true);
+
+const regions = [...regionLpsMain, ...regionLpsExtra] as Array<{
+  slug: string;
+  regionName: string;
+  regionFull: string;
+}>;
+for (const region of regions) {
+  const faqs = buildRegionFaqs(region.regionName, region.regionFull, region.slug);
+  const questions = faqs.map((faq) => faq.q);
+  assert.equal(new Set(questions).size, questions.length, `${region.slug} duplicate question text`);
+  assert.equal(questions.filter((question) => question.includes('料金')).length, 1, region.slug);
+  assert.equal(questions.filter((question) => question.includes('保険')).length, 1, region.slug);
+}
+
+const osakaFaqs = buildRegionFaqs('大阪', '大阪府', 'osaka');
+assert.equal(
+  osakaFaqs.filter((faq) => faq.q.includes('料金')).map((faq) => faq.q).join(' / '),
+  '大阪府内の出張車内清掃の料金目安は？'
+);
+const osakaPrice = osakaFaqs.find((faq) => faq.q.includes('料金'));
+assert.ok(osakaPrice);
+assert.match(osakaPrice.a, /24,000円/);
+assert.match(osakaPrice.a, /29,000円/);
+assert.match(osakaPrice.a, /38,000円/);
+assert.match(osakaPrice.a, /26,000円/);
+assert.match(osakaPrice.a, /32,000円/);
+assert.match(osakaPrice.a, /42,000円/);
+const osakaInsurance = osakaFaqs.find((faq) => faq.q.includes('保険'));
+assert.ok(osakaInsurance);
+assert.equal(osakaInsurance.q, '車内に灯油をこぼした場合、保険は使えますか？申請の流れは？');
+assert.match(osakaInsurance.a, /個人賠償/);
+assert.match(osakaInsurance.a, /車内清掃費用特約/);
+assert.match(osakaInsurance.a, /30,000円/);
+assert.match(osakaInsurance.a, /領収書/);
+assert.equal((osakaInsurance.a.match(/車両保険（一般型）/g) || []).length, 1);
+assert.equal((osakaInsurance.a.match(/個人賠償/g) || []).length, 1);
 
 console.log('blog aio unit checks passed');

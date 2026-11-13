@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { BLOG_REGION_BY_SLUG, type BlogRegion } from '../data/blog-regions';
-import { canonicalUrl } from './canonical-url';
+import { canonicalUrl, normalizeCanonicalHref } from './canonical-url';
 
 export type BlogEntry = CollectionEntry<'blog'>;
 
@@ -29,7 +29,8 @@ export function resolveBlogImage(src?: string | null): string {
 }
 
 export function resolveBlogCanonical(entry: BlogEntry, pathname?: string): string {
-  if (entry.data.canonicalUrl) return entry.data.canonicalUrl;
+  const override = entry.data.canonicalUrl?.trim();
+  if (override) return normalizeCanonicalHref(override);
   if (pathname) return canonicalUrl(pathname);
   return canonicalUrl(getBlogPath(entry));
 }
