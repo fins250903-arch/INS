@@ -1,5 +1,6 @@
 ---
 import CtaBundle from './CtaBundle.astro';
+import { LINE_OFFICIAL_URL } from '../data/site';
 import {
   getStoreLpLinkLabel,
   resolveStoreLpPath
@@ -38,6 +39,23 @@ const storeLabel = getStoreLpLinkLabel(regionFull);
     }
 
     <CtaBundle />
+
+    <div class="mt-4 flex flex-col items-stretch justify-center gap-3 sm:flex-row">
+      <a
+        href={LINE_OFFICIAL_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="blog-cta-alt blog-cta-line inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-bold text-white transition hover:opacity-90 sm:min-w-44 sm:text-base"
+      >
+        LINEで相談
+      </a>
+      <a
+        href="/contact/"
+        class="blog-cta-alt inline-flex items-center justify-center rounded-full border-2 border-gray-300 bg-white px-5 py-3 text-sm font-bold text-gray-800 transition hover:border-primary hover:text-primary sm:min-w-44 sm:text-base"
+      >
+        メールでお問い合わせ
+      </a>
+    </div>
   </div>
 </section>
 
@@ -50,5 +68,13 @@ const storeLabel = getStoreLpLinkLabel(regionFull);
   .store-site-link {
     text-decoration: none;
     box-shadow: 0 6px 16px rgba(165, 195, 58, 0.18);
+  }
+
+  .blog-cta-alt {
+    text-decoration: none;
+  }
+
+  .blog-cta-line {
+    background-color: #06c755;
   }
 </style>
