@@ -8,9 +8,35 @@ import {
   pricingStandard
 } from './lp-pricing';
 
-const partialSeatPrice = pricingPartial[0].price;
+const partialSeat = pricingPartial[0];
+const partialSeatPrice = partialSeat.price;
 const generatorBringInPrice = pricingOptionByLabel('発電機').price;
 const keroseneSeatPrice = pricingOptionByLabel('灯油').price;
+
+/**
+ * First-view entry price for one seat. Digits come from 座席シート単体（1脚）.
+ * Wording is the owner-confirmed line: 部分清掃 1シート18,000円から.
+ */
+export const LP_FV_PARTIAL_ENTRY_LINE = `部分清掃 1シート${partialSeatPrice}から`;
+
+/** In-page jumps from the regional LP first view. Prices stay inside the rate card. */
+export const problemAnchors = [
+  { href: '#heading-emergency-vomit', label: '車内の嘔吐' },
+  { href: '#heading-emergency-kerosene', label: '灯油こぼし' },
+  { href: '#heading-emergency-pet', label: 'ペット粗相' }
+] as const;
+
+/** One full-width line under the jump buttons. Kerosene is not the 18,000 yen seat price. */
+export const problemAnchorCaption = `嘔吐・ペットの部分清掃は1シート${partialSeatPrice}から。灯油専用洗浄は1席${keroseneSeatPrice}。`;
+
+/** Shown on the vomit card. Partial entry plus the existing 普通車セット example. */
+export const vomitPriceNote = `部分清掃は1シート${partialSeatPrice}から。座席と床面まで汚れた普通車のセット合計は${pricingStandard.total}（税込・料金表の例）です。`;
+
+/** Shown on the kerosene card. Matches 灯油専用洗浄（1席あたり）. */
+export const kerosenePriceNote = `灯油専用洗浄は1席${keroseneSeatPrice}（税込）です。`;
+
+/** Shown on the pet card. Deodorize set is the same row as the one-seat partial. */
+export const petPriceNote = `シート1脚の部分清掃は${partialSeatPrice}から。消臭・脱臭を足すと${partialSeat.deodorizeSet}（税込）です。`;
 
 export type InsuranceMatrixRow = {
   situation: string;
