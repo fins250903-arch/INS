@@ -26,7 +26,13 @@ import {
   emergencyPetSteps,
   emergencyVomitSteps,
   getRegionalIntro,
+  kerosenePriceNote,
   LP_FV_BASE_PRICE_LINE,
+  LP_FV_PARTIAL_ENTRY_LINE,
+  petPriceNote,
+  problemAnchorCaption,
+  problemAnchors,
+  vomitPriceNote,
   insuranceMatrixNote,
   insuranceMatrixRows
 } from '../data/lp-aio-content';
@@ -256,6 +262,30 @@ const formatDate = (date: Date) => {
           <span class="mr-3 inline-block border-b-2 border-primary pb-0.5">嘔吐・ゲロ対応</span>
           <span class="inline-block border-b-2 border-primary pb-0.5">立会不要</span>
         </p>
+        <div class="mt-4 rounded-xl bg-slate-950/75 px-4 py-3 shadow-lg backdrop-blur-sm sm:px-5">
+          <p class="fv-partial-price text-xl font-black leading-snug text-amber-200 sm:text-2xl">
+            {LP_FV_PARTIAL_ENTRY_LINE}
+          </p>
+          <p class="fv-price mt-1 text-sm font-bold leading-snug text-white/95 sm:text-base">
+            {LP_FV_BASE_PRICE_LINE}
+          </p>
+          <nav class="mt-3" aria-label="お悩み別の説明と料金">
+            <p class="mb-1.5 text-[11px] font-bold text-white/85 sm:text-xs">お悩みの説明と料金へ</p>
+            <ul class="m-0 grid list-none grid-cols-3 gap-1.5 p-0 sm:gap-2">
+              {problemAnchors.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="flex min-h-11 items-center justify-center rounded-lg bg-white px-1 py-2 text-center text-[11px] font-black leading-tight text-slate-950 shadow-sm [word-break:keep-all] hover:bg-amber-100 sm:text-sm"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-1.5 text-[11px] font-bold leading-snug text-amber-100 sm:text-xs">{problemAnchorCaption}</p>
+          </nav>
+        </div>
         <div class="mt-4 flex flex-wrap items-center gap-6 rounded-xl bg-slate-950/60 px-5 py-4 shadow-lg backdrop-blur-sm">
           <div>
             <div class="fv-stamp" title="自社アンケート調査（2025年）">
@@ -268,9 +298,6 @@ const formatDate = (date: Date) => {
             365日24時間受付中・迅速訪問<br />
             立会も不要！ <span class="text-amber-300 font-bold">嘔吐</span>、<span class="text-amber-300 font-bold">お漏らし</span><br />
             <span class="text-amber-300 font-bold">灯油こぼし</span>も <span class="text-amber-300 font-bold underline decoration-amber-300">ニオイ徹底洗浄</span>
-          </p>
-          <p class="fv-price basis-full text-base font-black leading-snug text-amber-200 sm:text-lg">
-            {LP_FV_BASE_PRICE_LINE}
           </p>
           <FvServiceNotices regionSlug={regionSlug} insuranceHref="#heading-insurance-matrix" />
         </div>
@@ -367,31 +394,44 @@ const formatDate = (date: Date) => {
     <p class="mt-3 text-sm sm:text-base text-gray-800 leading-relaxed font-semibold">{emergencyIntro}</p>
     <div class="mt-6 grid gap-6 md:grid-cols-3">
       <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-        <h3 id="heading-emergency-vomit" class="text-base font-bold text-cta-red">嘔吐（ゲロ）の場合</h3>
+        <h3 id="heading-emergency-vomit" class="scroll-mt-4 text-base font-bold text-cta-red">車内の嘔吐</h3>
+        <p class="mt-1 text-xs font-semibold text-gray-600">ゲロの直後にやること</p>
         <ol class="mt-3 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
           {emergencyVomitSteps.map((step) => <li>{step}</li>)}
         </ol>
+        <p class="mt-3 text-sm font-bold leading-relaxed text-gray-900">{vomitPriceNote}</p>
         <p class="mt-3 text-sm">
+          <a href="#heading-pricing-vomit" class="font-semibold text-cta-red underline hover:text-primary">嘔吐の料金例を見る</a>
+          ／
           <a href={vomitKeywordHref} class="font-semibold text-cta-red underline hover:text-primary">嘔吐の緊急ページを見る</a>
           ／
           <a href={hrefForSlug('outo1')} class="font-semibold text-cta-red underline hover:text-primary">嘔吐の対応を詳しく読む</a>
         </p>
       </div>
       <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-        <h3 id="heading-emergency-kerosene" class="text-base font-bold text-cta-red">灯油こぼしの場合</h3>
+        <h3 id="heading-emergency-kerosene" class="scroll-mt-4 text-base font-bold text-cta-red">灯油こぼし</h3>
+        <p class="mt-1 text-xs font-semibold text-gray-600">直後にやること</p>
         <ol class="mt-3 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
           {emergencyKeroseneSteps.map((step) => <li>{step}</li>)}
         </ol>
+        <p class="mt-3 text-sm font-bold leading-relaxed text-gray-900">{kerosenePriceNote}</p>
         <p class="mt-3 text-sm">
+          <a href="#heading-pricing-kerosene" class="font-semibold text-cta-red underline hover:text-primary">灯油の料金を見る</a>
+          ／
           <a href={hrefForSlug('tt1')} class="font-semibold text-cta-red underline hover:text-primary">灯油こぼしの解説を読む</a>
         </p>
       </div>
       <div class="bg-white rounded-xl p-5 border border-red-100 shadow-sm">
-        <h3 id="heading-emergency-pet" class="text-base font-bold text-cta-red">ペット粗相（尿・うんち）の場合</h3>
+        <h3 id="heading-emergency-pet" class="scroll-mt-4 text-base font-bold text-cta-red">ペット粗相</h3>
+        <p class="mt-1 text-xs font-semibold text-gray-600">尿・うんちの直後にやること</p>
         <ol class="mt-3 list-decimal list-inside space-y-2 text-sm text-gray-700 leading-relaxed">
           {emergencyPetSteps.map((step) => <li>{step}</li>)}
         </ol>
+        <p class="mt-3 text-sm font-bold leading-relaxed text-gray-900">{petPriceNote}</p>
+        <p class="mt-2 text-xs leading-relaxed text-gray-600">ペット毛取りとうんちの加算は、料金表の追加作業とセットの「加算」欄です。</p>
         <p class="mt-3 text-sm">
+          <a href="#heading-pricing-partial" class="font-semibold text-cta-red underline hover:text-primary">部分清掃の料金を見る</a>
+          ／
           <a href={hrefForSlug('siko')} class="font-semibold text-cta-red underline hover:text-primary">ペット粗相の解説を読む</a>
         </p>
       </div>
@@ -980,7 +1020,7 @@ DIYは軽度向きで深部汚れは限界`}
           </tbody>
         </table>
       </div>
-      <h3 class="mt-6 text-xl font-bold">📍 【個別】部分クリーニング</h3>
+      <h3 id="heading-pricing-partial" class="mt-6 scroll-mt-4 text-xl font-bold">📍 【個別】部分クリーニング</h3>
       <p class="mt-2 text-sm font-semibold text-cta-red">{pricingPartialDeodorizeNote}</p>
       <p class="mt-2 text-sm">「ここだけ綺麗にしたい」というご要望にお応えします。※床マット・ドア内側・シートベルトは除きます。</p>
       <div class="mt-4 overflow-x-auto">
@@ -1017,7 +1057,10 @@ DIYは軽度向きで深部汚れは限界`}
           </thead>
           <tbody>
             {pricingOptions.map((row) => (
-              <tr class="border-t">
+              <tr
+                class:list={['border-t', row.label.includes('灯油') && 'scroll-mt-4']}
+                id={row.label.includes('灯油') ? 'heading-pricing-kerosene' : undefined}
+              >
                 <td class="p-3">{row.label}</td>
                 <td class="p-3 font-semibold">{row.price}</td>
               </tr>
@@ -1035,7 +1078,7 @@ DIYは軽度向きで深部汚れは限界`}
         </ul>
       </div>
 
-      <h3 class="mt-6 text-xl font-bold">📝 お見積り例</h3>
+      <h3 id="heading-pricing-vomit" class="mt-6 scroll-mt-4 text-xl font-bold">📝 お見積り例</h3>
       <p class="mt-2 text-sm font-semibold">普通車内で嘔吐し、座席と床面が汚れている場合</p>
       <ul class="mt-2 text-sm list-disc list-inside">
         <li><strong>普通車セット（車内清掃）</strong>：{pricingStandard.interiorCleaning} --- A</li>
@@ -1171,7 +1214,8 @@ DIYは軽度向きで深部汚れは限界`}
   .fv-title,
   .fv-sub,
   .fv-desc,
-  .fv-price {
+  .fv-price,
+  .fv-partial-price {
     text-shadow:
       0 1px 2px rgba(0, 0, 0, 0.55),
       0 2px 12px rgba(0, 0, 0, 0.35);
@@ -1238,8 +1282,12 @@ DIYは軽度向きで深部汚れは限界`}
       line-height: 1.55 !important;
     }
     .fv-price {
-      font-size: 1.05rem !important;
+      font-size: 0.95rem !important;
       line-height: 1.45 !important;
+    }
+    .fv-partial-price {
+      font-size: 1.35rem !important;
+      line-height: 1.35 !important;
     }
   }
 </style>
