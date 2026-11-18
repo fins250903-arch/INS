@@ -1,6 +1,7 @@
 import {
   type InquiryFieldKey,
   type InquiryInput,
+  normalizeEmail,
   submitInquiry,
   validateInquiry
 } from '../lib/contact-form';
@@ -8,6 +9,7 @@ import {
 const FIELD_IDS: Record<InquiryFieldKey, string> = {
   name: 'contact-name',
   phone: 'contact-phone',
+  email: 'contact-email',
   postalCode: 'contact-postal',
   message: 'contact-message'
 };
@@ -21,10 +23,22 @@ function readInput(form: HTMLFormElement): InquiryInput {
   return {
     name: read('お名前'),
     phone: read('電話番号'),
+    email: read('メールアドレス'),
     postalCode: read('郵便番号'),
     message: read('相談内容'),
     honey: read('_honey')
   };
+}
+
+function syncReplyTo(form: HTMLFormElement, email: string): void {
+  let field = form.querySelector('input[name="_replyto"]');
+  if (!(field instanceof HTMLInputElement)) {
+    field = form.ownerDocument.createElement('input');
+    field.type = 'hidden';
+    field.name = '_replyto';
+    form.appendChild(field);
+  }
+  field.value = email;
 }
 
 function describedBy(doc: Document, fieldId: string, invalid: boolean): string {
@@ -100,6 +114,7 @@ export function bindContactForm(doc: Document): void {
       if (status) status.textContent = '入力内容をご確認ください。';
       return;
     }
+    syncReplyTo(form, normalizeEmail(input.email));
     if (nativeSubmit) return;
 
     event.preventDefault();

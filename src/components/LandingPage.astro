@@ -2,6 +2,7 @@
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import AntimicrobialCampaignBanner from './AntimicrobialCampaignBanner.astro';
+import ContactInquiryForm from './ContactInquiryForm.astro';
 import CtaBundle from './CtaBundle.astro';
 import FvServiceNotices from './FvServiceNotices.astro';
 import { osakaServiceAreas } from '../data/service-areas/osaka';
@@ -39,7 +40,7 @@ import {
 import { buildRegionFaqs } from '../data/lp-faqs';
 import { keywordLps } from '../data/keyword-lp';
 import { regionLpLinks } from '../data/region-lp-links';
-import { CONTACT_FORM_PATH, HQ_ADDRESS_LINE, SITE_CONTENT_UPDATED } from '../data/site';
+import { HQ_ADDRESS_LINE, SITE_CONTENT_UPDATED } from '../data/site';
 import type { CaseStudiesBlock } from '../data/lp-region-case-studies';
 import bgHero from '../assets/images/images-1-e1756888161530.jpg';
 import ctaBg from '../assets/images/carclean15kb.jpg';
@@ -608,8 +609,9 @@ const formatDate = (date: Date) => {
       <div class="p-6 flex flex-col items-center gap-3 text-center">
         <a href="tel:070-8428-0866" class="text-2xl sm:text-3xl font-bold text-cta-red">TEL: 070-8428-0866</a>
         <p class="text-sm text-gray-500">（受付時間／365日24時間受付中）</p>
-        <a href={CONTACT_FORM_PATH} class="text-sm sm:text-base font-bold text-primary underline">メールで相談する</a>
-        <p class="text-xs text-gray-500">フォームからお名前・電話番号・郵便番号・相談内容を送れます</p>
+        <div class="w-full">
+          <ContactInquiryForm />
+        </div>
         <a href="/contact/" class="text-sm font-semibold text-gray-600 underline hover:text-primary">LINE・各種ご案内</a>
       </div>
     </div>
@@ -896,8 +898,8 @@ DIYは軽度向きで深部汚れは限界`}
       <div class="p-6 flex flex-col items-center gap-3 text-center">
         <a href="tel:070-8428-0866" class="text-2xl sm:text-3xl font-bold text-cta-red">TEL: 070-8428-0866</a>
         <p class="text-sm text-gray-500">（受付時間／365日24時間受付中）</p>
-        <a href={CONTACT_FORM_PATH} class="text-sm sm:text-base font-bold text-primary underline">メールで相談する</a>
-        <p class="text-xs text-gray-500">フォームからお名前・電話番号・郵便番号・相談内容を送れます</p>
+        <a href="#contact-form" class="text-sm sm:text-base font-bold text-primary underline">メールで相談する</a>
+        <p class="text-xs text-gray-500">フォームからお名前・電話番号・メールアドレス・郵便番号・相談内容を送れます。すべて必須です。</p>
         <a href="/contact/" class="text-sm font-semibold text-gray-600 underline hover:text-primary">LINE・各種ご案内</a>
       </div>
     </div>
@@ -1186,7 +1188,7 @@ DIYは軽度向きで深部汚れは限界`}
       <CtaBundle />
     </div>
     
-    <a href={CONTACT_FORM_PATH} class="mt-6 block text-center text-sm text-white/70 underline hover:text-white transition-colors">メールで相談する</a>
+    <a href="#contact-form" class="mt-6 block text-center text-sm text-white/70 underline hover:text-white transition-colors">メールで相談する</a>
   </div>
 </section>
 
