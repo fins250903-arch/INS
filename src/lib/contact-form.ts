@@ -17,11 +17,12 @@ export const FORM_SUBMIT_ENDPOINT = `https://formsubmit.co/${INQUIRY_EMAIL}` as 
 export const FORM_SUBMIT_AJAX_ENDPOINT = `https://formsubmit.co/ajax/${INQUIRY_EMAIL}` as const;
 export const INQUIRY_NEXT_URL = 'https://insbs.net/thanks/' as const;
 
-export const INQUIRY_FIELD_NAMES = ['お名前', '電話番号', '郵便番号', '相談内容'] as const;
+export const INQUIRY_FIELD_NAMES = ['お名前', '電話番号', 'メールアドレス', '郵便番号', '相談内容'] as const;
 
 /** Shape the product asked for. FormSubmit does not accept this as a template. */
 export const REQUESTED_PLAIN_BODY = `お名前：〈入力内容〉
 電話番号：〈入力内容〉
+メールアドレス：〈入力内容〉
 郵便番号：〈入力内容〉
 相談内容：
 〈入力内容〉` as const;
@@ -37,19 +38,20 @@ export const FORM_SUBMIT_EMAIL_CONSTRAINT = {
   differences: [
     'FormSubmit has no parameter for a custom plain-text body. _template only selects one of three built-in layouts. The default is basic, and the documentation sample value is table.',
     'Japanese labels and order are sent as name attributes. The colon character, the line break before 相談内容, and any service header or footer are chosen by FormSubmit and are not configurable in the public docs.',
-    'Reserved names _subject, _honey, and _next are excluded from the message body (help page: reserved fields such as _next, _subject, and _cc).'
+    'Reserved names _subject, _replyto, _honey, and _next are excluded from the message body (help page: reserved fields such as _next, _subject, and _cc). _replyto is the visitor email so the mailbox Reply button addresses the customer.'
   ]
 } as const;
 
 export type InquiryInput = {
   name: string;
   phone: string;
+  email: string;
   postalCode: string;
   message: string;
   honey?: string;
 };
 
-export type InquiryFieldKey = 'name' | 'phone' | 'postalCode' | 'message';
+export type InquiryFieldKey = 'name' | 'phone' | 'email' | 'postalCode' | 'message';
 export type FieldErrors = Partial<Record<InquiryFieldKey, string>>;
 
 export type FormSubmitResult = {
@@ -64,6 +66,7 @@ export type FetchLike = (
 
 const PHONE_ERROR =
   '電話番号は、先頭の0を残した10桁または11桁で入力してください。ハイフンはそのままで構いません。';
+const EMAIL_ERROR = 'メールアドレスの形式で入力してください。返信先として使います。';
 const POSTAL_ERROR =
   '郵便番号は、先頭の0を残した7桁で入力してください。ハイフン（例: 001-0000）も使えます。';
 
@@ -79,6 +82,10 @@ export function normalizePhone(value: string): string {
   return coerceNumericText(value.trim());
 }
 
+export function normalizeEmail(value: string): string {
+  return value.trim().replace(/[\s\u3000]/g, '');
+}
+
 export function normalizePostalCode(value: string): string {
   return coerceNumericText(value.trim()).replace(/^〒/, '');
 }
@@ -91,6 +98,7 @@ export function validateInquiry(input: InquiryInput): FieldErrors {
   const errors: FieldErrors = {};
   const name = input.name.trim();
   const phone = normalizePhone(input.phone);
+  const email = normalizeEmail(input.email);
   const postalCode = normalizePostalCode(input.postalCode);
   const message = normalizeMessage(input.message);
 
@@ -99,6 +107,9 @@ export function validateInquiry(input: InquiryInput): FieldErrors {
 
   if (!phone) errors.phone = '電話番号を入力してください。';
   else if (!isPhone(phone)) errors.phone = PHONE_ERROR;
+
+  if (!email) errors.email = 'メールアドレスを入力してください。';
+  else if (!isEmail(email)) errors.email = EMAIL_ERROR;
 
   if (!postalCode) errors.postalCode = '郵便番号を入力してください。';
   else if (!/^\d{3}-?\d{4}$/.test(postalCode)) errors.postalCode = POSTAL_ERROR;
@@ -109,6 +120,11 @@ export function validateInquiry(input: InquiryInput): FieldErrors {
   return errors;
 }
 
+function isEmail(value: string): boolean {
+  if (value.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 function isPhone(value: string): boolean {
   if (!/^0[0-9-]+$/.test(value)) return false;
   if (value.includes('--') || value.startsWith('-') || value.endsWith('-')) return false;
@@ -116,14 +132,17 @@ function isPhone(value: string): boolean {
   return /^0\d{9,10}$/.test(digits);
 }
 
-/** Ordered fields. Reserved keys stay after the four inquiry labels. */
+/** Ordered fields. Reserved keys stay after the inquiry labels. */
 export function buildInquiryEntries(input: InquiryInput): Array<[string, string]> {
+  const email = normalizeEmail(input.email);
   return [
     ['お名前', input.name.trim()],
     ['電話番号', normalizePhone(input.phone)],
+    ['メールアドレス', email],
     ['郵便番号', normalizePostalCode(input.postalCode)],
     ['相談内容', normalizeMessage(input.message)],
     ['_subject', INQUIRY_SUBJECT],
+    ['_replyto', email],
     ['_honey', input.honey ?? ''],
     ['_next', INQUIRY_NEXT_URL]
   ];
