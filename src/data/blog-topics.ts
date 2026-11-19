@@ -51,6 +51,7 @@ export type BlogTopicId =
   | 'milk'
   | 'oil'
   | 'childseat'
+  | 'blood'
   | 'general';
 
 export type LpHeadingLink = {
@@ -457,6 +458,20 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     relatedSlugs: ['j1', 'diy3', 'yuka', 'sakaimilk', 'kusumi'],
     keywords: ['チャイルドシート汚れ', 'チャイルドシート下', '食べこぼし', '後部座席']
   },
+  blood: {
+    id: 'blood',
+    label: 'シートの血液シミ',
+    answer:
+      `車内シートの血液（鼻血・けが・生理など）は、こすらず乾いた布で吸い取り、熱湯・塩素系・消臭スプレーは使わないでください。色が残ったシミは{regionFull}の出張車内清掃（${keiInteriorPriceClause()}）で、料金表の「加算」欄を目安に見積もります。`,
+    bullets: [
+      '乾いた布を押し当てて吸い、こすらない',
+      '熱湯・塩素系・消臭スプレーはシミと臭いを固定しやすい',
+      '人の手当は医療機関へ。シートの汚れについて病状は断定しない'
+    ],
+    lpHeadings: [H('heading-compare-outreach'), H('heading-pricing'), H('heading-flow'), H('heading-areas')],
+    relatedSlugs: ['nyou', 'sakaimilk', 'outo2', 's1', 'diy3'],
+    keywords: ['車内 血液', '鼻血 シミ', 'シート 血']
+  },
   general: {
     id: 'general',
     label: '車内清掃（総合）',
@@ -580,6 +595,7 @@ export const SLUG_TO_TOPIC: Record<string, BlogTopicId> = {
   yuka1: 'floor',
   yukasita: 'floor',
   'childseat-yogore': 'childseat',
+  'ketsueki-shimi': 'blood',
   '他人の車に嘔吐　個人賠償責任保険で解決できる': 'insurance',
   '車の魚臭さ撃退': 'fish'
 };
@@ -617,6 +633,7 @@ export function detectTopicId(
   }
   if (/保険|賠償/.test(haystack)) return 'insurance';
   if (/嘔吐|ゲロ|酔い/.test(haystack)) return 'vomit';
+  if (/血液|鼻血|血のシミ/.test(haystack)) return 'blood';
   if (/灯油/.test(haystack)) return 'kerosene';
   if (/ペット|犬|猫/.test(haystack)) return 'pet';
   if (/タバコ|ヤニ/.test(haystack)) return 'tobacco';
