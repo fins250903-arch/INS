@@ -5,7 +5,7 @@ date: "2026-11-12"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
-draft: true
+draft: false
 categories:
   - "blog"
   - "oosaka"
