@@ -364,7 +364,7 @@ async function persistEntry(params: Record<string, unknown>): Promise<Response> 
     return json(
       {
         error:
-          '記事の保存には Cloudflare Worker の BLOG_PUBLISH_GITHUB_TOKEN が必要です。一覧の表示はできます。'
+          '記事の保存には Worker ins の「ランタイム変数とシークレット」にある BLOG_PUBLISH_GITHUB_TOKEN が必要です。ビルド変数には置かないでください。'
       },
       503
     );
@@ -405,7 +405,10 @@ async function persistEntry(params: Record<string, unknown>): Promise<Response> 
 async function persistMedia(params: Record<string, unknown>): Promise<Response> {
   if (!getGitHubPublishConfig()) {
     return json(
-      { error: '画像の保存には Cloudflare Worker の BLOG_PUBLISH_GITHUB_TOKEN が必要です。' },
+      {
+        error:
+          '画像の保存には Worker ins の「ランタイム変数とシークレット」にある BLOG_PUBLISH_GITHUB_TOKEN が必要です。ビルド変数には置かないでください。'
+      },
       503
     );
   }
@@ -429,7 +432,13 @@ async function persistMedia(params: Record<string, unknown>): Promise<Response> 
 
 async function deleteFiles(action: string, params: Record<string, unknown>): Promise<Response> {
   if (!getGitHubPublishConfig()) {
-    return json({ error: '削除には Cloudflare Worker の BLOG_PUBLISH_GITHUB_TOKEN が必要です。' }, 503);
+    return json(
+      {
+        error:
+          '削除には Worker ins の「ランタイム変数とシークレット」にある BLOG_PUBLISH_GITHUB_TOKEN が必要です。ビルド変数には置かないでください。'
+      },
+      503
+    );
   }
 
   const paths =
