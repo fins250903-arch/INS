@@ -13,6 +13,10 @@ assert.equal(detectTopicId('unknown-slug', '灯油をこぼした'), 'kerosene')
 assert.equal(detectTopicId('childseat-yogore'), 'childseat');
 assert.equal(detectTopicId('unknown-slug', 'チャイルドシートの下の汚れ'), 'childseat');
 assert.equal(detectTopicId('unknown-slug', 'チャイルドシートに嘔吐'), 'vomit');
+assert.equal(detectTopicId('amamori-mizunure'), 'rain');
+assert.equal(detectTopicId('unknown-slug', '大阪で車内が雨漏りした'), 'rain');
+assert.equal(detectTopicId('yuka'), 'floor');
+assert.equal(detectTopicId('kb1'), 'mold');
 
 const topic = getBlogTopic('outo1');
 assert.ok(topic.answer.includes('{regionFull}'));
