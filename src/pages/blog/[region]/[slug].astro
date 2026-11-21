@@ -62,6 +62,7 @@ const modifiedOn = (post.data.updatedDate ?? post.data.date).toISOString().slice
 
 const blogJsonLd = buildBlogPostJsonLd({
   path: pagePath,
+  canonical: seo.canonical,
   title: post.data.title,
   description: seo.description,
   datePublished: publishedOn,

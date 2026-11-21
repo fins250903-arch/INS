@@ -1,5 +1,5 @@
 import { BUSINESS_NAME, SITE_HOME_PATH, SITE_PERSON_NAME } from '../data/site';
-import { canonicalUrl, pageId, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
+import { canonicalUrl, pageId, sameOriginPath, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
 import { buildJsonLdGraph } from './json-ld-graph';
 import { siteOrganizationNode, sitePersonNode, siteWebSiteNode, webPageNode } from './json-ld-site';
 
@@ -10,6 +10,8 @@ export type BlogJsonLdRelated = {
 
 export function buildBlogPostJsonLd(input: {
   path: string;
+  /** Preferred URL from frontmatter. Same-origin values replace BlogPosting url and mainEntityOfPage. */
+  canonical?: string;
   title: string;
   description: string;
   datePublished: string;
@@ -24,9 +26,15 @@ export function buildBlogPostJsonLd(input: {
   howtoSteps?: string[];
   howtoName?: string;
 }): Record<string, unknown> {
-  const path = input.path.endsWith('/') ? input.path : `${input.path}/`;
-  const url = canonicalUrl(path);
+  const selfPath = input.path.endsWith('/') ? input.path : `${input.path}/`;
+  const canonicalPath = input.canonical ? sameOriginPath(input.canonical) : undefined;
+  const path = canonicalPath ?? selfPath;
+  const canonicalDiffers = Boolean(canonicalPath && canonicalPath !== selfPath);
+  const externalCanonical = input.canonical && !canonicalPath ? input.canonical.trim() : undefined;
+  const url = externalCanonical ?? canonicalUrl(path);
   const baseId = pageId(path);
+  // Keep this document's FAQ @id on its own URL so it does not overwrite the canonical page's FAQPage.
+  const faqBaseId = canonicalDiffers ? pageId(selfPath) : baseId;
   const articleId = `${baseId}#article`;
   const webpageId = `${baseId}#webpage`;
   const breadcrumbId = `${baseId}#breadcrumb`;
@@ -44,7 +52,9 @@ export function buildBlogPostJsonLd(input: {
     inLanguage: 'ja-JP',
     author: { '@id': SITE_PERSON_ID },
     publisher: { '@id': SITE_ORGANIZATION_ID },
-    mainEntityOfPage: { '@id': webpageId },
+    mainEntityOfPage: externalCanonical
+      ? { '@type': 'WebPage', '@id': externalCanonical.replace(/\/$/, '') }
+      : { '@id': webpageId },
     speakable: {
       '@type': 'SpeakableSpecification',
       cssSelector: ['h1', '.aio-article-body h2:first-of-type', '.aio-answer', '.aio-related']
@@ -85,7 +95,7 @@ export function buildBlogPostJsonLd(input: {
     authorId: SITE_PERSON_ID,
     breadcrumbId,
     dateModified,
-    hasPartId: input.faqs && input.faqs.length > 0 ? `${baseId}#faq` : undefined
+    hasPartId: input.faqs && input.faqs.length > 0 && !canonicalDiffers ? `${baseId}#faq` : undefined
   });
   webpage['@id'] = webpageId;
 
@@ -114,7 +124,7 @@ export function buildBlogPostJsonLd(input: {
   if (input.faqs && input.faqs.length > 0) {
     nodes.push({
       '@type': 'FAQPage',
-      '@id': `${baseId}#faq`,
+      '@id': `${faqBaseId}#faq`,
       mainEntity: input.faqs.map((faq) => ({
         '@type': 'Question',
         name: faq.q,

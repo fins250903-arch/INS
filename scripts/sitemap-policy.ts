@@ -1,7 +1,8 @@
 /**
  * Build-time sitemap rules. Imported from astro.config only (uses node:fs).
- * Keeps redirected URLs and retired Hiroshima pages out of the sitemap, and
- * stamps blog URLs with the article date instead of the build clock.
+ * Keeps redirected URLs, retired Hiroshima pages, and blog posts whose
+ * frontmatter canonical points elsewhere out of the sitemap, and stamps blog
+ * URLs with the article date instead of the build clock.
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -9,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 import { keywordLps } from '../src/data/keyword-lp.ts';
 import { SITE_CONTENT_UPDATED } from '../src/data/site.ts';
+import { sameOriginPath } from '../src/lib/canonical-url.ts';
 import { createMatcher, type RedirectRule } from '../workers/legacy-redirects/src/match';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -48,6 +50,7 @@ export function includeInSitemap(pageUrl: string): boolean {
 
   if (isLegacyBlogSlugPage(pathname)) return false;
   if (matchApexRedirect(APEX_HOST, pathname)) return false;
+  if (canonicalizedAway.has(normalizeSitemapUrl(pageUrl))) return false;
   return true;
 }
 
@@ -89,6 +92,29 @@ function loadBlogLastmod(): Map<string, string> {
 }
 
 const blogLastmod = loadBlogLastmod();
+
+/** Blog URLs whose frontmatter canonical points at a different page. */
+function loadCanonicalizedAway(): Set<string> {
+  const excluded = new Set<string>();
+  const root = path.join(ROOT, 'src/content/blog');
+  for (const file of walkMarkdown(root)) {
+    const raw = readFileSync(file, 'utf8');
+    const frontmatter = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+    if (!frontmatter) continue;
+    const block = frontmatter[1];
+    if (frontmatterValue(block, 'draft') === 'true') continue;
+    const region = frontmatterValue(block, 'region');
+    const canonical = frontmatterValue(block, 'canonicalUrl') || frontmatterValue(block, 'canonical');
+    if (!region || !canonical) continue;
+    const self = `/blog/${region}/${path.basename(file, '.md')}/`;
+    const target = sameOriginPath(canonical);
+    const pointsElsewhere = target ? target !== self : true;
+    if (pointsElsewhere) excluded.add(`${SITE_ORIGIN}${self}`);
+  }
+  return excluded;
+}
+
+const canonicalizedAway = loadCanonicalizedAway();
 
 function landingPageUrls(): Set<string> {
   const urls = new Set<string>();

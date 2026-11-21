@@ -20,6 +20,32 @@ export function pageId(path: string): string {
   return canonicalUrl(path).replace(/\/$/, '');
 }
 
+/**
+ * Pathname of an on-site URL, with a trailing slash.
+ * Returns undefined for other origins so an external canonical is not rewritten onto this host.
+ */
+export function sameOriginPath(href: string): string | undefined {
+  const trimmed = href.trim();
+  if (!trimmed) return undefined;
+  try {
+    const url = new URL(trimmed, SITE_CANONICAL_ORIGIN);
+    const origin = SITE_CANONICAL_ORIGIN.replace(/\/$/, '');
+    if (url.origin !== origin) return undefined;
+    return url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Absolute href. On-site paths gain a trailing slash; other origins are returned trimmed. */
+export function normalizeCanonicalHref(href: string): string {
+  const trimmed = href.trim();
+  const pathname = sameOriginPath(trimmed);
+  if (!pathname) return trimmed;
+  const url = new URL(trimmed, SITE_CANONICAL_ORIGIN);
+  return `${url.origin}${pathname}${url.search}${url.hash}`;
+}
+
 export const SITE_WEBSITE_ID = `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/#website`;
 export const SITE_ORGANIZATION_ID = `${SITE_CANONICAL_ORIGIN.replace(/\/$/, '')}/#organization`;
 

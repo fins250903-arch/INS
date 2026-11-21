@@ -76,7 +76,7 @@ content:
       - name: canonicalUrl
         label: カノニカル URL
         type: string
-        description: 未入力時はサイト上の自身の URL を自動設定します
+        description: 未入力時は自身のURL。別URLを入れると、そのページを正規とし、この記事はサイトマップから外れます。
       - name: draft
         label: 下書き
         type: boolean

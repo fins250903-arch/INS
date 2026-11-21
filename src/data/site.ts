@@ -17,7 +17,7 @@ export const LINE_OFFICIAL_URL = 'https://lin.ee/Xs8Orp2' as const;
  * Last editorial review of shared LP copy (pricing, FAQ, JSON-LD dateModified, 「最終更新」).
  * Bump this when that copy changes. Do not derive it from the build clock.
  */
-export const SITE_CONTENT_UPDATED = '2026-11-04' as const;
+export const SITE_CONTENT_UPDATED = '2026-11-13' as const;
 
 export const BUSINESS_NAME = 'アイエヌエスINS出張車内清掃' as const;
 
