@@ -63,10 +63,18 @@ export function pricingOptionByLabel(part: string): (typeof pricingOptions)[numb
   return row;
 }
 
-/** schema.org priceRange for the 車内清掃 column (min-max, yen digits only). */
+/**
+ * schema.org priceRange (yen digits only, no commas).
+ * The floor is the one-seat partial entry shown as 「部分清掃 1シート…から」
+ * (`pricingPartial[0]`). The ceiling is the highest 車内清掃 price.
+ * Set totals and options stay outside this range.
+ */
 export function baseInteriorPriceRange(): string {
-  const amounts = pricingSet.map((row) => parseYenAmount(row.interiorCleaning));
-  return `${Math.min(...amounts)}-${Math.max(...amounts)}`;
+  const ceiling = Math.max(...pricingSet.map((row) => parseYenAmount(row.interiorCleaning)));
+  const floor = parseYenAmount(pricingPartial[0].price);
+  const low = Math.min(floor, ceiling);
+  const high = Math.max(floor, ceiling);
+  return `${low}-${high}`;
 }
 
 /** One sentence that lists 車内清掃, 嘔吐加算, and セット合計 from the table. */

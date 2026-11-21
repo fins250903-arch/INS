@@ -7,6 +7,7 @@ import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { LP_FV_PARTIAL_ENTRY_LINE } from '../src/data/lp-aio-content.ts';
 import {
   additionalNotes,
   pricingLabel,
@@ -45,6 +46,7 @@ const lines = [
   '',
   '### 部分クリーニング',
   '',
+  `- ${LP_FV_PARTIAL_ENTRY_LINE}`,
   `- ${pricingPartialDeodorizeNote}`,
   ...pricingPartial.map(
     (row) => `- ${row.label}: ${row.price}（消臭・脱臭セット ${row.deodorizeSet}）`

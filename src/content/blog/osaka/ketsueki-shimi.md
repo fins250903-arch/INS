@@ -1,7 +1,8 @@
 ---
 title: "大阪で車内シートについた血液のシミを広げない対処"
 urlSlug: "ketsueki-shimi"
-date: "2026-11-12"
+date: "2026-11-19"
+updatedDate: "2026-11-19"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
