@@ -13,6 +13,26 @@
   ],
   "rules": [
     {
+      "from": "/osaka/vomit",
+      "to": "/osaka/shanai-outo/",
+      "status": 308
+    },
+    {
+      "from": "/osaka/vomit/",
+      "to": "/osaka/shanai-outo/",
+      "status": 308
+    },
+    {
+      "from": "/osaka/kerosene",
+      "to": "/osaka/touyu-kobosi/",
+      "status": 308
+    },
+    {
+      "from": "/osaka/kerosene/",
+      "to": "/osaka/touyu-kobosi/",
+      "status": 308
+    },
+    {
       "from": "/blog/osaka/shanai-seiso-ranking",
       "to": "/blog/osaka/ranking-osaka-carclean/",
       "status": 308
