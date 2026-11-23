@@ -419,6 +419,12 @@ const formatDate = (date: Date) => {
         <p class="mt-3 text-sm">
           <a href="#heading-pricing-kerosene" class="font-semibold text-cta-red underline hover:text-primary">灯油の料金を見る</a>
           ／
+          {regionSlug === 'osaka' && (
+            <>
+              <a href="/osaka/touyu-kobosi/" class="font-semibold text-cta-red underline hover:text-primary">灯油こぼしの緊急ページを見る</a>
+              ／
+            </>
+          )}
           <a href={hrefForSlug('tt1')} class="font-semibold text-cta-red underline hover:text-primary">灯油こぼしの解説を読む</a>
         </p>
       </div>
