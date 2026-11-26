@@ -5,7 +5,7 @@ date: "2026-11-19"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
-draft: true
+draft: false
 canonicalUrl: "https://insbs.net/blog/osaka/amamori-mizunure/"
 categories:
   - "blog"
