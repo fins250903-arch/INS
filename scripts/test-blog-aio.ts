@@ -20,6 +20,10 @@ assert.equal(detectTopicId('unknown-slug', 'チャイルドシートに嘔吐'),
 assert.equal(detectTopicId('ketsueki-shimi'), 'blood');
 assert.equal(detectTopicId('unknown-slug', '車内シートの血液のシミ'), 'blood');
 assert.equal(detectTopicId('unknown-slug', '嘔吐と血液'), 'vomit');
+assert.equal(detectTopicId('gamu-betatsuki'), 'gum');
+assert.equal(detectTopicId('unknown-slug', '大阪で車のシートにガムがついた'), 'gum');
+assert.equal(detectTopicId('unknown-slug', 'チャイルドシートの下のベタつき'), 'childseat');
+assert.equal(detectTopicId('j1', '山崎家族の相棒'), 'diy');
 
 const topic = getBlogTopic('outo1');
 assert.ok(topic.answer.includes('{regionFull}'));

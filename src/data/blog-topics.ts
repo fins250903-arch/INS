@@ -52,6 +52,7 @@ export type BlogTopicId =
   | 'oil'
   | 'childseat'
   | 'blood'
+  | 'gum'
   | 'general';
 
 export type LpHeadingLink = {
@@ -472,6 +473,20 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     relatedSlugs: ['nyou', 'sakaimilk', 'outo2', 's1', 'diy3'],
     keywords: ['車内 血液', '鼻血 シミ', 'シート 血']
   },
+  gum: {
+    id: 'gum',
+    label: 'シートのガム・溶けたチョコ',
+    answer:
+      `車のシートにガムや溶けたチョコ、アイスがついたときは、爪でこそがず、乾いた布へ移してください。熱や水で押し込むと繊維の奥へ広がります。ベタつきが残る場合は{regionFull}の出張車内清掃（${keiInteriorPriceClause()}）で吸引できます。`,
+    bullets: [
+      '固まりを爪でこそがない',
+      '乾いた布を押し当てて、浮いている分だけ移す',
+      'ホースで床へ流さない'
+    ],
+    lpHeadings: [H('heading-compare-outreach'), H('heading-pricing'), H('heading-areas')],
+    relatedSlugs: ['yuka', 'j1', 'diy3', 'oilwash1'],
+    keywords: ['車内 ガム', 'シート ガム', '溶けたチョコ', 'シート ベタベタ']
+  },
   general: {
     id: 'general',
     label: '車内清掃（総合）',
@@ -520,6 +535,7 @@ export const BLOG_TOPIC_FAQ_QUESTIONS: Record<BlogTopicId, string> = {
   milk: '車に牛乳をこぼして臭くなったらどうすればいい？',
   oil: '作業着のオイルがシートについたらどう落とせますか？',
   childseat: 'チャイルドシートの下の食べかすやベタつきはどうすればいい？',
+  gum: '車のシートにガムがついたらどうすればいい？',
   general: '車のシミや臭いが戻るときはどうすればいい？'
 };
 
@@ -631,6 +647,7 @@ export const SLUG_TO_TOPIC: Record<string, BlogTopicId> = {
   yukasita: 'floor',
   'childseat-yogore': 'childseat',
   'ketsueki-shimi': 'blood',
+  'gamu-betatsuki': 'gum',
   '他人の車に嘔吐　個人賠償責任保険で解決できる': 'insurance',
   '車の魚臭さ撃退': 'fish'
 };
@@ -669,6 +686,7 @@ export function detectTopicId(
   if (/保険|賠償/.test(haystack)) return 'insurance';
   if (/嘔吐|ゲロ|酔い/.test(haystack)) return 'vomit';
   if (/血液|鼻血|血のシミ/.test(haystack)) return 'blood';
+  if (/ガム|溶けたチョコ|チョコレート|飴/.test(haystack)) return 'gum';
   if (/灯油/.test(haystack)) return 'kerosene';
   if (/ペット|犬|猫/.test(haystack)) return 'pet';
   if (/タバコ|ヤニ/.test(haystack)) return 'tobacco';
