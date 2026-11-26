@@ -13,6 +13,7 @@ import {
   baseInteriorPriceRange,
   pricingKei,
   pricingLarge,
+  pricingPartial,
   pricingSet
 } from '../data/lp-pricing';
 import { canonicalUrl, pageId, SITE_ORGANIZATION_ID, SITE_PERSON_ID } from './canonical-url';
@@ -144,15 +145,32 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     input.subjectOf ??
     mergeSubjectOf(subjectOfFromCaseStudies(input.caseStudies), SERVICE_SUBJECT_OF);
 
-  const catalogItems = pricingSet.map((row, i) => ({
-    '@type': 'Offer',
-    position: i + 1,
-    name: row.label,
-    price: yenToNumber(row.interiorCleaning),
-    priceCurrency: 'JPY',
-    availability: 'https://schema.org/InStock',
-    url: pageUrl
-  }));
+  const partialSeatPrice = yenToNumber(pricingPartial[0].price);
+  const catalogItems = [
+    ...pricingSet.map((row, i) => ({
+      '@type': 'Offer',
+      position: i + 1,
+      name: row.label,
+      price: yenToNumber(row.interiorCleaning),
+      priceCurrency: 'JPY',
+      availability: 'https://schema.org/InStock',
+      url: pageUrl
+    })),
+    {
+      '@type': 'Offer',
+      position: pricingSet.length + 1,
+      name: '部分清掃（1シート）',
+      price: partialSeatPrice,
+      priceCurrency: 'JPY',
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        minPrice: partialSeatPrice,
+        priceCurrency: 'JPY'
+      },
+      availability: 'https://schema.org/InStock',
+      url: pageUrl
+    }
+  ];
 
   const service: Record<string, unknown> = {
     '@type': 'Service',

@@ -20,7 +20,10 @@ const blog = defineCollection({
     images: z.array(z.string()).optional(),
     /** Decap CMS: ファイル名用スラッグ（未使用時はファイル名から推定） */
     urlSlug: z.string().optional(),
-    /** SEO 用カノニカル URL（未指定時は Astro.site + パスから自動生成） */
+    /**
+     * Preferred canonical URL. When this points at another page, rel=canonical and
+     * BlogPosting url/mainEntityOfPage follow it, and the post is omitted from the sitemap.
+     */
     canonicalUrl: z.string().url().optional(),
     /** SEO settings edited via Decap CMS */
     seo: z

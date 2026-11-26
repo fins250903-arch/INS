@@ -51,6 +51,7 @@ export type BlogTopicId =
   | 'milk'
   | 'oil'
   | 'childseat'
+  | 'blood'
   | 'rain'
   | 'general';
 
@@ -458,6 +459,20 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     relatedSlugs: ['j1', 'diy3', 'yuka', 'sakaimilk', 'kusumi'],
     keywords: ['チャイルドシート汚れ', 'チャイルドシート下', '食べこぼし', '後部座席']
   },
+  blood: {
+    id: 'blood',
+    label: 'シートの血液シミ',
+    answer:
+      `車内シートの血液（鼻血・けが・生理など）は、こすらず乾いた布で吸い取り、熱湯・塩素系・消臭スプレーは使わないでください。色が残ったシミは{regionFull}の出張車内清掃（${keiInteriorPriceClause()}）で、料金表の「加算」欄を目安に見積もります。`,
+    bullets: [
+      '乾いた布を押し当てて吸い、こすらない',
+      '熱湯・塩素系・消臭スプレーはシミと臭いを固定しやすい',
+      '人の手当は医療機関へ。シートの汚れについて病状は断定しない'
+    ],
+    lpHeadings: [H('heading-compare-outreach'), H('heading-pricing'), H('heading-flow'), H('heading-areas')],
+    relatedSlugs: ['nyou', 'sakaimilk', 'outo2', 's1', 'diy3'],
+    keywords: ['車内 血液', '鼻血 シミ', 'シート 血']
+  },
   rain: {
     id: 'rain',
     label: '車内の雨漏り・水濡れ',
@@ -486,6 +501,43 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     relatedSlugs: ['no1', 'outo1', 'syuttyou22', 'diy3'],
     keywords: ['車内清掃', '車内クリーニング', '出張']
   }
+};
+
+/**
+ * Natural search questions for the first blog FAQ.
+ * Keyed by topic so the visible FAQ and FAQPage JSON-LD stay off the
+ * mechanical `${label}はどうすればいいですか？` template.
+ */
+export const BLOG_TOPIC_FAQ_QUESTIONS: Record<BlogTopicId, string> = {
+  vomit: '車で子どもが吐いたら最初に何をすればいい？',
+  'vomit-dont': '車の嘔吐物処理でやってはいけないことは？',
+  insurance: '車内を汚したとき、保険は使えますか？',
+  smell: '車の臭いが消えないときはどうすればいい？',
+  urine: '車のシートにおしっこが染みたらどうすればいい？',
+  pet: 'ペットが車で粗相したらどうすればいい？',
+  tobacco: '車のタバコ臭やヤニは自分で取れますか？',
+  ozone: '車のオゾン脱臭はどんなときに効果がありますか？',
+  fish: '車に魚の汁がこぼれて臭いが残ったらどうする？',
+  coffee: '車のシートにコーヒーをこぼしたらどうすればいい？',
+  kerosene: '車内に灯油をこぼしたら最初に何をすればいい？',
+  mice: '車にネズミの臭いがついたらどうすればいい？',
+  ranking: '車内清掃の業者はどう選べばいい？',
+  diy: '車内の汚れはどこまで自分で掃除できますか？',
+  seatbelt: 'シートベルトが酸っぱい臭いのときはどうすればいい？',
+  floor: '車のフロアを水で丸洗いしてもいいですか？',
+  feces: '車のシートにうんちがついたらどうすればいい？',
+  cupmen: '車にカップ麺のスープをこぼしたらどうする？',
+  mold: '車内にカビが生えたらどうすればいい？',
+  leather: '革シートの汚れは自分で落としてもいいですか？',
+  window: '車の内側の窓が曇るのはなぜですか？',
+  carwash: '炎天下に洗車すると水垢はつきますか？',
+  outreach: '出張の車内清掃はどんなときに頼めますか？',
+  milk: '車に牛乳をこぼして臭くなったらどうすればいい？',
+  oil: '作業着のオイルがシートについたらどう落とせますか？',
+  childseat: 'チャイルドシートの下の食べかすやベタつきはどうすればいい？',
+  blood: '車のシートに血液のシミがついたらどうすればいい？',
+  rain: '車内が雨漏りしてシートが水濡れしたらどうすればいい？',
+  general: '車のシミや臭いが戻るときはどうすればいい？'
 };
 
 /** Exact filename slug → topic. Keep in sync with src/content/blog. */
@@ -595,6 +647,7 @@ export const SLUG_TO_TOPIC: Record<string, BlogTopicId> = {
   yuka1: 'floor',
   yukasita: 'floor',
   'childseat-yogore': 'childseat',
+  'ketsueki-shimi': 'blood',
   'amamori-mizunure': 'rain',
   '他人の車に嘔吐　個人賠償責任保険で解決できる': 'insurance',
   '車の魚臭さ撃退': 'fish'
@@ -633,6 +686,7 @@ export function detectTopicId(
   }
   if (/保険|賠償/.test(haystack)) return 'insurance';
   if (/嘔吐|ゲロ|酔い/.test(haystack)) return 'vomit';
+  if (/血液|鼻血|血のシミ/.test(haystack)) return 'blood';
   if (/灯油/.test(haystack)) return 'kerosene';
   if (/ペット|犬|猫/.test(haystack)) return 'pet';
   if (/タバコ|ヤニ/.test(haystack)) return 'tobacco';

@@ -1,14 +1,23 @@
 ---
-title: "こまった！他人の車に嘔吐は、個人賠償責任保険で解決できる？"
-date: "2026-02-20"
-region: "osaka"
-regionFull: "大阪府"
-areaLabel: "大阪・近畿エリア"
-thumbnail: "kodomo_hakike_otokonoko-1.png"
+title: こまった！他人の車に嘔吐は、個人賠償責任保険で解決できる？
+urlSlug: outo3-2
+date: 2026-11-24
+region: osaka
+regionFull: 大阪府
+areaLabel: 大阪・近畿エリア
+thumbnail: kodomo_hakike_otokonoko-1.png
 draft: false
 categories:
-  - "outo1"
-  - "seisou"
+  - outo1
+  - seisou
+seo:
+  meta_description: |
+    撮影→保険会社へ連絡→見積、の順がトラブルになりにくい
+    免責金額未満は自己負担になりやすい
+    他人の子どもが嘔吐したケースは個人賠償の相談が多い
+  noindex: false
+ogp:
+  og_type: article
 ---
 
 <!-- aio-answer-first -->
@@ -102,10 +111,6 @@ categories:
 
 電話番号をタップしてください
 
-[TEL:070-8428-0866
+[TEL:070-8428-0866（受付時間／365日24時間受付中）](tel:070-8428-0866)
 
-（受付時間／365日24時間受付中）
-
-](tel:070-8428-0866)[
-
-メールでお問い合わせ](/contact/)
+[メールでお問い合わせ](/contact/)

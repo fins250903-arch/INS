@@ -1,4 +1,10 @@
-import { getBlogTopic, AIO_ANSWER_END, AIO_ANSWER_START, type LpHeadingLink } from '../data/blog-topics';
+import {
+  getBlogTopic,
+  AIO_ANSWER_END,
+  AIO_ANSWER_START,
+  BLOG_TOPIC_FAQ_QUESTIONS,
+  type LpHeadingLink
+} from '../data/blog-topics';
 import { resolveStoreLpPath } from '../data/region-lp-links';
 import { TOPIC_KEYWORD_SLUG } from '../data/keyword-lp';
 import { basePriceFaqAnswer } from '../data/lp-pricing';
@@ -150,7 +156,7 @@ export function buildTopicFaqs(input: {
   const regionFull = input.regionFull || '対応エリア';
   const answer = replaceRegionPlaceholder(topic.answer, regionFull);
   return [
-    { q: `${topic.label}はどうすればいいですか？`, a: answer },
+    { q: BLOG_TOPIC_FAQ_QUESTIONS[topic.id], a: answer },
     {
       q: `${regionFull}で出張車内清掃は依頼できますか？`,
       a: `${regionFull}は駐車場完結の出張車内清掃に対応しています。365日24時間受付、立会不要、見積無料です。電話 ${TEL_DISPLAY} またはお問い合わせフォームから依頼できます。`

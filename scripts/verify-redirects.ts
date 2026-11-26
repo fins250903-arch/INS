@@ -22,6 +22,12 @@ const CASES: Expectation[] = [
   // Apex domain: rules compiled into public/_redirects.
   ['insbs.net', '/', '/osaka/'],
   ['insbs.net', '/osaka/', null],
+  ['insbs.net', '/osaka/shanai-outo/', null],
+  ['insbs.net', '/osaka/touyu-kobosi/', null],
+  ['insbs.net', '/osaka/vomit', '/osaka/shanai-outo/'],
+  ['insbs.net', '/osaka/vomit/', '/osaka/shanai-outo/'],
+  ['insbs.net', '/osaka/kerosene', '/osaka/touyu-kobosi/'],
+  ['insbs.net', '/osaka/kerosene/', '/osaka/touyu-kobosi/'],
   ['insbs.net', '/contact/', null],
   ['insbs.net', '/blog/chiiki/osaka/', null],
   ['insbs.net', '/hirosima', '/'],

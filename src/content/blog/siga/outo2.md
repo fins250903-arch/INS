@@ -5,6 +5,7 @@ date: 2026-11-08
 region: siga
 regionFull: 滋賀県
 areaLabel: 滋賀・近畿エリア
+canonicalUrl: https://insbs.net/blog/fukuoka/outo2/
 thumbnail: gero5.jpg
 draft: false
 categories:
@@ -119,10 +120,6 @@ ogp:
 
 電話番号をタップしてください
 
-[TEL:070-8428-0866
+[TEL:070-8428-0866（受付時間／365日24時間受付中）](tel:070-8428-0866)
 
-（受付時間／365日24時間受付中）
-
-](tel:070-8428-0866)[
-
-メールでお問い合わせ](/contact/)
+[メールでお問い合わせ](/contact/)
