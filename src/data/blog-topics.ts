@@ -52,6 +52,7 @@ export type BlogTopicId =
   | 'oil'
   | 'childseat'
   | 'blood'
+  | 'rain'
   | 'general';
 
 export type LpHeadingLink = {
@@ -472,6 +473,20 @@ export const BLOG_TOPICS: Record<BlogTopicId, BlogTopic> = {
     relatedSlugs: ['nyou', 'sakaimilk', 'outo2', 's1', 'diy3'],
     keywords: ['車内 血液', '鼻血 シミ', 'シート 血']
   },
+  rain: {
+    id: 'rain',
+    label: '車内の雨漏り・水濡れ',
+    answer:
+      `車内の雨漏りでシートやマットが水濡れしたときは、こすらず吸い取り、ホースで流さないでください。湿ったまま閉め切ると臭いが戻りやすいです。床まで染みた場合は{regionFull}の出張車内清掃（${keiInteriorPriceClause()}）で吸引できます。`,
+    bullets: [
+      'マットを外し、乾いた布を押し当てて吸う',
+      '車内をホースで洗わない',
+      '乾いたつもりで窓を閉め切らない'
+    ],
+    lpHeadings: [H('heading-compare-outreach'), H('heading-pricing'), H('heading-areas')],
+    relatedSlugs: ['yuka', 'kb1', 'diy3', 'no1'],
+    keywords: ['車内雨漏り', 'シート水濡れ', '雨漏り臭い']
+  },
   general: {
     id: 'general',
     label: '車内清掃（総合）',
@@ -520,6 +535,8 @@ export const BLOG_TOPIC_FAQ_QUESTIONS: Record<BlogTopicId, string> = {
   milk: '車に牛乳をこぼして臭くなったらどうすればいい？',
   oil: '作業着のオイルがシートについたらどう落とせますか？',
   childseat: 'チャイルドシートの下の食べかすやベタつきはどうすればいい？',
+  blood: '車のシートに血液のシミがついたらどうすればいい？',
+  rain: '車内が雨漏りしてシートが水濡れしたらどうすればいい？',
   general: '車のシミや臭いが戻るときはどうすればいい？'
 };
 
@@ -631,6 +648,7 @@ export const SLUG_TO_TOPIC: Record<string, BlogTopicId> = {
   yukasita: 'floor',
   'childseat-yogore': 'childseat',
   'ketsueki-shimi': 'blood',
+  'amamori-mizunure': 'rain',
   '他人の車に嘔吐　個人賠償責任保険で解決できる': 'insurance',
   '車の魚臭さ撃退': 'fish'
 };
@@ -672,6 +690,7 @@ export function detectTopicId(
   if (/灯油/.test(haystack)) return 'kerosene';
   if (/ペット|犬|猫/.test(haystack)) return 'pet';
   if (/タバコ|ヤニ/.test(haystack)) return 'tobacco';
+  if (/雨漏り|水濡れ/.test(haystack)) return 'rain';
   if (/魚|海鮮/.test(haystack)) return 'fish';
   if (/ニオイ|臭い|消臭/.test(haystack)) return 'smell';
   if (/ランキング|比較/.test(haystack)) return 'ranking';
