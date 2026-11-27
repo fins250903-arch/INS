@@ -1,7 +1,8 @@
 ---
 title: こまった！他人の車に嘔吐は、個人賠償責任保険で解決できる？
 urlSlug: outo3-2
-date: 2026-11-24
+date: "2026-02-20"
+updatedDate: "2026-11-24"
 region: osaka
 regionFull: 大阪府
 areaLabel: 大阪・近畿エリア
