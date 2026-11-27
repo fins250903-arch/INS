@@ -1,5 +1,4 @@
-import regionLpsExtra from '../data/region-lp-extra.json';
-import regionLpsMain from '../data/region-lp.json';
+import { listServiceRegions } from '../data/service-regions';
 import {
   BUSINESS_NAME,
   CONTACT_EMAIL,
@@ -18,11 +17,10 @@ import { CREW_PHOTO_URL, ORGANIZATION_LOGO_URL, WORK_PHOTO_URLS } from './publis
 
 /** Prefectures with a landing page. This is where crews visit, not the office address. */
 function organizationAreaServed(): Record<string, string>[] {
-  const names = new Set<string>();
-  for (const region of [...regionLpsMain, ...regionLpsExtra]) {
-    if (region.regionFull) names.add(region.regionFull);
-  }
-  return [...names].map((name) => ({ '@type': 'AdministrativeArea', name }));
+  return listServiceRegions().map((region) => ({
+    '@type': 'AdministrativeArea',
+    name: region.regionFull
+  }));
 }
 
 function telE164(): string {

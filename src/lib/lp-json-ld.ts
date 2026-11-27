@@ -4,7 +4,6 @@ import type { CaseStudiesBlock } from '../data/lp-region-case-studies';
 import {
   BUSINESS_NAME,
   CONTACT_EMAIL,
-  headquartersPostalAddress,
   SITE_CONTENT_UPDATED,
   SITE_HOME_PATH,
   TEL_DISPLAY
@@ -68,6 +67,41 @@ function mergeSubjectOf(
 function yenToNumber(label: string): number {
   const digits = label.replace(/[^0-9]/g, '');
   return digits ? parseInt(digits, 10) : 0;
+}
+
+/** Line-item offers for 車内清掃 and the one-seat partial. Prices come from lp-pricing.ts. */
+export function interiorOfferCatalog(pageUrl: string): Record<string, unknown> {
+  const partialSeatPrice = yenToNumber(pricingPartial[0].price);
+  const catalogItems = [
+    ...pricingSet.map((row, i) => ({
+      '@type': 'Offer',
+      position: i + 1,
+      name: row.label,
+      price: yenToNumber(row.interiorCleaning),
+      priceCurrency: 'JPY',
+      availability: 'https://schema.org/InStock',
+      url: pageUrl
+    })),
+    {
+      '@type': 'Offer',
+      position: pricingSet.length + 1,
+      name: '部分清掃（1シート）',
+      price: partialSeatPrice,
+      priceCurrency: 'JPY',
+      priceSpecification: {
+        '@type': 'PriceSpecification',
+        minPrice: partialSeatPrice,
+        priceCurrency: 'JPY'
+      },
+      availability: 'https://schema.org/InStock',
+      url: pageUrl
+    }
+  ];
+  return {
+    '@type': 'OfferCatalog',
+    name: '車内クリーニング基本料金（税込・目安）',
+    itemListElement: catalogItems
+  };
 }
 
 function telE164(): string {
@@ -145,33 +179,6 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     input.subjectOf ??
     mergeSubjectOf(subjectOfFromCaseStudies(input.caseStudies), SERVICE_SUBJECT_OF);
 
-  const partialSeatPrice = yenToNumber(pricingPartial[0].price);
-  const catalogItems = [
-    ...pricingSet.map((row, i) => ({
-      '@type': 'Offer',
-      position: i + 1,
-      name: row.label,
-      price: yenToNumber(row.interiorCleaning),
-      priceCurrency: 'JPY',
-      availability: 'https://schema.org/InStock',
-      url: pageUrl
-    })),
-    {
-      '@type': 'Offer',
-      position: pricingSet.length + 1,
-      name: '部分清掃（1シート）',
-      price: partialSeatPrice,
-      priceCurrency: 'JPY',
-      priceSpecification: {
-        '@type': 'PriceSpecification',
-        minPrice: partialSeatPrice,
-        priceCurrency: 'JPY'
-      },
-      availability: 'https://schema.org/InStock',
-      url: pageUrl
-    }
-  ];
-
   const service: Record<string, unknown> = {
     '@type': 'Service',
     '@id': serviceId,
@@ -192,21 +199,20 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
       '@type': 'AdministrativeArea',
       name: input.regionFull
     },
-    offers: {
-      '@type': 'OfferCatalog',
-      name: '車内クリーニング基本料金（税込・目安）',
-      itemListElement: catalogItems
-    },
+    offers: interiorOfferCatalog(pageUrl),
     subjectOf
   };
 
   const lbDescription = input.localBusinessDescription ?? input.description;
+  // Head-office PostalAddress lives only on Organization. This node is the
+  // prefecture crew visits, so it names areaServed and does not invent geo.
+  const serviceAreaNote = `${input.regionFull}への出張エリアです。来店用の店舗はなく、会社所在地は親のOrganizationを参照します。`;
 
   const localBusiness: Record<string, unknown> = {
     '@type': 'ProfessionalService',
     '@id': localBusinessId,
     name: `${BUSINESS_NAME}（${input.regionFull}）`,
-    description: lbDescription,
+    description: `${lbDescription} ${serviceAreaNote}`,
     url: pageUrl,
     subjectOf,
     telephone: tel,
@@ -215,7 +221,7 @@ export function buildLpJsonLd(input: BuildLpJsonLdInput): Record<string, unknown
     image: WORK_PHOTO_URLS,
     parentOrganization: { '@id': SITE_ORGANIZATION_ID },
     employee: { '@id': SITE_PERSON_ID },
-    address: headquartersPostalAddress(),
+    provider: { '@id': SITE_ORGANIZATION_ID },
     areaServed: {
       '@type': 'AdministrativeArea',
       name: input.regionFull

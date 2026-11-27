@@ -24,6 +24,7 @@ export const BUSINESS_NAME = 'アイエヌエスINS出張車内清掃' as const;
 /**
  * 会社情報テーブルの本社所在地（岡山）。郵便番号はこのリポジトリに無い。
  * 出張先の府県名は JSON-LD の address に入れず、areaServed に分ける。
+ * 本社の PostalAddress は Organization にだけ置く。都道府県 LP の ProfessionalService には載せない。
  */
 export const HQ_ADDRESS_REGION = '岡山県' as const;
 export const HQ_ADDRESS_LOCALITY = '岡山市南区' as const;
