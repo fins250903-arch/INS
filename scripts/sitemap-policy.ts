@@ -2,7 +2,8 @@
  * Build-time sitemap rules. Imported from astro.config only (uses node:fs).
  * Keeps redirected URLs, retired Hiroshima pages, and blog posts whose
  * frontmatter canonical points elsewhere out of the sitemap, and stamps blog
- * URLs with the article date instead of the build clock.
+ * URLs with the article date instead of the build clock. /aio/ uses the same
+ * editorial date as shared pricing and FAQ copy.
  */
 import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
@@ -132,6 +133,7 @@ function landingPageUrls(): Set<string> {
 }
 
 const landingPages = landingPageUrls();
+const AIO_SUMMARY_URL = `${SITE_ORIGIN}/aio/`;
 
 function normalizeSitemapUrl(pageUrl: string): string {
   const url = new URL(pageUrl);
@@ -143,6 +145,7 @@ export function sitemapLastmod(pageUrl: string): string | undefined {
   const normalized = normalizeSitemapUrl(pageUrl);
   const article = blogLastmod.get(normalized);
   if (article) return article;
+  if (normalized === AIO_SUMMARY_URL) return SITE_CONTENT_UPDATED;
   if (landingPages.has(normalized)) return SITE_CONTENT_UPDATED;
   return undefined;
 }

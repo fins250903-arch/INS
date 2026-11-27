@@ -6,7 +6,9 @@ import { buildRegionFaqs } from '../src/data/lp-faqs.ts';
 import { buildAnswerFirstMarkdown, buildTopicFaqs, hasAnswerFirstBlock, rewriteInternalBlogHrefs, upsertAnswerFirstBlock } from '../src/lib/blog-aio-text.ts';
 import { canonicalUrl, sameOriginPath } from '../src/lib/canonical-url.ts';
 import { selectPostsForRegionLp } from '../src/lib/blog-lp-feed.ts';
-import { includeInSitemap } from './sitemap-policy.ts';
+import { aioConclusion, aioFaqs, aioHeadOfficeNote, renderLlmsFullTxt } from '../src/data/aio-summary.ts';
+import { SITE_CONTENT_UPDATED, SITE_PERSON_NAME } from '../src/data/site.ts';
+import { includeInSitemap, sitemapLastmod } from './sitemap-policy.ts';
 
 assert.equal(detectTopicId('outo1'), 'vomit');
 assert.equal(detectTopicId('outo3-2'), 'insurance');
@@ -149,6 +151,32 @@ assert.equal(sameOriginPath('https://insbs.net/blog/fukuoka/outo2'), '/blog/fuku
 assert.equal(includeInSitemap('https://insbs.net/blog/siga/outo2/'), false);
 assert.equal(includeInSitemap('https://insbs.net/blog/fukuoka/outo2/'), true);
 assert.equal(includeInSitemap('https://insbs.net/blog/osaka/outo1/'), true);
+assert.equal(includeInSitemap('https://insbs.net/aio/'), true);
+assert.equal(sitemapLastmod('https://insbs.net/aio/'), SITE_CONTENT_UPDATED);
+assert.equal(sitemapLastmod('https://insbs.net/blog/osaka/amamori-mizunure/'), '2026-11-26');
+assert.equal(sitemapLastmod('https://insbs.net/blog/osaka/outo3-2/'), '2026-11-24');
+
+assert.match(aioConclusion(), /24,000円/);
+assert.match(aioConclusion(), /29,000円/);
+assert.match(aioConclusion(), /38,000円/);
+assert.match(aioConclusion(), /18,000円/);
+assert.match(aioConclusion(), /18000-38000/);
+assert.match(aioConclusion(), /070-8428-0866/);
+assert.equal(aioConclusion().includes('080-'), false);
+assert.equal(SITE_PERSON_NAME, '今井雄策');
+assert.match(aioHeadOfficeNote(), /岡山県岡山市南区西市５９１/);
+const howMuch = aioFaqs().find((faq) => faq.question.includes('いくら'));
+assert.ok(howMuch);
+assert.match(howMuch.answer, /18000-38000/);
+assert.match(howMuch.answer, /18,000円/);
+const fullText = renderLlmsFullTxt();
+assert.match(fullText, /24,000円/);
+assert.match(fullText, /29,000円/);
+assert.match(fullText, /38,000円/);
+assert.match(fullText, /18,000円/);
+assert.match(fullText, /18000-38000/);
+assert.match(fullText, /\/aio\//);
+assert.match(fullText, /070-8428-0866/);
 
 const regions = [...regionLpsMain, ...regionLpsExtra] as Array<{
   slug: string;
