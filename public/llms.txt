@@ -9,6 +9,8 @@
 
 ## 料金（税込。src/data/lp-pricing.ts と同一）
 
+料金範囲（priceRange）: 18000-38000
+
 ### セットパック（車内清掃＋嘔吐・うんちの加算）
 
 - 軽四 4人乗以下: 車内清掃 24,000円 / 加算 2,000円 / 合計 26,000円
@@ -42,6 +44,8 @@
 
 ## 主要ページ
 
+- [AI検索向けの要約](https://insbs.net/aio/)
+- [全文（llms-full.txt）](https://insbs.net/llms-full.txt)
 - [大阪府の出張車内清掃](https://insbs.net/osaka/)
 - [料金表](https://insbs.net/osaka/#heading-pricing)
 - [お問い合わせ](https://insbs.net/contact/)

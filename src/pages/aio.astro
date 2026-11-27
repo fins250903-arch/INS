@@ -1,0 +1,168 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FloatingCTA from '../components/FloatingCTA.astro';
+import {
+  aioAreaSentence,
+  aioConclusion,
+  aioContentUpdatedLabel,
+  aioFaqs,
+  aioHeadOfficeNote,
+  aioMetaDescription,
+  aioPrimaryLinks,
+  aioWhat,
+  listAioServiceRegions
+} from '../data/aio-summary';
+import {
+  additionalNotes,
+  baseInteriorPriceRange,
+  pricingOptions,
+  pricingPartial,
+  pricingPartialDeodorizeNote,
+  pricingSet
+} from '../data/lp-pricing';
+import { CONTACT_FORM_PATH, LINE_OFFICIAL_URL, TEL_DISPLAY, TEL_HREF } from '../data/site';
+import { buildAioJsonLd } from '../lib/aio-json-ld';
+
+const title = '出張車内清掃の要約｜アイエヌエス車内清掃';
+const description = aioMetaDescription();
+const faqs = aioFaqs();
+const regions = listAioServiceRegions();
+const links = aioPrimaryLinks()
+  .filter((link) => new URL(link.href).pathname !== '/aio/')
+  .map((link) => {
+    const url = new URL(link.href);
+    return { href: `${url.pathname}${url.search}${url.hash}`, label: link.label };
+  });
+const jsonLd = buildAioJsonLd();
+---
+
+<Layout title={title} description={description} canonical="/aio/" jsonLd={jsonLd}>
+  <Header />
+  <main class="bg-white">
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold leading-snug">出張車内清掃の要約</h1>
+      <p id="aio-conclusion" class="mt-4 text-base leading-relaxed">
+        {aioConclusion()}
+      </p>
+      <p class="mt-3 text-sm text-gray-600">最終更新：{aioContentUpdatedLabel()}｜料金・対応エリア・FAQは料金表と同じデータです。</p>
+
+      <section class="mt-10">
+        <h2 class="text-2xl font-bold">これは何か</h2>
+        <p class="mt-3 text-sm leading-relaxed">{aioWhat()}</p>
+      </section>
+
+      <section id="aio-where" class="mt-10">
+        <h2 class="text-2xl font-bold">対応エリア</h2>
+        <p class="mt-3 text-sm leading-relaxed">{aioHeadOfficeNote()}</p>
+        <p class="mt-3 text-sm leading-relaxed">{aioAreaSentence()}</p>
+        <ul class="mt-4 columns-2 gap-x-6 text-sm leading-7 sm:columns-3">
+          {
+            regions.map((region) => (
+              <li>
+                <a href={`/${region.slug}/`} class="underline hover:text-primary">
+                  {region.regionFull}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <section id="aio-prices" class="mt-10">
+        <h2 class="text-2xl font-bold">料金（税込）</h2>
+        <p class="mt-3 text-sm leading-relaxed">
+          料金範囲（priceRange）は{baseInteriorPriceRange()}です。金額は料金表と同じです。
+        </p>
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full text-sm border border-gray-200">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="p-3 text-left">車種区分</th>
+                <th class="p-3 text-left">車内清掃</th>
+                <th class="p-3 text-left">嘔吐・うんちの加算</th>
+                <th class="p-3 text-left">合計</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                pricingSet.map((row) => (
+                  <tr class="border-t border-gray-200">
+                    <td class="p-3">{row.label}</td>
+                    <td class="p-3 font-semibold">{row.interiorCleaning}</td>
+                    <td class="p-3">{row.addon}</td>
+                    <td class="p-3 font-semibold">{row.total}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <h3 class="mt-6 text-lg font-bold">部分清掃</h3>
+        <p class="mt-2 text-sm">{pricingPartialDeodorizeNote}</p>
+        <ul class="mt-2 list-disc pl-5 text-sm leading-7">
+          {
+            pricingPartial.map((row) => (
+              <li>
+                {row.label}：{row.price}（消臭・脱臭セット {row.deodorizeSet}）
+              </li>
+            ))
+          }
+        </ul>
+        <h3 class="mt-6 text-lg font-bold">オプション</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm leading-7">
+          {pricingOptions.map((row) => <li>{row.label}：{row.price}</li>)}
+        </ul>
+        <h3 class="mt-6 text-lg font-bold">別途お見積り</h3>
+        <ul class="mt-2 list-disc pl-5 text-sm leading-7">
+          {additionalNotes.map((note) => <li>{note}</li>)}
+        </ul>
+      </section>
+
+      <section id="aio-contact" class="mt-10">
+        <h2 class="text-2xl font-bold">連絡先</h2>
+        <ul class="mt-3 space-y-2 text-sm leading-7">
+          <li>
+            電話：<a href={TEL_HREF} class="font-bold underline">{TEL_DISPLAY}</a>（365日24時間）
+          </li>
+          <li>
+            メール：<a href={CONTACT_FORM_PATH} class="underline">問い合わせフォーム</a>
+          </li>
+          <li>
+            LINE：<a href={LINE_OFFICIAL_URL} class="underline" target="_blank" rel="noopener noreferrer">公式アカウント</a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-2xl font-bold">よくある質問</h2>
+        <div class="mt-4 space-y-6">
+          {
+            faqs.map((faq) => (
+              <div>
+                <h3 class="text-base font-bold">{faq.question}</h3>
+                <p class="mt-2 text-sm leading-relaxed">{faq.answer}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="mt-10">
+        <h2 class="text-2xl font-bold">関連</h2>
+        <ul class="mt-3 list-disc pl-5 text-sm leading-7">
+          {
+            links.map((link) => (
+              <li>
+                <a href={link.href} class="underline">{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </article>
+  </main>
+  <Footer />
+  <FloatingCTA />
+</Layout>

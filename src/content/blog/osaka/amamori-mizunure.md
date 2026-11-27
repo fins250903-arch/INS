@@ -1,7 +1,8 @@
 ---
 title: "大阪で車内が雨漏りしたあと、シートの水濡れを広げない"
 urlSlug: "amamori-mizunure"
-date: "2026-11-19"
+date: "2026-11-26"
+updatedDate: "2026-11-26"
 region: "osaka"
 regionFull: "大阪府"
 areaLabel: "大阪・近畿エリア"
